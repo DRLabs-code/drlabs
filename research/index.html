@@ -47,6 +47,17 @@ label{font-size:.9rem;color:var(--muted)}
 #article table { display:block; overflow-x:auto; max-width:100%; }
 img, figure { max-width:100%; }
 .wrap { overflow-x:hidden; }
+
+html, body { max-width:100vw; overflow-x:hidden; }
+.wrap { max-width:min(920px,100%); padding:16px; overflow-x:hidden; }
+#article, main, .card { max-width:100%; overflow-x:hidden; }
+#article a, #article p, #article li, #article td, #article th, #article code {
+  overflow-wrap:anywhere; word-break:break-word; word-wrap:break-word;
+}
+#article table { width:100% !important; table-layout:fixed; display:table; }
+#article pre { white-space:pre-wrap; word-break:break-word; max-width:100%; }
+img, figure, figure img { max-width:100% !important; height:auto; }
+
 </style>
 
 </head>
