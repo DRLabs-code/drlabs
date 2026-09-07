@@ -4,17 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>研究报告 · DRLabs</title>
-<link rel="stylesheet" href="../styles.css">
+<style>
+:root, [data-theme="light"] {
+  --bg:#f4f7fb; --card:#fff; --text:#1a2332; --muted:#5a6b82; --border:#d7e0ee;
+  --brand:#1d4f91; --link:#1a5fb4; --badge:#1d4f91; --quote:#e8eef8;
+}
+[data-theme="dark"] {
+  --bg:#0b1220; --card:#121a2b; --text:#e8eefc; --muted:#9bb0d0; --border:#243356;
+  --brand:#7eb6ff; --link:#7eb6ff; --badge:#1d4f91; --quote:#162238;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:920px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:16px 0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.brand{font-weight:700;font-size:1.15rem;color:var(--text)}
+.spacer{flex:1}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:12px 0}
+.badge{display:inline-block;background:var(--badge);color:#fff;border-radius:999px;padding:2px 10px;font-size:.85rem}
+img,figure img{max-width:100%;height:auto;border-radius:8px;margin:12px 0}
+figure{margin:16px 0}figcaption{color:var(--muted);font-size:.9rem}
+h1,h2,h3{line-height:1.3;color:var(--text)}
+.muted{color:var(--muted);font-size:.95rem}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95rem}
+th,td{border:1px solid var(--border);padding:8px;text-align:left}
+th{background:var(--quote)}
+blockquote{border-left:3px solid var(--brand);margin:12px 0;padding:8px 12px;background:var(--quote);color:var(--muted)}
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+.btn{display:inline-block;background:var(--badge);color:#fff!important;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:1rem}
+.btn.secondary{background:transparent;color:var(--text)!important;border:1px solid var(--border)}
+input{width:100%;padding:10px 12px;margin:8px 0 14px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:1rem}
+label{font-size:.9rem;color:var(--muted)}
+.theme-btn,.auth-link{font-size:.9rem}
+.gate{max-width:420px;margin:40px auto}
+.err{color:#c62828;font-size:.9rem}
+.ok{color:#2e7d32;font-size:.9rem}
+#article[data-locked="1"]{filter:blur(6px);user-select:none;pointer-events:none;max-height:280px;overflow:hidden}
+.login-needed{margin:16px 0}
+</style>
+
 </head>
 <body>
 <div class="wrap">
-<header class="nav" style="padding:16px 0;margin-bottom:24px">
+<header class="nav">
   <a class="brand" href="../">DRLabs</a>
   <a href="../">首页</a>
-  <a href="./">研究报告</a>
+  <a href="../research/">研究报告</a>
   <a href="../about.html">关于</a>
+  <span class="spacer"></span>
+  <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
+  <span id="authSlot" data-login="../login.html"></span>
 </header>
 <main>
+
   <h1>研究报告</h1>
   <div class="card">
     <span class="badge">6.7 / 10</span>
@@ -22,8 +65,99 @@
     <p class="muted">2026年9月7日 · AAVE</p>
     <p>仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。</p>
   </div>
+
 </main>
-<footer class="muted" style="margin-top:48px;padding-top:16px;border-top:1px solid #1e2a44">仅供参考，投资请理性。</footer>
+<footer>内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</footer>
 </div>
+<script>
+(function(){
+  const KEY='drlabs-theme'; // auto|light|dark
+  function hourTheme(){ const h=new Date().getHours(); return (h>=6 && h<18)?'light':'dark'; }
+  function resolve(mode){
+    if(mode==='light'||mode==='dark') return mode;
+    return hourTheme();
+  }
+  function apply(){
+    const mode=localStorage.getItem(KEY)||'auto';
+    document.documentElement.setAttribute('data-theme', resolve(mode));
+    const el=document.getElementById('themeLabel');
+    if(el) el.textContent = mode==='auto'?'皮肤:自动':(mode==='light'?'皮肤:白天':'皮肤:黑夜');
+  }
+  window.cycleTheme=function(){
+    const order=['auto','light','dark'];
+    const cur=localStorage.getItem(KEY)||'auto';
+    const next=order[(order.indexOf(cur)+1)%order.length];
+    localStorage.setItem(KEY,next);
+    apply();
+  };
+  apply();
+  setInterval(function(){ if((localStorage.getItem(KEY)||'auto')==='auto') apply(); }, 60*1000);
+})();
+</script>
+<script>
+(function(){
+  const USERS_KEY='drlabs-users-v1';
+  const SESSION_KEY='drlabs-session-v1';
+  function loadUsers(){ try{return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}catch(e){return [];} }
+  function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+  // Lightweight hash (not server-grade; UI gate until Worker backend ships). Store only hash.
+  async function hashPw(pw, salt){
+    const data=new TextEncoder().encode(salt+'::'+pw);
+    const buf=await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function validPhone(p){ return /^1[3-9]\d{9}$/.test(p) || /^\+?\d{8,15}$/.test(p); }
+  window.DRAuth={
+    me:function(){ try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');}catch(e){return null;} },
+    logout:function(){ sessionStorage.removeItem(SESSION_KEY); location.reload(); },
+    register: async function(phone, password){
+      phone=(phone||'').trim(); password=password||'';
+      if(!validPhone(phone)) throw new Error('请输入有效手机号');
+      if(password.length<6) throw new Error('密码至少 6 位');
+      const users=loadUsers();
+      if(users.some(u=>u.phone===phone)) throw new Error('该手机号已注册');
+      const salt=crypto.randomUUID();
+      const password_hash=await hashPw(password, salt);
+      users.push({phone, salt, password_hash, created_at:new Date().toISOString()});
+      saveUsers(users);
+      // Also mirror to downloadable backup the owner can export
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({phone}));
+      return true;
+    },
+    login: async function(phone, password){
+      phone=(phone||'').trim(); password=password||'';
+      const u=loadUsers().find(x=>x.phone===phone);
+      if(!u) throw new Error('账号不存在');
+      const h=await hashPw(password, u.salt);
+      if(h!==u.password_hash) throw new Error('密码错误');
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({phone}));
+      return true;
+    },
+    exportUsers:function(){
+      const blob=new Blob([localStorage.getItem(USERS_KEY)||'[]'],{type:'application/json'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='drlabs-users.json'; a.click();
+    }
+  };
+  function paintNav(){
+    const slot=document.getElementById('authSlot');
+    if(!slot) return;
+    const me=window.DRAuth.me();
+    if(me){
+      slot.innerHTML='<span class="muted">'+me.phone+'</span> <a href="#" id="logoutBtn">退出</a>';
+      const b=document.getElementById('logoutBtn'); if(b) b.onclick=function(e){e.preventDefault(); DRAuth.logout();};
+    } else {
+      slot.innerHTML='<a href="'+slot.getAttribute('data-login')+'">登录/注册</a>';
+    }
+  }
+  window.requireAuthForArticle=function(){
+    const art=document.getElementById('article');
+    const gate=document.getElementById('loginNeeded');
+    if(!art) return;
+    if(DRAuth.me()){ art.dataset.locked='0'; if(gate) gate.style.display='none'; }
+    else { art.dataset.locked='1'; if(gate) gate.style.display='block'; }
+  };
+  document.addEventListener('DOMContentLoaded', function(){ paintNav(); if(window.requireAuthForArticle) requireAuthForArticle(); });
+})();
+</script>
 </body>
 </html>
