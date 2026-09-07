@@ -40,7 +40,7 @@ label{font-size:.9rem;color:var(--muted)}
 .gate{max-width:420px;margin:40px auto}
 .err{color:#c62828;font-size:.9rem}
 .ok{color:#2e7d32;font-size:.9rem}
-#article[data-locked="1"]{filter:blur(6px);user-select:none;pointer-events:none;max-height:280px;overflow:hidden}
+#article[data-locked="1"]{display:none!important}#article[data-locked="0"]{display:block}
 .login-needed{margin:16px 0}
 </style>
 
@@ -59,7 +59,7 @@ label{font-size:.9rem;color:var(--muted)}
 <main>
 
   <div id="loginNeeded" class="login-needed card" style="display:none">
-    <p><strong>登录后阅读全文</strong></p>
+    <p><strong>登录后阅读完整研报</strong></p><p class="muted">未登录不展示正文，避免只看到图片预览。</p>
     <p class="muted">注册只需手机号 + 密码（无短信费用）。</p>
     <p><a class="btn" href="../../login.html">去登录 / 注册</a></p>
   </div>
