@@ -1,653 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-zh="Aave 研报 · DRLabs" data-title-en="Aave report · DRLabs">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aave 研报 · DRLabs</title>
-<style>
-:root, [data-theme="light"] {
-  --bg:#f4f7fb; --card:#fff; --text:#1a2332; --muted:#5a6b82; --border:#d7e0ee;
-  --brand:#1d4f91; --link:#1a5fb4; --badge:#1d4f91; --quote:#e8eef8;
-}
-[data-theme="dark"] {
-  --bg:#0b1220; --card:#121a2b; --text:#e8eefc; --muted:#9bb0d0; --border:#243356;
-  --brand:#7eb6ff; --link:#7eb6ff; --badge:#1d4f91; --quote:#162238;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:920px;margin:0 auto;padding:24px}
-.nav{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:16px 0;margin-bottom:24px;border-bottom:1px solid var(--border)}
-.brand{font-weight:700;font-size:1.15rem;color:var(--text)}
-.spacer{flex:1}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:12px 0}
-.badge{display:inline-block;background:var(--badge);color:#fff;border-radius:999px;padding:2px 10px;font-size:.85rem}
-img,figure img{max-width:100%;height:auto;border-radius:8px;margin:12px 0}
-figure{margin:16px 0}figcaption{color:var(--muted);font-size:.9rem}
-h1,h2,h3{line-height:1.3;color:var(--text)}
-.muted{color:var(--muted);font-size:.95rem}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95rem}
-th,td{border:1px solid var(--border);padding:8px;text-align:left}
-th{background:var(--quote)}
-blockquote{border-left:3px solid var(--brand);margin:12px 0;padding:8px 12px;background:var(--quote);color:var(--muted)}
-hr{border:none;border-top:1px solid var(--border);margin:24px 0}
-footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
-.btn{display:inline-block;background:var(--badge);color:#fff!important;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:1rem}
-.btn.secondary{background:transparent;color:var(--text)!important;border:1px solid var(--border)}
-input{width:100%;padding:10px 12px;margin:8px 0 14px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:1rem}
-label{font-size:.9rem;color:var(--muted)}
-.theme-btn,.auth-link{font-size:.9rem}
-.gate{max-width:420px;margin:40px auto}
-.err{color:#c62828;font-size:.9rem}
-.ok{color:#2e7d32;font-size:.9rem}
-#article[data-locked="1"]{display:none!important}#article[data-locked="0"]{display:block}
-.login-needed{margin:16px 0}
-#article, #article * { overflow-wrap:anywhere; word-break:break-word; }
-#article pre, #article code { white-space:pre-wrap; overflow-x:auto; max-width:100%; }
-#article table { display:block; overflow-x:auto; max-width:100%; }
-img, figure { max-width:100%; }
-.wrap { overflow-x:hidden; }
-
-html, body { max-width:100vw; overflow-x:hidden; }
-.wrap { max-width:min(920px,100%); padding:16px; overflow-x:hidden; }
-#article, main, .card { max-width:100%; overflow-x:hidden; }
-#article a, #article p, #article li, #article td, #article th, #article code {
-  overflow-wrap:anywhere; word-break:break-word; word-wrap:break-word;
-}
-#article table { width:100% !important; table-layout:fixed; display:table; }
-#article pre { white-space:pre-wrap; word-break:break-word; max-width:100%; }
-img, figure, figure img { max-width:100% !important; height:auto; }
-
-</style>
-
+<link rel="stylesheet" href="../../assets/site.css">
+<script>
+(function(){try{var k='drlabs-lang';var l=localStorage.getItem(k);
+if(l!=='zh'&&l!=='en'){l=((navigator.language||'zh')+'').toLowerCase().indexOf('zh')===0?'zh':'en';}
+document.documentElement.setAttribute('data-lang',l);
+document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':'en');}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="wrap">
 <header class="nav">
   <a class="brand" href="../../">DRLabs</a>
-  <a href="../../">首页</a>
-  <a href="../../research/">研究报告</a>
-  <a href="../../about.html">关于</a>
+  <a href="../../"><span class="lang-zh">首页</span><span class="lang-en">Home</span></a>
+  <a href="../../research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span></a>
+  <a href="../../about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span></a>
   <span class="spacer"></span>
+  <a class="lang-btn" href="#" onclick="cycleLang();return false;" id="langLabel" title="Language / 语言">中文 · EN</a>
   <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
   <span id="authSlot" data-login="../../login.html"></span>
 </header>
 <main>
 
   <div id="loginNeeded" class="login-needed card" style="display:none">
-    <p><strong>登录后阅读完整研报</strong></p><p class="muted">未登录不展示正文，避免只看到图片预览。</p>
-    <p class="muted">注册只需手机号 + 密码（无短信费用）。</p>
-    <p><a class="btn" href="../../login.html">去登录 / 注册</a></p>
+    <p><strong class="lang-zh">登录后阅读完整研报</strong><strong class="lang-en">Log in to read the full report</strong></p>
+    <p class="muted lang-zh">未登录不展示正文，避免只看到图片预览。</p>
+    <p class="muted lang-en">The body is hidden until you log in, so the charts are not shown as a free preview.</p>
+    <p class="muted lang-zh">注册只需手机号 + 密码（无短信费用）。</p>
+    <p class="muted lang-en">Sign up with phone number + password. No SMS fee.</p>
+    <p><a class="btn" href="../../login.html"><span class="lang-zh">去登录 / 注册</span><span class="lang-en">Log in / Sign up</span></a></p>
   </div>
   <article id="article" data-locked="1">
-  <p class="muted">发布 / 数据日期：2026年9月7日 · AAVE · <span class="badge">6.7 / 10</span></p>
-  <h1>Aave（AAVE）项目研究报告</h1>
-<p><strong>DRLabs 加密货币研究</strong><br />
-<strong>发布 / 数据日期：2026年9月7日（Asia/Shanghai，UTC+8 / 用户当地 PT）</strong><br />
-<strong>立场：中性偏研究（非投资建议）</strong></p>
-<blockquote>
-<p><strong>一句话结论：</strong> Aave 仍是链上借贷赛道的绝对规模与品牌龙头，V3 承载主体流动性、V4（Hub &amp; Spoke）已于 2026 年 3 月上线以太坊主网并处于保守放量阶段；基本面取决于利率周期、跨链份额与 DAO–Labs 治理对齐，而非短期代币价格叙事。</p>
-</blockquote>
+  <p class="muted"><span class="lang-zh">发布 / 数据日期：2026年9月7日 · AAVE · 6.7 / 10</span><span class="lang-en">Published / as-of: 7 Sep 2026 · AAVE · 6.7 / 10</span></p>
+<h1 class="lang-zh">Aave（AAVE）项目研究报告</h1><h1 class="lang-en">Aave (AAVE) research report</h1>
+<p class="lang-zh"><strong>DRLabs 加密货币研究</strong></p><p class="lang-en"><strong>DRLabs crypto research</strong></p>
+<p class="lang-zh"><strong>发布 / 数据日期：2026年9月7日（Asia/Shanghai，UTC+8 / 用户当地 PT）</strong></p><p class="lang-en"><strong>Published / data date: 7 September 2026 (Asia/Shanghai, UTC+8 / reader-local PT)</strong></p>
+<p class="lang-zh"><strong>立场：中性偏研究（非投资建议）</strong></p><p class="lang-en"><strong>Stance: research-neutral (not investment advice)</strong></p>
+<blockquote class="lang-zh"><strong>一句话结论：</strong> Aave 仍是链上借贷赛道的绝对规模与品牌龙头，V3 承载主体流动性、V4（Hub &amp; Spoke）已于 2026 年 3 月上线以太坊主网并处于保守放量阶段；基本面取决于利率周期、跨链份额与 DAO–Labs 治理对齐，而非短期代币价格叙事。</blockquote><blockquote class="lang-en"><strong>One-line takeaway:</strong> Aave is still the scale and brand leader in on-chain lending. V3 holds the bulk of liquidity; V4 (Hub &amp; Spoke) went live on Ethereum mainnet in March 2026 and is still in a conservative-cap phase. Fundamentals hinge on the rate cycle, cross-chain share and DAO–Labs alignment — not a short-term token-price story.</blockquote>
 <hr />
-<h2>1. 项目概览</h2>
-<p>Aave 是去中心化、非托管的流动性协议：用户向资金池存入资产赚取利息，或以超额抵押方式借入资产；协议通过智能合约自动撮合供需、清算风险仓位，无需中介托管。名称源自芬兰语「幽灵」（ghost），寓意透明、无形的基础设施。</p>
-<p><strong>解决的问题：</strong> 传统借贷依赖中介与信用审查，链上则长期面临流动性碎片化、抵押品与风险参数难以模块化扩展等问题。Aave 以资金池模型替代早期点对点撮合，并持续迭代风险隔离、跨链部署与原生稳定币（GHO）等能力。</p>
-<p><strong>定位：</strong> DeFi 核心「货币市场」基础设施；按 DefiLlama 口径，Aave 系列（尤其 V3）长期占据借贷类 TVL 首位。官方称累计放贷规模已超过 1 万亿美元量级，并宣称在去中心化借贷市场中占有过半份额（以官方博客口径，需与第三方 TVL 份额交叉验证）。</p>
-<p><strong>简史：</strong> 2017 年由 Stani Kulechov（现 Aave Labs CEO）以 ETHLend 启动点对点借贷；后转型流动性池并更名 Aave，约 2020 年初在以太坊主网上线；2020 年 10 月 LEND 按 100:1 迁移为治理代币 AAVE。此后经历 V2、多链 V3、GHO、Safety Module→Umbrella，以及 2026 年 V4 主网上线。</p>
+<h2 id="1-项目概览" class="lang-zh">1. 项目概览</h2><h2 class="lang-en">1. Project overview</h2>
+<p class="lang-zh">Aave 是去中心化、非托管的流动性协议：用户向资金池存入资产赚取利息，或以超额抵押方式借入资产；协议通过智能合约自动撮合供需、清算风险仓位，无需中介托管。名称源自芬兰语「幽灵」（ghost），寓意透明、无形的基础设施。</p><p class="lang-en">Aave is a decentralized, non-custodial liquidity protocol: users deposit assets into pools to earn interest, or borrow against over-collateralization. Smart contracts match supply and demand and liquidate risky positions without a custodian. The name comes from Finnish for “ghost”, a nod to transparent, invisible infrastructure.</p>
+<p class="lang-zh"><strong>解决的问题：</strong> 传统借贷依赖中介与信用审查，链上则长期面临流动性碎片化、抵押品与风险参数难以模块化扩展等问题。Aave 以资金池模型替代早期点对点撮合，并持续迭代风险隔离、跨链部署与原生稳定币（GHO）等能力。</p><p class="lang-en"><strong>Problem it solves:</strong> Traditional credit relies on intermediaries and underwriting. On-chain markets have long faced fragmented liquidity and collateral/risk parameters that are hard to extend modularly. Aave replaced early peer-to-peer matching with a pool model and kept iterating on risk isolation, multi-chain deployment and a native stablecoin (GHO).</p>
+<p class="lang-zh"><strong>定位：</strong> DeFi 核心「货币市场」基础设施；按 DefiLlama 口径，Aave 系列（尤其 V3）长期占据借贷类 TVL 首位。官方称累计放贷规模已超过 1 万亿美元量级，并宣称在去中心化借贷市场中占有过半份额（以官方博客口径，需与第三方 TVL 份额交叉验证）。</p><p class="lang-en"><strong>Positioning:</strong> Core DeFi “money market” infrastructure. On DefiLlama, the Aave family (especially V3) has long led lending TVL. Official materials claim cumulative originations above the $1 trillion mark and more than half of decentralized lending (official-blog definition — cross-check against third-party TVL share).</p>
+<p class="lang-zh"><strong>简史：</strong> 2017 年由 Stani Kulechov（现 Aave Labs CEO）以 ETHLend 启动点对点借贷；后转型流动性池并更名 Aave，约 2020 年初在以太坊主网上线；2020 年 10 月 LEND 按 100:1 迁移为治理代币 AAVE。此后经历 V2、多链 V3、GHO、Safety Module→Umbrella，以及 2026 年 V4 主网上线。</p><p class="lang-en"><strong>Brief history:</strong> In 2017 Stani Kulechov (now Aave Labs CEO) launched peer-to-peer lending as ETHLend; the project later moved to liquidity pools, rebranded to Aave, and went live on Ethereum mainnet around early 2020. In October 2020 LEND migrated 100:1 into the AAVE governance token. Then came V2, multi-chain V3, GHO, Safety Module→Umbrella, and the 2026 V4 mainnet launch.</p>
 <hr />
-<h2>2. 产品与机制</h2>
-<h3>2.1 借贷市场与利率模型</h3>
-<ul>
-<li><strong>供给/借款：</strong> 用户供给资产获得生息凭证；借款需超额抵押，利率由利用率驱动的曲线决定（最优利用率以下斜率较缓，以上陡峭），供给利率由借款利息扣除协议费用后分摊。</li>
-<li><strong>V3 架构：</strong> 按市场（market）隔离流动性（如以太坊 Core / Prime）。同一链上不同市场之间资金互不复用，利于风险隔离，但新市场需独立引导流动性。</li>
-<li><strong>eMode（Efficiency Mode）：</strong> 对价格高度相关资产（如稳定币对、ETH/LST）提高借款能力，提升资本效率。</li>
-<li><strong>aToken：</strong> V3 中供给凭证多为 rebasing 的 aToken，余额随利息增长；可在生态中作为组合乐高使用。</li>
-</ul>
-<h3>2.2 清算</h3>
-<p>仓位健康因子（Health Factor）低于 1 可被清算。清算人偿还部分债务并获得抵押品与清算奖励。协议依赖预言机价格；极端行情下清算拥堵、坏账与预言机延迟是核心尾部风险。</p>
-<h3>2.3 Aave V4（现状以官方为准）</h3>
-<p><strong>上线时间：</strong> 官方博客标注 <strong>2026 年 3 月 30 日</strong> V4 在以太坊主网上线。</p>
-<p><strong>核心变化 — Hub &amp; Spoke：</strong></p>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Liquidity Hub</td>
-<td>链上统一流动性与会计中枢；对 Spoke 设定 credit/debit 额度</td>
-</tr>
-<tr>
-<td>Spoke</td>
-<td>用户交互入口；可配置独立抵押品、风险参数与清算规则</td>
-</tr>
-<tr>
-<td>Risk Premium</td>
-<td>在基础利用率利率之上，按抵押品质量加收借款溢价</td>
-</tr>
-<tr>
-<td>清算引擎</td>
-<td>以 Target Health Factor 替代固定 close factor；可变清算奖励；dust 防尘规则</td>
-</tr>
-</tbody>
-</table>
-<p>官方说明：V4 启动时配备多个 Liquidity Hub（如 Core / Prime / Plus 等叙事），<strong>供给与借款上限刻意保守</strong>，由 DAO 观察生产环境后逐步调高。界面侧推出面向 V4 的 <strong>Aave Pro</strong>。安全方面，官方称约 345 累计审计日、多家审计机构及 Sherlock 公开竞赛等（详见审计仓库）。</p>
-<p><strong>会计凭证：</strong> 社区与技术解读普遍提到 V4 向 ERC-4626 份额型会计演进（相对 V3 rebasing aToken）；具体产品体验以官方文档与 UI 为准。</p>
-<p><strong>与 V3 关系：</strong> 官方与治理材料明确 <strong>V3 在仍有需要时将继续运行</strong>；V4 为下一代统一流动性架构，迁移与份额切换是中长期过程。</p>
-<h3>2.4 跨链部署</h3>
-<p>Aave 已部署于以太坊及多条 L2/侧链与新兴 L1（DefiLlama 链分布见下文）。V4 官方路线图为：以太坊主网验证后，由 DAO 扩展 Spoke、调高 caps，并推进更多网络。</p>
-<h3>2.5 GHO 与储蓄产品</h3>
-<p><strong>GHO</strong> 为 Aave 生态原生、超额抵押的美元锚定稳定币：用户以抵押品铸造（借款）GHO，偿还时销毁；借款利息主要流向 DAO 财库。据 DefiLlama 稳定币数据，<strong>2026年9月7日</strong> 前后 GHO 流通市值约 <strong>6.98 亿美元</strong>，价格约 <strong>$0.999</strong>，贴近 $1。</p>
-<p><img alt="GHO 流通规模" src="../../assets/aave/05_gho_circulating.png" /></p>
-<p><strong>解读：</strong> GHO 已形成近 7 亿美元流通体量，锚定尚稳；但相对 USDT/USDC 及新兴收益型稳定币仍属中小规模，增长取决于借款需求、sGHO 储蓄竞争力与跨链流动性。</p>
-<p><strong>sGHO / Aave Savings Rate（ASR）：</strong> 治理将储蓄侧产品向 ERC-4626 合规 vault（sGHO）迁移；GHO Stewards 2026 年 8 月提案中，讨论将 ASR 上调至约 <strong>4.50%</strong>（并同步上调部分链上 GHO 借款利率），以应对竞争储蓄率与留存需求。具体执行以链上参数与 UI 为准。</p>
-<p><strong>GSM 等稳定机制：</strong> 用于锚定维护与流动性缓冲；稳定币脱锚、跨链价差与利率错配仍是产品层风险点。</p>
+<h2 id="2-产品与机制" class="lang-zh">2. 产品与机制</h2><h2 class="lang-en">2. Product and mechanics</h2>
+<h3 class="lang-zh">2.1 借贷市场与利率模型</h3><h3 class="lang-en">2.1 Lending markets and the rate model</h3>
+<ul class="lang-zh"><li><strong>供给/借款：</strong> 用户供给资产获得生息凭证；借款需超额抵押，利率由利用率驱动的曲线决定（最优利用率以下斜率较缓，以上陡峭），供给利率由借款利息扣除协议费用后分摊。</li><li><strong>V3 架构：</strong> 按市场（market）隔离流动性（如以太坊 Core / Prime）。同一链上不同市场之间资金互不复用，利于风险隔离，但新市场需独立引导流动性。</li><li><strong>eMode（Efficiency Mode）：</strong> 对价格高度相关资产（如稳定币对、ETH/LST）提高借款能力，提升资本效率。</li><li><strong>aToken：</strong> V3 中供给凭证多为 rebasing 的 aToken，余额随利息增长；可在生态中作为组合乐高使用。</li></ul><ul class="lang-en"><li><strong>Supply / borrow:</strong> Suppliers receive interest-bearing receipts. Borrowing requires over-collateralization. Rates follow a utilization curve (flatter below optimal utilization, steep above). Supply rates are borrower interest minus protocol fees, shared among suppliers.</li><li><strong>V3 architecture:</strong> Liquidity is isolated by market (e.g. Ethereum Core / Prime). Pools on the same chain do not reuse funds across markets — better risk isolation, but new markets must bootstrap liquidity on their own.</li><li><strong>eMode (Efficiency Mode):</strong> Raises borrowing power for highly correlated assets (stable pairs, ETH/LST) and improves capital efficiency.</li><li><strong>aToken:</strong> V3 supply receipts are mostly rebasing aTokens; balances grow with interest and can be composed elsewhere in DeFi.</li></ul>
+<h3 class="lang-zh">2.2 清算</h3><h3 class="lang-en">2.2 Liquidations</h3>
+<p class="lang-zh">仓位健康因子（Health Factor）低于 1 可被清算。清算人偿还部分债务并获得抵押品与清算奖励。协议依赖预言机价格；极端行情下清算拥堵、坏账与预言机延迟是核心尾部风险。</p><p class="lang-en">Positions with Health Factor below 1 can be liquidated. Liquidators repay part of the debt and receive collateral plus a bonus. The protocol depends on oracle prices; liquidation congestion, bad debt and oracle lag are the core tail risks in stress.</p>
+<h3 class="lang-zh">2.3 Aave V4（现状以官方为准）</h3><h3 class="lang-en">2.3 Aave V4 (status per official sources)</h3>
+<p class="lang-zh"><strong>上线时间：</strong> 官方博客标注 <strong>2026 年 3 月 30 日</strong> V4 在以太坊主网上线。</p><p class="lang-en"><strong>Launch:</strong> Official blog dated <strong>30 March 2026</strong> for V4 on Ethereum mainnet.</p>
+<p class="lang-zh"><strong>核心变化 — Hub &amp; Spoke：</strong></p><p class="lang-en"><strong>Core change — Hub &amp; Spoke:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>组件<br><span class="bi">Component</span></th><th>作用<br><span class="bi">Role</span></th></tr></thead><tbody><tr><td>Liquidity Hub</td><td>链上统一流动性与会计中枢；对 Spoke 设定 credit/debit 额度<br><span class="bi">On-chain unified liquidity and accounting hub; sets credit/debit limits for Spokes</span></td></tr><tr><td>Spoke</td><td>用户交互入口；可配置独立抵押品、风险参数与清算规则<br><span class="bi">User-facing entry; can set its own collateral, risk parameters and liquidation rules</span></td></tr><tr><td>Risk Premium</td><td>在基础利用率利率之上，按抵押品质量加收借款溢价<br><span class="bi">Extra borrow premium on top of the utilization rate, by collateral quality</span></td></tr><tr><td>清算引擎<br><span class="bi">Liquidation engine</span></td><td>以 Target Health Factor 替代固定 close factor；可变清算奖励；dust 防尘规则<br><span class="bi">Target Health Factor replaces a fixed close factor; variable bonuses; dust rules</span></td></tr></tbody></table></div>
+<p class="lang-zh">官方说明：V4 启动时配备多个 Liquidity Hub（如 Core / Prime / Plus 等叙事），<strong>供给与借款上限刻意保守</strong>，由 DAO 观察生产环境后逐步调高。界面侧推出面向 V4 的 <strong>Aave Pro</strong>。安全方面，官方称约 345 累计审计日、多家审计机构及 Sherlock 公开竞赛等（详见审计仓库）。</p><p class="lang-en">Official note: V4 launched with several Liquidity Hubs (Core / Prime / Plus and similar narratives). <strong>Supply and borrow caps were deliberately conservative</strong>, to be raised by the DAO after watching production. The UI side launched <strong>Aave Pro</strong> for V4. On security, official materials cite about 345 cumulative audit days, multiple firms and a Sherlock public contest (see the audit repo).</p>
+<p class="lang-zh"><strong>会计凭证：</strong> 社区与技术解读普遍提到 V4 向 ERC-4626 份额型会计演进（相对 V3 rebasing aToken）；具体产品体验以官方文档与 UI 为准。</p><p class="lang-en"><strong>Accounting:</strong> Community and technical write-ups generally describe V4 moving toward ERC-4626 share accounting (versus V3 rebasing aTokens). Product UX follows official docs and the UI.</p>
+<p class="lang-zh"><strong>与 V3 关系：</strong> 官方与治理材料明确 <strong>V3 在仍有需要时将继续运行</strong>；V4 为下一代统一流动性架构，迁移与份额切换是中长期过程。</p><p class="lang-en"><strong>Relationship to V3:</strong> Official and governance materials are explicit that <strong>V3 will keep running as long as it is needed</strong>. V4 is the next unified-liquidity architecture; migration and share shift are a medium-term process.</p>
+<h3 class="lang-zh">2.4 跨链部署</h3><h3 class="lang-en">2.4 Multi-chain deployment</h3>
+<p class="lang-zh">Aave 已部署于以太坊及多条 L2/侧链与新兴 L1（DefiLlama 链分布见下文）。V4 官方路线图为：以太坊主网验证后，由 DAO 扩展 Spoke、调高 caps，并推进更多网络。</p><p class="lang-en">Aave is live on Ethereum plus multiple L2s/sidechains and newer L1s (DefiLlama chain mix below). The official V4 path: prove it on Ethereum mainnet, then let the DAO add Spokes, raise caps, and push more networks.</p>
+<h3 class="lang-zh">2.5 GHO 与储蓄产品</h3><h3 class="lang-en">2.5 GHO and savings products</h3>
+<p class="lang-zh"><strong>GHO</strong> 为 Aave 生态原生、超额抵押的美元锚定稳定币：用户以抵押品铸造（借款）GHO，偿还时销毁；借款利息主要流向 DAO 财库。据 DefiLlama 稳定币数据，<strong>2026年9月7日</strong> 前后 GHO 流通市值约 <strong>6.98 亿美元</strong>，价格约 <strong>$0.999</strong>，贴近 $1。</p><p class="lang-en"><strong>GHO</strong> is Aave’s native, over-collateralized USD-pegged stablecoin: users mint (borrow) GHO against collateral and burn it on repay. Borrow interest mostly flows to the DAO treasury. DefiLlama stablecoin data around <strong>7 September 2026</strong> puts GHO circulating market cap at about <strong>$698 million</strong>, price about <strong>$0.999</strong>, close to $1.</p>
+<figure><img src="../../assets/aave/05_gho_circulating.png" alt="GHO 流通规模"><figcaption class="lang-zh">GHO 流通规模</figcaption><figcaption class="lang-en">GHO circulating supply</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> GHO 已形成近 7 亿美元流通体量，锚定尚稳；但相对 USDT/USDC 及新兴收益型稳定币仍属中小规模，增长取决于借款需求、sGHO 储蓄竞争力与跨链流动性。</p><p class="lang-en"><strong>Read:</strong> GHO has a near-$700 million float and a stable peg so far. Versus USDT/USDC and newer yield-bearing stables it is still mid-sized. Growth depends on borrow demand, sGHO competitiveness and cross-chain liquidity.</p>
+<p class="lang-zh"><strong>sGHO / Aave Savings Rate（ASR）：</strong> 治理将储蓄侧产品向 ERC-4626 合规 vault（sGHO）迁移；GHO Stewards 2026 年 8 月提案中，讨论将 ASR 上调至约 <strong>4.50%</strong>（并同步上调部分链上 GHO 借款利率），以应对竞争储蓄率与留存需求。具体执行以链上参数与 UI 为准。</p><p class="lang-en"><strong>sGHO / Aave Savings Rate (ASR):</strong> Governance is moving the savings side to an ERC-4626 vault (sGHO). In an August 2026 GHO Stewards proposal, ASR was discussed at about <strong>4.50%</strong> (with some chain GHO borrow rates raised in parallel) to match competing savings rates and retention. Execution follows on-chain parameters and the UI.</p>
+<p class="lang-zh"><strong>GSM 等稳定机制：</strong> 用于锚定维护与流动性缓冲；稳定币脱锚、跨链价差与利率错配仍是产品层风险点。</p><p class="lang-en"><strong>GSM and other stability tools:</strong> Used for peg defense and liquidity buffers. Depegs, cross-chain basis and rate mismatch remain product-level risks.</p>
 <hr />
-<h2>3. 代币经济（AAVE）</h2>
-<table>
-<thead>
-<tr>
-<th>项目</th>
-<th>数据（2026年9月7日）</th>
-<th>来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>最大/总供应</td>
-<td>16,000,000 AAVE</td>
-<td>公开代币参数 / Etherscan</td>
-</tr>
-<tr>
-<td>流通量（推算）</td>
-<td>约 15.54M（约 97.1%）</td>
-<td>DefiLlama 市值 ÷ 现价</td>
-</tr>
-<tr>
-<td>价格</td>
-<td>约 $134.55</td>
-<td>DefiLlama coins API</td>
-</tr>
-<tr>
-<td>流通市值</td>
-<td>约 $20.9 亿</td>
-<td>DefiLlama protocol mcap</td>
-</tr>
-<tr>
-<td>FDV（按 16M）</td>
-<td>约 $21.5 亿</td>
-<td>现价 × 上限供应</td>
-</tr>
-<tr>
-<td>30 日涨跌</td>
-<td>约 +49%（研报初稿 CoinGecko 口径；当日 API 限流未复核）</td>
-<td>CoinGecko（历史引用）</td>
-</tr>
-<tr>
-<td>1 年涨跌</td>
-<td>约 −55%（同上）</td>
-<td>CoinGecko（历史引用）</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="AAVE 市值与 FDV" src="../../assets/aave/04_aave_mcap_fdv.png" /></p>
-<p><strong>解读：</strong> 流通占比已接近完全稀释，市值与 FDV 差距很小（约 3%），传统「解锁抛压」叙事较弱；代币弹性更多来自治理溢价、DAO 收入归集预期与市场风险偏好，而非供给收缩。</p>
-<p><strong>用途：</strong></p>
-<ol>
-<li><strong>治理：</strong> 通过 Aave DAO（论坛讨论 → TEMP CHECK / ARFC → AIP）对参数、资产上市、费用与金库支出投票。  </li>
-<li><strong>安全与激励：</strong> 历史 Safety Module 以 <strong>stkAAVE</strong> 等资产承担潜在罚没（slashing）风险并获激励；现已升级为 <strong>Umbrella</strong>（以 aToken / 相关资产为主覆盖坏账，自动化罚没逻辑）。stkAAVE 在过渡期仍可能保留部分效用与激励，但官方帮助中心说明其不再是覆盖坏账的首选资产类型。  </li>
-<li><strong>价值捕获叙事：</strong> 2026 年 4 月前后通过的 <strong>「Aave Will Win」框架</strong> 将 Aave 品牌产品收入导向 DAO 财库，强化「持有 AAVE ≈ 协议与品牌经济权利」的叙事；应用层（如 Aave Pro / App 等）收入并入财库的路径以治理执行为准。</li>
-</ol>
-<p><strong>解锁：</strong> 总量固定 1600 万，绝大部分已流通；剩余主要在生态储备/奖励合约等。<strong>未发现重大未解锁悬崖式抛压</strong>；短期供给压力更多来自激励排放与财库操作，而非传统归属解锁。</p>
+<h2 id="3-代币经济aave" class="lang-zh">3. 代币经济（AAVE）</h2><h2 class="lang-en">3. Token economics (AAVE)</h2>
+<div class="table-wrap"><table><thead><tr><th>项目<br><span class="bi">Item</span></th><th>数据（2026年9月7日）<br><span class="bi">Data (7 September 2026)</span></th><th>来源<br><span class="bi">Source</span></th></tr></thead><tbody><tr><td>最大/总供应<br><span class="bi">Max / total supply</span></td><td>16,000,000 AAVE</td><td>公开代币参数 / Etherscan<br><span class="bi">Public token params / Etherscan</span></td></tr><tr><td>流通量（推算）<br><span class="bi">Circulating (implied)</span></td><td>约 15.54M（约 97.1%）<br><span class="bi">~15.54M (~97.1%)</span></td><td>DefiLlama 市值 ÷ 现价<br><span class="bi">DefiLlama mcap ÷ spot</span></td></tr><tr><td>价格<br><span class="bi">Price</span></td><td>约 $134.55<br><span class="bi">~$134.55</span></td><td>DefiLlama coins API</td></tr><tr><td>流通市值<br><span class="bi">Circulating mcap</span></td><td>约 $20.9 亿<br><span class="bi">~$2.09B</span></td><td>DefiLlama protocol mcap</td></tr><tr><td>FDV（按 16M）<br><span class="bi">FDV (at 16M)</span></td><td>约 $21.5 亿<br><span class="bi">~$2.15B</span></td><td>现价 × 上限供应<br><span class="bi">Spot × max supply</span></td></tr><tr><td>30 日涨跌<br><span class="bi">30-day change</span></td><td>约 +49%（研报初稿 CoinGecko 口径；当日 API 限流未复核）<br><span class="bi">~+49% (draft CoinGecko print; not re-checked after API throttle)</span></td><td>CoinGecko（历史引用）<br><span class="bi">CoinGecko (historical cite)</span></td></tr><tr><td>1 年涨跌<br><span class="bi">1-year change</span></td><td>约 −55%（同上）<br><span class="bi">~−55% (same)</span></td><td>CoinGecko（历史引用）<br><span class="bi">CoinGecko (historical cite)</span></td></tr></tbody></table></div>
+<figure><img src="../../assets/aave/04_aave_mcap_fdv.png" alt="AAVE 市值与 FDV"><figcaption class="lang-zh">AAVE 市值与 FDV</figcaption><figcaption class="lang-en">AAVE market cap and FDV</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> 流通占比已接近完全稀释，市值与 FDV 差距很小（约 3%），传统「解锁抛压」叙事较弱；代币弹性更多来自治理溢价、DAO 收入归集预期与市场风险偏好，而非供给收缩。</p><p class="lang-en"><strong>Read:</strong> Circulation is close to fully diluted; mcap and FDV gap is small (~3%). The usual “unlock overhang” story is weak. Token elasticity comes more from governance premium, expected DAO revenue and risk appetite than from supply squeeze.</p>
+<p class="lang-zh"><strong>用途：</strong></p><p class="lang-en"><strong>Uses:</strong></p>
+<ol class="lang-zh"><li><strong>治理：</strong> 通过 Aave DAO（论坛讨论 → TEMP CHECK / ARFC → AIP）对参数、资产上市、费用与金库支出投票。  </li><li><strong>安全与激励：</strong> 历史 Safety Module 以 <strong>stkAAVE</strong> 等资产承担潜在罚没（slashing）风险并获激励；现已升级为 <strong>Umbrella</strong>（以 aToken / 相关资产为主覆盖坏账，自动化罚没逻辑）。stkAAVE 在过渡期仍可能保留部分效用与激励，但官方帮助中心说明其不再是覆盖坏账的首选资产类型。  </li><li><strong>价值捕获叙事：</strong> 2026 年 4 月前后通过的 <strong>「Aave Will Win」框架</strong> 将 Aave 品牌产品收入导向 DAO 财库，强化「持有 AAVE ≈ 协议与品牌经济权利」的叙事；应用层（如 Aave Pro / App 等）收入并入财库的路径以治理执行为准。</li></ol><ol class="lang-en"><li><strong>Governance:</strong> Aave DAO (forum → TEMP CHECK / ARFC → AIP) votes on parameters, listings, fees and treasury spend.  </li><li><strong>Safety and incentives:</strong> The historical Safety Module used <strong>stkAAVE</strong> and similar assets for slashing risk plus incentives. It has been upgraded to <strong>Umbrella</strong> (aTokens / related assets covering bad debt, with automated slashing). stkAAVE may keep some utility and incentives in the transition, but the official help center says it is no longer the preferred bad-debt cover asset.  </li><li><strong>Value-capture narrative:</strong> The <strong>“Aave Will Win” framework</strong> passed around April 2026 directs Aave-branded product revenue to the DAO treasury, strengthening “holding AAVE ≈ economic rights in the protocol and brand”. Paths for app-layer revenue (Aave Pro / App and similar) into the treasury follow governance execution.</li></ol>
+<p class="lang-zh"><strong>解锁：</strong> 总量固定 1600 万，绝大部分已流通；剩余主要在生态储备/奖励合约等。<strong>未发现重大未解锁悬崖式抛压</strong>；短期供给压力更多来自激励排放与财库操作，而非传统归属解锁。</p><p class="lang-en"><strong>Unlocks:</strong> Fixed 16 million supply, almost all circulating; remainder mainly in ecosystem reserve/incentive contracts. <strong>No material cliff unlock found.</strong> Near-term supply pressure is more from incentive emissions and treasury ops than classic vesting.</p>
 <hr />
-<h2>4. 市场与基本面</h2>
-<blockquote>
-<p>说明：不同数据商对「TVL」定义不同。DefiLlama 协议 TVL 通常接近「净锁定」（供给 − 借款等调整）；Aavescan 同时披露供给、借款与净 TVL。本稿图表以 <strong>DefiLlama 可复核 API</strong> 为主；Aavescan 页面为前端渲染，本次未能稳定抓取即时数值，故不以 Aavescan 单独制图。</p>
-</blockquote>
-<h3>4.1 规模</h3>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>数值</th>
-<th>日期/来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Aave 协议 TVL（DefiLlama 父协议合计）</td>
-<td>约 <strong>$184.0 亿</strong></td>
-<td>2026-09-07，<a href="https://defillama.com/protocol/aave">DefiLlama API</a></td>
-</tr>
-<tr>
-<td>供给（估）/ 借款 / 净 TVL</td>
-<td>约 <strong>$312 亿 / $128.5 亿 / $184 亿</strong></td>
-<td>DefiLlama：供给≈净TVL+Borrowed</td>
-</tr>
-<tr>
-<td>Aave V3 TVL</td>
-<td>约 <strong>$176.4 亿</strong></td>
-<td>DefiLlama protocols</td>
-</tr>
-<tr>
-<td>Aave V4 TVL</td>
-<td>约 <strong>$3.84 亿</strong></td>
-<td>同上（上线后保守 caps，份额仍小）</td>
-</tr>
-<tr>
-<td>Aave V2 TVL</td>
-<td>约 <strong>$1.12 亿</strong></td>
-<td>同上（遗留）</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="Aave 各版本 TVL" src="../../assets/aave/01_aave_tvl_versions.png" /></p>
-<p><strong>解读：</strong> 父协议约 $184 亿净 TVL 中，V3 贡献约 96%；V4 约 $3.8 亿，反映 caps 保守与迁移早期——架构叙事已落地，流动性切换仍滞后。</p>
-<p><img alt="供给、借款与净 TVL" src="../../assets/aave/02_aave_supply_borrow_net.png" /></p>
-<p><strong>解读：</strong> 借款约 $129 亿、净 TVL 约 $184 亿，利用率处于可产生可观费用的区间；供给侧（净+借）约 $312 亿，体现协议作为「资产负债表」的规模优势。</p>
-<p><img alt="Aave 净 TVL 趋势" src="../../assets/aave/07_aave_tvl_trend.png" /></p>
-<p><strong>解读：</strong> 近一年净 TVL 自约 2025 年四季度高点回落，2026 年年中出现显著下台阶后于 8–9 月回升至约 $184 亿——<strong>规模领先但周期性明显</strong>，与风险资产与稳定币流向高度相关。</p>
-<h3>4.2 收入与费用（DefiLlama Fees）</h3>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>约值</th>
-<th>来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>协议费用（Fees）30 日</td>
-<td>约 <strong>$3280 万</strong></td>
-<td>DefiLlama fees/aave，2026-09-07</td>
-</tr>
-<tr>
-<td>协议收入（Revenue）30 日</td>
-<td>约 <strong>$457 万</strong></td>
-<td>同上（dailyRevenue）</td>
-</tr>
-<tr>
-<td>费用 / 收入 累计（All-time）</td>
-<td>约 <strong>$22.8 亿 / $3.09 亿</strong></td>
-<td>同上</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="30 日费用 vs 协议收入" src="../../assets/aave/03_aave_fees_vs_revenue_30d.png" /></p>
-<p><strong>解读：</strong> 近 30 日费用约 $3280 万、协议收入约 $457 万，收入/费用捕获率约 <strong>13.9%</strong>（其余主要流向供给方等）。费用体量领先借贷赛道，但代币层价值捕获仍取决于储备因子、GHO 利息与「Aave Will Win」执行落地，而非费用总额本身。</p>
-<p><strong>注意：</strong> 单日收入序列末尾可能出现不完整日，解读时宜看 7/30 日聚合。</p>
-<h3>4.3 竞争份额（DefiLlama，2026年9月7日）</h3>
-<table>
-<thead>
-<tr>
-<th>协议</th>
-<th>TVL 约值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Aave V3</td>
-<td>$176 亿</td>
-</tr>
-<tr>
-<td>Morpho Blue</td>
-<td>$98 亿</td>
-</tr>
-<tr>
-<td>SparkLend</td>
-<td>$45 亿</td>
-</tr>
-<tr>
-<td>Compound V3</td>
-<td>$14 亿</td>
-</tr>
-<tr>
-<td>Fluid Lending</td>
-<td>$7.5 亿</td>
-</tr>
-<tr>
-<td>Aave V4</td>
-<td>$3.8 亿</td>
-</tr>
-<tr>
-<td>Euler V2</td>
-<td>$3.5 亿</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="借贷竞品 TVL" src="../../assets/aave/06_lending_competitors_tvl.png" /></p>
-<p><strong>解读：</strong> Aave V3 仍大幅领先；Morpho Blue 以约 $98 亿紧随其后，在收益率与资本效率上形成差异化竞争。Compound V3 份额明显收缩。Spark 与 Sky 生态相关，部分与 Aave 流动性形成竞合。</p>
-<h3>4.4 链分布（DefiLlama currentChainTvls，排除 borrowed/staking/pool2）</h3>
-<p>约 <strong>84.8%</strong> 净 TVL 在 <strong>Ethereum</strong>（约 $156 亿）；其后为 Base、Plasma、Arbitrum、Monad、Avalanche、BSC、Polygon 等。借款总额约 <strong>$128.5 亿</strong>。跨链扩张在进行，但风险与收入仍高度集中于以太坊。</p>
+<h2 id="4-市场与基本面" class="lang-zh">4. 市场与基本面</h2><h2 class="lang-en">4. Market and fundamentals</h2>
+<blockquote class="lang-zh">说明：不同数据商对「TVL」定义不同。DefiLlama 协议 TVL 通常接近「净锁定」（供给 − 借款等调整）；Aavescan 同时披露供给、借款与净 TVL。本稿图表以 <strong>DefiLlama 可复核 API</strong> 为主；Aavescan 页面为前端渲染，本次未能稳定抓取即时数值，故不以 Aavescan 单独制图。</blockquote><blockquote class="lang-en">Note: data vendors define “TVL” differently. DefiLlama protocol TVL is usually close to “net locked” (supply minus borrows and similar adjustments). Aavescan also shows supply, borrows and net TVL. Charts here use <strong>DefiLlama’s auditable API</strong>. Aavescan is front-end rendered and could not be scraped stably this round, so it is not used for standalone charts.</blockquote>
+<h3 class="lang-zh">4.1 规模</h3><h3 class="lang-en">4.1 Scale</h3>
+<div class="table-wrap"><table><thead><tr><th>指标<br><span class="bi">Metric</span></th><th>数值<br><span class="bi">Value</span></th><th>日期/来源<br><span class="bi">Date / source</span></th></tr></thead><tbody><tr><td>Aave 协议 TVL（DefiLlama 父协议合计）<br><span class="bi">Aave protocol TVL (DefiLlama parent)</span></td><td>约 <strong>$184.0 亿</strong><br><span class="bi">~<strong>$18.40B</strong></span></td><td>2026-09-07，<a href="https://defillama.com/protocol/aave">DefiLlama API</a></td></tr><tr><td>供给（估）/ 借款 / 净 TVL<br><span class="bi">Supply (est.) / borrows / net TVL</span></td><td>约 <strong>$312 亿 / $128.5 亿 / $184 亿</strong><br><span class="bi">~<strong>$31.2B / $12.85B / $18.4B</strong></span></td><td>DefiLlama：供给≈净TVL+Borrowed<br><span class="bi">DefiLlama: supply ≈ net TVL + Borrowed</span></td></tr><tr><td>Aave V3 TVL</td><td>约 <strong>$176.4 亿</strong><br><span class="bi">~<strong>$17.64B</strong></span></td><td>DefiLlama protocols</td></tr><tr><td>Aave V4 TVL</td><td>约 <strong>$3.84 亿</strong><br><span class="bi">~<strong>$0.384B</strong></span></td><td>同上（上线后保守 caps，份额仍小）<br><span class="bi">Same (conservative caps after launch; still small)</span></td></tr><tr><td>Aave V2 TVL</td><td>约 <strong>$1.12 亿</strong><br><span class="bi">~<strong>$0.112B</strong></span></td><td>同上（遗留）<br><span class="bi">Same (legacy)</span></td></tr></tbody></table></div>
+<figure><img src="../../assets/aave/01_aave_tvl_versions.png" alt="Aave 各版本 TVL"><figcaption class="lang-zh">Aave 各版本 TVL</figcaption><figcaption class="lang-en">Aave TVL by version</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> 父协议约 $184 亿净 TVL 中，V3 贡献约 96%；V4 约 $3.8 亿，反映 caps 保守与迁移早期——架构叙事已落地，流动性切换仍滞后。</p><p class="lang-en"><strong>Read:</strong> Of ~$18.4B parent net TVL, V3 is about 96%. V4 is about $384M — conservative caps plus early migration. The architecture story is live; liquidity has not switched yet.</p>
+<figure><img src="../../assets/aave/02_aave_supply_borrow_net.png" alt="供给、借款与净 TVL"><figcaption class="lang-zh">供给、借款与净 TVL</figcaption><figcaption class="lang-en">Supply, borrows and net TVL</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> 借款约 $129 亿、净 TVL 约 $184 亿，利用率处于可产生可观费用的区间；供给侧（净+借）约 $312 亿，体现协议作为「资产负债表」的规模优势。</p><p class="lang-en"><strong>Read:</strong> Borrows ~$12.9B and net TVL ~$18.4B put utilization in a fee-producing range. Supply-side (net + borrowed) ~$31.2B shows the protocol’s balance-sheet scale.</p>
+<figure><img src="../../assets/aave/07_aave_tvl_trend.png" alt="Aave 净 TVL 趋势"><figcaption class="lang-zh">Aave 净 TVL 趋势</figcaption><figcaption class="lang-en">Aave net TVL trend</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> 近一年净 TVL 自约 2025 年四季度高点回落，2026 年年中出现显著下台阶后于 8–9 月回升至约 $184 亿——<strong>规模领先但周期性明显</strong>，与风险资产与稳定币流向高度相关。</p><p class="lang-en"><strong>Read:</strong> Net TVL over the past year rolled over from a late-2025 peak, stepped down mid-2026, then recovered in August–September to about $18.4B — <strong>still the scale leader, clearly cyclical</strong>, tightly tied to risk assets and stablecoin flows.</p>
+<h3 class="lang-zh">4.2 收入与费用（DefiLlama Fees）</h3><h3 class="lang-en">4.2 Revenue and fees (DefiLlama Fees)</h3>
+<div class="table-wrap"><table><thead><tr><th>指标<br><span class="bi">Metric</span></th><th>约值<br><span class="bi">Approx.</span></th><th>来源<br><span class="bi">Source</span></th></tr></thead><tbody><tr><td>协议费用（Fees）30 日<br><span class="bi">Protocol fees, 30d</span></td><td>约 <strong>$3280 万</strong><br><span class="bi">~<strong>$32.8M</strong></span></td><td>DefiLlama fees/aave，2026-09-07</td></tr><tr><td>协议收入（Revenue）30 日<br><span class="bi">Protocol revenue, 30d</span></td><td>约 <strong>$457 万</strong><br><span class="bi">~<strong>$4.57M</strong></span></td><td>同上（dailyRevenue）<br><span class="bi">Same (dailyRevenue)</span></td></tr><tr><td>费用 / 收入 累计（All-time）<br><span class="bi">Fees / revenue, all-time</span></td><td>约 <strong>$22.8 亿 / $3.09 亿</strong><br><span class="bi">~<strong>$2.28B / $309M</strong></span></td><td>同上<br><span class="bi">Same</span></td></tr></tbody></table></div>
+<figure><img src="../../assets/aave/03_aave_fees_vs_revenue_30d.png" alt="30 日费用 vs 协议收入"><figcaption class="lang-zh">30 日费用 vs 协议收入</figcaption><figcaption class="lang-en">30-day fees vs protocol revenue</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> 近 30 日费用约 $3280 万、协议收入约 $457 万，收入/费用捕获率约 <strong>13.9%</strong>（其余主要流向供给方等）。费用体量领先借贷赛道，但代币层价值捕获仍取决于储备因子、GHO 利息与「Aave Will Win」执行落地，而非费用总额本身。</p><p class="lang-en"><strong>Read:</strong> Last 30 days ~$32.8M fees and ~$4.57M protocol revenue, a capture rate of about <strong>13.9%</strong> (the rest mostly to suppliers). Fee scale leads lending, but token-layer capture still depends on reserve factor, GHO interest and “Aave Will Win” execution — not the fee headline alone.</p>
+<p class="lang-zh"><strong>注意：</strong> 单日收入序列末尾可能出现不完整日，解读时宜看 7/30 日聚合。</p><p class="lang-en"><strong>Note:</strong> The last day of a daily revenue series may be incomplete; prefer 7/30-day aggregates.</p>
+<h3 class="lang-zh">4.3 竞争份额（DefiLlama，2026年9月7日）</h3><h3 class="lang-en">4.3 Competitive share (DefiLlama, 7 September 2026)</h3>
+<div class="table-wrap"><table><thead><tr><th>协议<br><span class="bi">Protocol</span></th><th>TVL 约值<br><span class="bi">Approx. TVL</span></th></tr></thead><tbody><tr><td>Aave V3</td><td>$176 亿<br><span class="bi">$17.6B</span></td></tr><tr><td>Morpho Blue</td><td>$98 亿<br><span class="bi">$9.8B</span></td></tr><tr><td>SparkLend</td><td>$45 亿<br><span class="bi">$4.5B</span></td></tr><tr><td>Compound V3</td><td>$14 亿<br><span class="bi">$1.4B</span></td></tr><tr><td>Fluid Lending</td><td>$7.5 亿<br><span class="bi">$0.75B</span></td></tr><tr><td>Aave V4</td><td>$3.8 亿<br><span class="bi">$0.38B</span></td></tr><tr><td>Euler V2</td><td>$3.5 亿<br><span class="bi">$0.35B</span></td></tr></tbody></table></div>
+<figure><img src="../../assets/aave/06_lending_competitors_tvl.png" alt="借贷竞品 TVL"><figcaption class="lang-zh">借贷竞品 TVL</figcaption><figcaption class="lang-en">Lending competitor TVL</figcaption></figure>
+<p class="lang-zh"><strong>解读：</strong> Aave V3 仍大幅领先；Morpho Blue 以约 $98 亿紧随其后，在收益率与资本效率上形成差异化竞争。Compound V3 份额明显收缩。Spark 与 Sky 生态相关，部分与 Aave 流动性形成竞合。</p><p class="lang-en"><strong>Read:</strong> Aave V3 still leads by a wide margin. Morpho Blue at ~$9.8B is the closest follower, competing on yield and capital efficiency. Compound V3 share has shrunk. Spark sits in the Sky orbit and is both competitor and complement to Aave liquidity.</p>
+<h3 class="lang-zh">4.4 链分布（DefiLlama currentChainTvls，排除 borrowed/staking/pool2）</h3><h3 class="lang-en">4.4 Chain mix (DefiLlama currentChainTvls, excluding borrowed/staking/pool2)</h3>
+<p class="lang-zh">约 <strong>84.8%</strong> 净 TVL 在 <strong>Ethereum</strong>（约 $156 亿）；其后为 Base、Plasma、Arbitrum、Monad、Avalanche、BSC、Polygon 等。借款总额约 <strong>$128.5 亿</strong>。跨链扩张在进行，但风险与收入仍高度集中于以太坊。</p><p class="lang-en">About <strong>84.8%</strong> of net TVL is on <strong>Ethereum</strong> (~$15.6B); then Base, Plasma, Arbitrum, Monad, Avalanche, BSC, Polygon and others. Total borrows ~<strong>$12.85B</strong>. Multi-chain expansion is underway, but risk and revenue remain highly concentrated on Ethereum.</p>
 <hr />
-<h2>5. 治理与团队 / 基金会背景</h2>
-<ul>
-<li><strong>Aave Labs：</strong> 由创始人 <strong>Stani Kulechov</strong> 领导的产品与研发实体，负责协议迭代、前端与品牌相关建设。  </li>
-<li><strong>Aave DAO：</strong> AAVE 持有者与委托代表通过 <a href="https://governance.aave.com">governance.aave.com</a> 与链上治理管理参数、上市资产、金库与重大升级。  </li>
-<li><strong>服务商生态：</strong> 历史上 BGD Labs、风险服务商、ACI 等贡献方参与开发与治理运营；2026 年前后围绕资金分配与权力结构出现公开摩擦（部分服务商宣布减少或停止贡献），属治理观察重点。  </li>
-<li><strong>「Aave Will Win」框架（约 2026 年 4 月通过）：</strong> 将 Aave 品牌产品收入导向 DAO；向 Labs 提供约一年期预算支持；承诺推进品牌/IP 由社区保护载体（基金会类实体）持有的后续提案。CoinDesk 等报道称此为结束「收入归谁」争议的里程碑，同时引发对中心化与问责标准的讨论。  </li>
-<li><strong>风险与参数管理：</strong> Risk Steward、GHO Stewards 等角色可在授权范围内调整利率等参数，提高响应速度，但也增加委托风险。</li>
-</ul>
-<p>公开信息未显示单一「传统基金会」完全替代 Labs；基金会/IP 载体的最终法律结构以后续 AIP 为准，<strong>本稿标注为：框架已通过，细则仍待观察。</strong></p>
+<h2 id="5-治理与团队-基金会背景" class="lang-zh">5. 治理与团队 / 基金会背景</h2><h2 class="lang-en">5. Governance, team / foundation background</h2>
+<ul class="lang-zh"><li><strong>Aave Labs：</strong> 由创始人 <strong>Stani Kulechov</strong> 领导的产品与研发实体，负责协议迭代、前端与品牌相关建设。  </li><li><strong>Aave DAO：</strong> AAVE 持有者与委托代表通过 <a href="https://governance.aave.com">governance.aave.com</a> 与链上治理管理参数、上市资产、金库与重大升级。  </li><li><strong>服务商生态：</strong> 历史上 BGD Labs、风险服务商、ACI 等贡献方参与开发与治理运营；2026 年前后围绕资金分配与权力结构出现公开摩擦（部分服务商宣布减少或停止贡献），属治理观察重点。  </li><li><strong>「Aave Will Win」框架（约 2026 年 4 月通过）：</strong> 将 Aave 品牌产品收入导向 DAO；向 Labs 提供约一年期预算支持；承诺推进品牌/IP 由社区保护载体（基金会类实体）持有的后续提案。CoinDesk 等报道称此为结束「收入归谁」争议的里程碑，同时引发对中心化与问责标准的讨论。  </li><li><strong>风险与参数管理：</strong> Risk Steward、GHO Stewards 等角色可在授权范围内调整利率等参数，提高响应速度，但也增加委托风险。</li></ul><ul class="lang-en"><li><strong>Aave Labs:</strong> Product and R&amp;D entity led by founder <strong>Stani Kulechov</strong>, covering protocol iteration, front ends and brand work.  </li><li><strong>Aave DAO:</strong> AAVE holders and delegates manage parameters, listings, treasury and major upgrades via <a href="https://governance.aave.com">governance.aave.com</a> and on-chain governance.  </li><li><strong>Service-provider stack:</strong> Historically BGD Labs, risk providers, ACI and others contributed to development and governance ops. Around 2026, public friction over funding and power (some providers reduced or stopped contributing) is a governance watch item.  </li><li><strong>“Aave Will Win” framework (~passed April 2026):</strong> Directs Aave-branded product revenue to the DAO; gives Labs about a one-year budget; commits to a follow-on proposal for brand/IP to sit in a community-protection vehicle (foundation-like). CoinDesk and others called it a milestone ending the “who gets revenue” fight, while also raising centralization and accountability questions.  </li><li><strong>Risk and parameter ops:</strong> Risk Steward, GHO Stewards and similar roles can tweak rates inside a mandate — faster response, more delegated risk.</li></ul>
+<p class="lang-zh">公开信息未显示单一「传统基金会」完全替代 Labs；基金会/IP 载体的最终法律结构以后续 AIP 为准，<strong>本稿标注为：框架已通过，细则仍待观察。</strong></p><p class="lang-en">Public information does not show a single traditional foundation fully replacing Labs. The final legal structure of any foundation/IP vehicle follows later AIPs. <strong>This note flags: framework passed, details still to watch.</strong></p>
 <hr />
-<h2>6. 竞争格局与护城河</h2>
-<p><strong>护城河（相对稳固）：</strong></p>
-<ol>
-<li><strong>流动性网络效应与品牌信任：</strong> 深度资金池降低大额滑点与利率冲击，机构与金库更倾向「战斗测试」充分的场所。  </li>
-<li><strong>多链与产品矩阵：</strong> V3 多市场 + GHO + Umbrella + Horizon（RWA 借贷，DefiLlama 另列）+ V4 模块化 Spoke。  </li>
-<li><strong>清算与风控经验：</strong> 历经多轮加密极端行情；官方强调生产环境压力测试历史。  </li>
-<li><strong>治理与集成广度：</strong> 钱包、聚合器、结构化产品默认对接成本。</li>
-</ol>
-<p><strong>挑战：</strong></p>
-<ul>
-<li><strong>Morpho 等：</strong> 更高资本效率与策展收益，可能分流边际存款。  </li>
-<li><strong>V4 迁移摩擦：</strong> 双版本并存期流动性分裂；caps 保守导致 V4 短期份额有限。  </li>
-<li><strong>DAO–Labs 张力：</strong> 影响外部贡献者与升级节奏的可预期性。  </li>
-<li><strong>稳定币大战：</strong> sUSDS、Ethena 等储蓄产品挤压 GHO/sGHO 增长空间。</li>
-</ul>
+<h2 id="6-竞争格局与护城河" class="lang-zh">6. 竞争格局与护城河</h2><h2 class="lang-en">6. Competition and moat</h2>
+<p class="lang-zh"><strong>护城河（相对稳固）：</strong></p><p class="lang-en"><strong>Moat (relatively sturdy):</strong></p>
+<ol class="lang-zh"><li><strong>流动性网络效应与品牌信任：</strong> 深度资金池降低大额滑点与利率冲击，机构与金库更倾向「战斗测试」充分的场所。  </li><li><strong>多链与产品矩阵：</strong> V3 多市场 + GHO + Umbrella + Horizon（RWA 借贷，DefiLlama 另列）+ V4 模块化 Spoke。  </li><li><strong>清算与风控经验：</strong> 历经多轮加密极端行情；官方强调生产环境压力测试历史。  </li><li><strong>治理与集成广度：</strong> 钱包、聚合器、结构化产品默认对接成本。</li></ol><ol class="lang-en"><li><strong>Liquidity network effects and brand trust:</strong> Deep pools cut large-size slippage and rate shock; institutions and treasuries prefer battle-tested venues.  </li><li><strong>Multi-chain and product matrix:</strong> V3 multi-market + GHO + Umbrella + Horizon (RWA lending, listed separately on DefiLlama) + V4 modular Spokes.  </li><li><strong>Liquidation and risk experience:</strong> Multiple crypto stress cycles; official materials stress production pressure-test history.  </li><li><strong>Governance and integration breadth:</strong> Default wiring cost for wallets, aggregators and structured products.</li></ol>
+<p class="lang-zh"><strong>挑战：</strong></p><p class="lang-en"><strong>Challenges:</strong></p>
+<ul class="lang-zh"><li><strong>Morpho 等：</strong> 更高资本效率与策展收益，可能分流边际存款。  </li><li><strong>V4 迁移摩擦：</strong> 双版本并存期流动性分裂；caps 保守导致 V4 短期份额有限。  </li><li><strong>DAO–Labs 张力：</strong> 影响外部贡献者与升级节奏的可预期性。  </li><li><strong>稳定币大战：</strong> sUSDS、Ethena 等储蓄产品挤压 GHO/sGHO 增长空间。</li></ul><ul class="lang-en"><li><strong>Morpho and peers:</strong> Higher capital efficiency and curated yield can siphon marginal deposits.  </li><li><strong>V4 migration friction:</strong> Dual-version split; conservative caps keep V4 share small near term.  </li><li><strong>DAO–Labs tension:</strong> Affects predictability of external contributors and upgrade cadence.  </li><li><strong>Stablecoin wars:</strong> sUSDS, Ethena and other savings products squeeze GHO/sGHO growth.</li></ul>
 <hr />
-<h2>7. 风险（暴露面，不含利用细节）</h2>
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th>暴露面</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>智能合约</td>
-<td>V3/V4/Umbrella/GHO 合约复杂；新架构上线初期攻击面扩大；依赖持续审计与形式化验证</td>
-</tr>
-<tr>
-<td>预言机</td>
-<td>价格延迟或操纵可导致错误清算或坏账；跨链部署放大预言机依赖</td>
-</tr>
-<tr>
-<td>治理</td>
-<td>恶意或仓促提案、参数失误、委托集中；Steward 权限边界</td>
-</tr>
-<tr>
-<td>监管</td>
-<td>借贷与稳定币面临各地证券法/稳定币监管不确定性；前端与 Labs 实体司法管辖</td>
-</tr>
-<tr>
-<td>GHO/稳定币</td>
-<td>脱锚、跨链流动性不足、储蓄率不可持续、GSM 耗尽情景</td>
-</tr>
-<tr>
-<td>流动性与黑天鹅</td>
-<td>连环清算、稳定币脱锚、LST 折价、跨链桥风险、关联协议传染</td>
-</tr>
-<tr>
-<td>运营与政治</td>
-<td>服务商退出、品牌/IP 归属争议、激励不足导致安全覆盖低于目标</td>
-</tr>
-</tbody>
-</table>
-<p>Umbrella 设计上将罚没资产与潜在坏账资产对齐，并引入赤字抵消缓冲；历史 Safety Module 据官方帮助中心称长期未实际执行罚没，<strong>不等于未来为零</strong>。</p>
+<h2 id="7-风险暴露面不含利用细节" class="lang-zh">7. 风险（暴露面，不含利用细节）</h2><h2 class="lang-en">7. Risks (exposures only, no exploit detail)</h2>
+<div class="table-wrap"><table><thead><tr><th>类别<br><span class="bi">Category</span></th><th>暴露面<br><span class="bi">Exposure</span></th></tr></thead><tbody><tr><td>智能合约<br><span class="bi">Smart contracts</span></td><td>V3/V4/Umbrella/GHO 合约复杂；新架构上线初期攻击面扩大；依赖持续审计与形式化验证<br><span class="bi">V3/V4/Umbrella/GHO complexity; attack surface widens at new-architecture launch; depends on ongoing audits and formal methods</span></td></tr><tr><td>预言机<br><span class="bi">Oracles</span></td><td>价格延迟或操纵可导致错误清算或坏账；跨链部署放大预言机依赖<br><span class="bi">Lag or manipulation can cause bad liquidations or bad debt; multi-chain multiplies oracle dependence</span></td></tr><tr><td>治理<br><span class="bi">Governance</span></td><td>恶意或仓促提案、参数失误、委托集中；Steward 权限边界<br><span class="bi">Malicious or rushed proposals, parameter errors, delegate concentration; Steward permission edges</span></td></tr><tr><td>监管<br><span class="bi">Regulation</span></td><td>借贷与稳定币面临各地证券法/稳定币监管不确定性；前端与 Labs 实体司法管辖<br><span class="bi">Lending and stables face securities/stablecoin uncertainty by jurisdiction; front end and Labs entity domicile</span></td></tr><tr><td>GHO/稳定币<br><span class="bi">GHO / stables</span></td><td>脱锚、跨链流动性不足、储蓄率不可持续、GSM 耗尽情景<br><span class="bi">Depeg, thin cross-chain liquidity, unsustainable savings rate, GSM exhaustion</span></td></tr><tr><td>流动性与黑天鹅<br><span class="bi">Liquidity and black swans</span></td><td>连环清算、稳定币脱锚、LST 折价、跨链桥风险、关联协议传染<br><span class="bi">Cascade liquidations, stable depegs, LST discounts, bridge risk, related-protocol contagion</span></td></tr><tr><td>运营与政治<br><span class="bi">Ops and politics</span></td><td>服务商退出、品牌/IP 归属争议、激励不足导致安全覆盖低于目标<br><span class="bi">Provider exits, brand/IP disputes, incentives too thin vs target coverage</span></td></tr></tbody></table></div>
+<p class="lang-zh">Umbrella 设计上将罚没资产与潜在坏账资产对齐，并引入赤字抵消缓冲；历史 Safety Module 据官方帮助中心称长期未实际执行罚没，<strong>不等于未来为零</strong>。</p><p class="lang-en">Umbrella aligns slashed assets with potential bad-debt assets and adds a deficit buffer. Official help-center language says the historical Safety Module long went without an actual slash — <strong>that is not a promise of zero in the future</strong>.</p>
 <hr />
-<h2>8. 催化剂与跟踪指标</h2>
-<p><strong>潜在催化剂：</strong></p>
-<ul>
-<li>V4 caps 上调、新 Spoke（机构/RWA/eMode 类）与更多链部署  </li>
-<li>GHO 流通与 sGHO 存款规模突破；ASR 与借款利率政策有效性  </li>
-<li>DAO 收入归集执行落地与潜在「回购/激励/分红」类提案（若出现需单独评估）  </li>
-<li>品牌基金会细则落地，缓和治理分裂叙事  </li>
-<li>利率上行周期推高费用与收入</li>
-</ul>
-<p><strong>建议跟踪指标（建议周更）：</strong></p>
-<ol>
-<li>DefiLlama：Aave 父协议 / V3 / V4 TVL 与链分布  </li>
-<li>费用与收入（7d/30d）及利用率  </li>
-<li>GHO 流通市值、锚定偏离、sGHO TVL、ASR  </li>
-<li>Umbrella 各资产质押量相对目标覆盖率  </li>
-<li>Morpho / Spark / Compound TVL 相对份额  </li>
-<li>治理论坛：V4 参数、Risk Steward、服务商预算与基金会提案  </li>
-<li>AAVE 流通量与财库持仓变动（链上）</li>
-</ol>
+<h2 id="8-催化剂与跟踪指标" class="lang-zh">8. 催化剂与跟踪指标</h2><h2 class="lang-en">8. Catalysts and tracking metrics</h2>
+<p class="lang-zh"><strong>潜在催化剂：</strong></p><p class="lang-en"><strong>Potential catalysts:</strong></p>
+<ul class="lang-zh"><li>V4 caps 上调、新 Spoke（机构/RWA/eMode 类）与更多链部署  </li><li>GHO 流通与 sGHO 存款规模突破；ASR 与借款利率政策有效性  </li><li>DAO 收入归集执行落地与潜在「回购/激励/分红」类提案（若出现需单独评估）  </li><li>品牌基金会细则落地，缓和治理分裂叙事  </li><li>利率上行周期推高费用与收入</li></ul><ul class="lang-en"><li>V4 cap raises, new Spokes (institution/RWA/eMode-like) and more chain deploys  </li><li>GHO float and sGHO deposits breaking out; ASR and borrow-rate policy effectiveness  </li><li>DAO revenue-routing execution and any “buyback / incentive / dividend” proposals (evaluate separately if they appear)  </li><li>Brand-foundation details landing, cooling the governance-split narrative  </li><li>A rising-rate cycle lifting fees and revenue</li></ul>
+<p class="lang-zh"><strong>建议跟踪指标（建议周更）：</strong></p><p class="lang-en"><strong>Suggested weekly metrics:</strong></p>
+<ol class="lang-zh"><li>DefiLlama：Aave 父协议 / V3 / V4 TVL 与链分布  </li><li>费用与收入（7d/30d）及利用率  </li><li>GHO 流通市值、锚定偏离、sGHO TVL、ASR  </li><li>Umbrella 各资产质押量相对目标覆盖率  </li><li>Morpho / Spark / Compound TVL 相对份额  </li><li>治理论坛：V4 参数、Risk Steward、服务商预算与基金会提案  </li><li>AAVE 流通量与财库持仓变动（链上）</li></ol><ol class="lang-en"><li>DefiLlama: Aave parent / V3 / V4 TVL and chain mix  </li><li>Fees and revenue (7d/30d) plus utilization  </li><li>GHO circulating mcap, peg deviation, sGHO TVL, ASR  </li><li>Umbrella stake by asset versus target coverage  </li><li>Morpho / Spark / Compound TVL relative share  </li><li>Governance forum: V4 parameters, Risk Steward, provider budgets and foundation proposals  </li><li>AAVE circulating supply and treasury holdings (on-chain)</li></ol>
 <hr />
-<h2>9. 结论与观察清单</h2>
-<p><strong>结论：</strong> Aave 在 2026 年仍是 DeFi 借贷的「系统性协议」：净 TVL 约 180 亿美元量级、费用体量领先，V4 已上线但尚未承接主流动性。代币侧供应接近完全流通，价值更多绑定 DAO 收入权与治理溢价；2026 年治理框架强化了收入归 DAO 的叙事，但执行质量与贡献者生态稳定性仍待验证。对研究型关注者而言，Aave 适合作为 <strong>借贷赛道基准仓与基础设施观察标的</strong>；交易决策需独立评估宏观利率、风险偏好与竞争分流。</p>
-<p><strong>观察清单：</strong></p>
-<ul>
-<li>[ ] V4 净 TVL 是否持续突破（相对 V3 的迁移斜率）  </li>
-<li>[ ] 30 日协议收入是否随利用率回升（相对 2025 高峰）  </li>
-<li>[ ] GHO 是否稳定在接近 $1 且储蓄侧有净流入  </li>
-<li>[ ] Umbrella 覆盖是否达到治理目标且无异常赤字  </li>
-<li>[ ] DAO–Labs 关系与外部贡献者是否重新稳定  </li>
-<li>[ ] Morpho 等对手份额是否继续侵蚀边际增长</li>
-</ul>
+<h2 id="9-结论与观察清单" class="lang-zh">9. 结论与观察清单</h2><h2 class="lang-en">9. Conclusion and watchlist</h2>
+<p class="lang-zh"><strong>结论：</strong> Aave 在 2026 年仍是 DeFi 借贷的「系统性协议」：净 TVL 约 180 亿美元量级、费用体量领先，V4 已上线但尚未承接主流动性。代币侧供应接近完全流通，价值更多绑定 DAO 收入权与治理溢价；2026 年治理框架强化了收入归 DAO 的叙事，但执行质量与贡献者生态稳定性仍待验证。对研究型关注者而言，Aave 适合作为 <strong>借贷赛道基准仓与基础设施观察标的</strong>；交易决策需独立评估宏观利率、风险偏好与竞争分流。</p><p class="lang-en"><strong>Conclusion:</strong> In 2026 Aave is still DeFi lending’s “systemic protocol”: net TVL around $18B, fee scale in the lead, V4 live but not yet carrying core liquidity. On the token, supply is nearly fully circulating; value is more bound to DAO revenue rights and a governance premium. The 2026 governance framework strengthened “revenue to the DAO”, but execution quality and contributor-stack stability still need proof. For research-oriented readers, Aave fits as a <strong>lending-sector benchmark holding and infrastructure watch</strong>. Trading decisions need a separate view of macro rates, risk appetite and competitive leakage.</p>
+<p class="lang-zh"><strong>观察清单：</strong></p><p class="lang-en"><strong>Watchlist:</strong></p>
+<ul class="lang-zh"><li>[ ] V4 净 TVL 是否持续突破（相对 V3 的迁移斜率）  </li><li>[ ] 30 日协议收入是否随利用率回升（相对 2025 高峰）  </li><li>[ ] GHO 是否稳定在接近 $1 且储蓄侧有净流入  </li><li>[ ] Umbrella 覆盖是否达到治理目标且无异常赤字  </li><li>[ ] DAO–Labs 关系与外部贡献者是否重新稳定  </li><li>[ ] Morpho 等对手份额是否继续侵蚀边际增长</li></ul><ul class="lang-en"><li>[ ] Whether V4 net TVL keeps breaking out (migration slope versus V3)  </li><li>[ ] Whether 30-day protocol revenue recovers with utilization (versus 2025 peaks)  </li><li>[ ] Whether GHO stays near $1 with net inflows on the savings side  </li><li>[ ] Whether Umbrella coverage hits governance targets without odd deficits  </li><li>[ ] Whether DAO–Labs relations and external contributors restabilize  </li><li>[ ] Whether Morpho and others keep eating marginal growth</li></ul>
 <hr />
-<h2>10. 客观总结与买入评分</h2>
-<p><strong>评估基准日：2026年9月7日（Asia/Shanghai，UTC+8）</strong></p>
-<p>本节为 DRLabs 内部研究框架下的结构化量化，用于横向比较同赛道标的的相对吸引力，<strong>不构成对任何读者的买入、持有或卖出建议</strong>（详见文末免责声明）。</p>
-<h3>10.1 评分标准（1–10）</h3>
-<table>
-<thead>
-<tr>
-<th>分数</th>
-<th>含义（研究口径）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>基本面严重恶化或存在难以接受的结构性缺陷；研究框架下倾向回避</td>
-</tr>
-<tr>
-<td>2–3</td>
-<td>重大不确定性主导，负面因素显著压过护城河与现金流逻辑</td>
-</tr>
-<tr>
-<td>4–5</td>
-<td>可跟踪但吸引力有限；仅适合极高风险偏好或事件驱动仓位</td>
-</tr>
-<tr>
-<td>6</td>
-<td>基本面可接受，存在明确争议点；可作为观察或小权重卫星仓讨论</td>
-</tr>
-<tr>
-<td>7</td>
-<td>赛道地位与基本面偏正面，但仍有竞争、治理或估值约束</td>
-</tr>
-<tr>
-<td>8</td>
-<td>较强的相对吸引力；多项维度得分偏高，剩余主要是执行与宏观风险</td>
-</tr>
-<tr>
-<td>9</td>
-<td>证据链非常强，负面因素有限；研究框架下偏向高置信度超配讨论</td>
-</tr>
-<tr>
-<td>10</td>
-<td>极端稀缺的「必须配置」情形；需同时满足护城河、增长、捕获与估值几乎无重大短板</td>
-</tr>
-</tbody>
-</table>
-<h3>10.2 评分维度与权重</h3>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>权重</th>
-<th>得分 (1–10)</th>
-<th>简要依据（2026-09-07）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>基本面 / 护城河</td>
-<td>25%</td>
-<td><strong>8.0</strong></td>
-<td>净 TVL ~$184 亿、品牌与集成广度领先；清算与多链经验深厚</td>
-</tr>
-<tr>
-<td>增长与份额</td>
-<td>20%</td>
-<td><strong>6.5</strong></td>
-<td>仍居首位，但 Morpho Blue ~$98 亿紧逼；V4 份额尚小</td>
-</tr>
-<tr>
-<td>代币价值捕获</td>
-<td>20%</td>
-<td><strong>6.5</strong></td>
-<td>「Aave Will Win」强化 DAO 收入叙事；30 日收入/费用约 13.9%，落地节奏待验证</td>
-</tr>
-<tr>
-<td>风险（越高分=风险越可控）</td>
-<td>20%</td>
-<td><strong>5.5</strong></td>
-<td>合约与跨链复杂度、治理摩擦、监管与稳定币竞争构成实质约束</td>
-</tr>
-<tr>
-<td>估值与时机</td>
-<td>15%</td>
-<td><strong>6.5</strong></td>
-<td>接近全流通、市值/FDV 差距小；一年维度曾大幅回撤后有反弹，择时空间存在但非极端低估证据</td>
-</tr>
-</tbody>
-</table>
-<p><strong>加权得分：</strong><br />
-<code>0.25×8.0 + 0.20×6.5 + 0.20×6.5 + 0.20×5.5 + 0.15×6.5 = 6.675</code> → <strong>最终买入评分：6.7 / 10</strong></p>
-<h3>10.3 为何是 6.7，而非更高或更低</h3>
-<ul>
-<li><strong>不上 8+：</strong> Morpho 等对手已具备挑战边际份额的能力；V4 流动性迁移缓慢；DAO–Labs 与服务商关系仍存噪音；协议收入相对费用的捕获比例有限，且治理执行存在路径依赖。  </li>
-<li><strong>不低于 5：</strong> 规模、费用体量与品牌信任仍显著领先 Compound 等传统对手；供应结构干净；GHO 与收入归 DAO 叙事提供中期期权价值；TVL 自年中低点已有修复。  </li>
-<li><strong>可争议点：</strong> 若投资者更重视「代币即现金流」且要求更高捕获确定性，可能给出 5–6；若更重视系统性基础设施稀缺性与机构采用，可能给出 7–7.5。本稿取加权中枢 <strong>6.7</strong>，对应「偏正面的赛道基准观察标的，而非无条件超配」。</li>
-</ul>
+<h2 id="10-客观总结与买入评分" class="lang-zh">10. 客观总结与买入评分</h2><h2 class="lang-en">10. Objective summary and buy score</h2>
+<p class="lang-zh"><strong>评估基准日：2026年9月7日（Asia/Shanghai，UTC+8）</strong></p><p class="lang-en"><strong>As-of date: 7 September 2026 (Asia/Shanghai, UTC+8)</strong></p>
+<p class="lang-zh">本节为 DRLabs 内部研究框架下的结构化量化，用于横向比较同赛道标的的相对吸引力，<strong>不构成对任何读者的买入、持有或卖出建议</strong>（详见文末免责声明）。</p><p class="lang-en">This section is a structured score under DRLabs’ internal research framework, used to compare relative attractiveness inside the same sector. <strong>It is not a buy, hold or sell recommendation for any reader</strong> (see the disclaimer at the end).</p>
+<h3 class="lang-zh">10.1 评分标准（1–10）</h3><h3 class="lang-en">10.1 Score scale (1–10)</h3>
+<div class="table-wrap"><table><thead><tr><th>分数<br><span class="bi">Score</span></th><th>含义（研究口径）<br><span class="bi">Meaning (research definition)</span></th></tr></thead><tbody><tr><td>1</td><td>基本面严重恶化或存在难以接受的结构性缺陷；研究框架下倾向回避<br><span class="bi">Fundamentals badly impaired or a structural flaw that is hard to accept; framework leans avoid</span></td></tr><tr><td>2–3</td><td>重大不确定性主导，负面因素显著压过护城河与现金流逻辑<br><span class="bi">Major uncertainty dominates; negatives clearly outweigh moat and cash-flow logic</span></td></tr><tr><td>4–5</td><td>可跟踪但吸引力有限；仅适合极高风险偏好或事件驱动仓位<br><span class="bi">Watchable but limited appeal; only for very high risk appetite or event-driven size</span></td></tr><tr><td>6</td><td>基本面可接受，存在明确争议点；可作为观察或小权重卫星仓讨论<br><span class="bi">Acceptable fundamentals with clear debate points; discuss as a watch or small satellite</span></td></tr><tr><td>7</td><td>赛道地位与基本面偏正面，但仍有竞争、治理或估值约束<br><span class="bi">Sector position and fundamentals lean positive, still constrained by competition, governance or valuation</span></td></tr><tr><td>8</td><td>较强的相对吸引力；多项维度得分偏高，剩余主要是执行与宏观风险<br><span class="bi">Stronger relative appeal; several factors score high; remainder is mostly execution and macro</span></td></tr><tr><td>9</td><td>证据链非常强，负面因素有限；研究框架下偏向高置信度超配讨论<br><span class="bi">Evidence chain is very strong, negatives limited; framework leans high-confidence overweight discussion</span></td></tr><tr><td>10</td><td>极端稀缺的「必须配置」情形；需同时满足护城河、增长、捕获与估值几乎无重大短板<br><span class="bi">Extremely scarce “must own” case; moat, growth, capture and valuation almost without a major hole</span></td></tr></tbody></table></div>
+<h3 class="lang-zh">10.2 评分维度与权重</h3><h3 class="lang-en">10.2 Factors and weights</h3>
+<div class="table-wrap"><table><thead><tr><th>维度<br><span class="bi">Factor</span></th><th>权重<br><span class="bi">Weight</span></th><th>得分 (1–10)<br><span class="bi">Score (1–10)</span></th><th>简要依据（2026-09-07）<br><span class="bi">Brief basis (2026-09-07)</span></th></tr></thead><tbody><tr><td>基本面 / 护城河<br><span class="bi">Fundamentals / moat</span></td><td>25%</td><td><strong>8.0</strong></td><td>净 TVL ~$184 亿、品牌与集成广度领先；清算与多链经验深厚<br><span class="bi">Net TVL ~$18.4B, brand and integrations lead; deep liquidation and multi-chain experience</span></td></tr><tr><td>增长与份额<br><span class="bi">Growth and share</span></td><td>20%</td><td><strong>6.5</strong></td><td>仍居首位，但 Morpho Blue ~$98 亿紧逼；V4 份额尚小<br><span class="bi">Still #1, but Morpho Blue ~$9.8B is close; V4 share still small</span></td></tr><tr><td>代币价值捕获<br><span class="bi">Token value capture</span></td><td>20%</td><td><strong>6.5</strong></td><td>「Aave Will Win」强化 DAO 收入叙事；30 日收入/费用约 13.9%，落地节奏待验证<br><span class="bi">“Aave Will Win” strengthens DAO revenue; 30d revenue/fees ~13.9%; execution pace unproven</span></td></tr><tr><td>风险（越高分=风险越可控）<br><span class="bi">Risk (higher = more contained)</span></td><td>20%</td><td><strong>5.5</strong></td><td>合约与跨链复杂度、治理摩擦、监管与稳定币竞争构成实质约束<br><span class="bi">Contract and cross-chain complexity, governance friction, regulation and stablecoin competition are real constraints</span></td></tr><tr><td>估值与时机<br><span class="bi">Valuation and timing</span></td><td>15%</td><td><strong>6.5</strong></td><td>接近全流通、市值/FDV 差距小；一年维度曾大幅回撤后有反弹，择时空间存在但非极端低估证据<br><span class="bi">Near fully circulating, small mcap/FDV gap; large 1y drawdown then a bounce — timing room exists, not extreme undervaluation proof</span></td></tr></tbody></table></div>
+<p class="lang-zh"><strong>加权得分：</strong> <code>0.25×8.0 + 0.20×6.5 + 0.20×6.5 + 0.20×5.5 + 0.15×6.5 = 6.675</code> → <strong>最终买入评分：6.7 / 10</strong></p><p class="lang-en"><strong>Weighted score:</strong> <code>0.25×8.0 + 0.20×6.5 + 0.20×6.5 + 0.20×5.5 + 0.15×6.5 = 6.675</code> → <strong>final buy score: 6.7 / 10</strong></p>
+<h3 class="lang-zh">10.3 为何是 6.7，而非更高或更低</h3><h3 class="lang-en">10.3 Why 6.7, not higher or lower</h3>
+<ul class="lang-zh"><li><strong>不上 8+：</strong> Morpho 等对手已具备挑战边际份额的能力；V4 流动性迁移缓慢；DAO–Labs 与服务商关系仍存噪音；协议收入相对费用的捕获比例有限，且治理执行存在路径依赖。  </li><li><strong>不低于 5：</strong> 规模、费用体量与品牌信任仍显著领先 Compound 等传统对手；供应结构干净；GHO 与收入归 DAO 叙事提供中期期权价值；TVL 自年中低点已有修复。  </li><li><strong>可争议点：</strong> 若投资者更重视「代币即现金流」且要求更高捕获确定性，可能给出 5–6；若更重视系统性基础设施稀缺性与机构采用，可能给出 7–7.5。本稿取加权中枢 <strong>6.7</strong>，对应「偏正面的赛道基准观察标的，而非无条件超配」。</li></ul><ul class="lang-en"><li><strong>Not 8+:</strong> Morpho and peers can contest marginal share; V4 liquidity migration is slow; DAO–Labs and provider relations still noisy; protocol revenue capture versus fees is limited, and governance execution is path-dependent.  </li><li><strong>Not below 5:</strong> Scale, fee volume and brand trust still lead Compound and other legacy peers; supply is clean; GHO plus revenue-to-DAO is a medium-term option; TVL has repaired from the mid-year low.  </li><li><strong>Debatable:</strong> Readers who overweight “token = cash flow” and want higher capture certainty may print 5–6; readers who overweight systemic-infra scarcity and institutional adoption may print 7–7.5. This note takes the weighted center <strong>6.7</strong> — “a positively biased sector-benchmark watch, not an unconditional overweight”.</li></ul>
 <hr />
-<h2>11. 免责声明</h2>
-<p>本报告由 DRLabs 基于公开信息整理，<strong>仅供一般性信息参考与研究讨论之用</strong>，不构成亦不应当被解释为证券、数字资产或其他金融产品的投资建议、推荐、要约、招揽或任何形式的承诺。</p>
-<p>加密资产及去中心化金融协议具有高度波动性与不确定性，价格与协议参数可能在短时间内发生剧烈变化，投资者存在损失部分或全部本金的风险。读者应基于自身财务状况、风险承受能力与投资目标进行独立判断，并在必要时咨询具备相应资质的专业顾问；<strong>因依据本报告内容作出的任何决策及其后果，均由读者自行承担</strong>。</p>
-<p>文中所列「买入评分」及各维度打分，系作者在既定研究框架与公开数据约束下的<strong>主观量化结果</strong>，用于内部比较与讨论，<strong>不代表对任何数字资产的买入或卖出推荐</strong>，亦不保证与未来市场表现一致。</p>
-<p>本报告所引用之数据、图表与第三方来源（包括但不限于 DefiLlama、协议官方文档与治理论坛等）可能存在统计口径差异、更新延迟、遗漏或错误。DRLabs 及作者不对前述信息的准确性、完整性、及时性或适用性作出任何明示或默示保证，亦不对因使用或依赖本报告而产生的任何直接或间接损失承担责任。市场状况与协议状态变化迅速，引用前请自行复核原始来源与链上状态。</p>
+<h2 id="11-免责声明" class="lang-zh">11. 免责声明</h2><h2 class="lang-en">11. Disclaimer</h2>
+<p class="lang-zh">本报告由 DRLabs 基于公开信息整理，<strong>仅供一般性信息参考与研究讨论之用</strong>，不构成亦不应当被解释为证券、数字资产或其他金融产品的投资建议、推荐、要约、招揽或任何形式的承诺。</p><p class="lang-en">This report is compiled by DRLabs from public information and is <strong>for general information and research discussion only</strong>. It is not, and should not be read as, investment advice, a recommendation, an offer, a solicitation or any form of commitment regarding securities, digital assets or other financial products.</p>
+<p class="lang-zh">加密资产及去中心化金融协议具有高度波动性与不确定性，价格与协议参数可能在短时间内发生剧烈变化，投资者存在损失部分或全部本金的风险。读者应基于自身财务状况、风险承受能力与投资目标进行独立判断，并在必要时咨询具备相应资质的专业顾问；<strong>因依据本报告内容作出的任何决策及其后果，均由读者自行承担</strong>。</p><p class="lang-en">Crypto assets and DeFi protocols are highly volatile and uncertain. Prices and protocol parameters can move violently in a short time. Investors can lose part or all of their principal. Readers should judge independently based on their finances, risk tolerance and objectives, and consult qualified advisers if needed. <strong>Any decision based on this report, and its consequences, is the reader’s own.</strong></p>
+<p class="lang-zh">文中所列「买入评分」及各维度打分，系作者在既定研究框架与公开数据约束下的<strong>主观量化结果</strong>，用于内部比较与讨论，<strong>不代表对任何数字资产的买入或卖出推荐</strong>，亦不保证与未来市场表现一致。</p><p class="lang-en">The “buy score” and factor scores are <strong>subjective quantifications</strong> under a stated framework and public-data constraints, used for internal comparison and discussion. <strong>They are not a buy or sell recommendation on any digital asset</strong> and do not guarantee future market performance.</p>
+<p class="lang-zh">本报告所引用之数据、图表与第三方来源（包括但不限于 DefiLlama、协议官方文档与治理论坛等）可能存在统计口径差异、更新延迟、遗漏或错误。DRLabs 及作者不对前述信息的准确性、完整性、及时性或适用性作出任何明示或默示保证，亦不对因使用或依赖本报告而产生的任何直接或间接损失承担责任。市场状况与协议状态变化迅速，引用前请自行复核原始来源与链上状态。</p><p class="lang-en">Data, charts and third-party sources cited (including but not limited to DefiLlama, official docs and governance forums) may differ in definition, be delayed, incomplete or wrong. DRLabs and the author make no express or implied warranty of accuracy, completeness, timeliness or fitness, and are not liable for any direct or indirect loss from using or relying on this report. Markets and protocol state change quickly; re-check original sources and on-chain state before citing.</p>
 <hr />
-<h2>12. 参考来源</h2>
-<ol>
-<li><a href="https://aave.com/docs/aave-v4">Aave V4 Overview（官方文档）</a>  </li>
-<li><a href="https://aave.com/blog/understanding-aave-v4s-architecture">Understanding Aave V4’s Architecture（官方博客）</a>  </li>
-<li><a href="https://aave.com/blog/aave-v4-live-ethereum">Aave V4 is Live on Ethereum（官方博客，2026-03-30）</a>  </li>
-<li><a href="https://aave.com">Aave 官网</a>  </li>
-<li><a href="https://defillama.com/protocol/aave">DefiLlama — Aave</a>  </li>
-<li><a href="https://defillama.com/protocol/aave-v3">DefiLlama — Aave V3</a>  </li>
-<li><a href="https://defillama.com/stablecoin/gho">DefiLlama — GHO 稳定币</a>  </li>
-<li><a href="https://aavescan.com/protocol/totals">Aavescan Protocol Totals</a>（本次未用于制图）  </li>
-<li><a href="https://www.coingecko.com/en/coins/aave">CoinGecko — Aave</a>（部分涨跌幅为历史引用；制图日 API 限流）  </li>
-<li><a href="https://aave.com/help/umbrella/umbrella">Umbrella 帮助文档</a>  </li>
-<li><a href="https://governance.aave.com/t/bgd-aave-safety-module-umbrella/18366">BGD：Safety Module — Umbrella（治理论坛）</a>  </li>
-<li><a href="https://governance.aave.com/t/gho-stewards-august-2026-gho-borrow-rate-and-aave-savings-rate-update/25534">GHO Stewards August 2026 利率与 ASR 更新</a>  </li>
-<li><a href="https://governance.aave.com/t/direct-to-aip-stkgho-sgho-migration-tool/25250">stkGHO → sGHO 迁移工具提案</a>  </li>
-<li><a href="https://governance.aave.com/t/arfc-aave-will-win-framework/24352">[ARFC] Aave Will Win Framework</a>  </li>
-<li><a href="https://www.coindesk.com/tech/2026/04/13/aave-passes-landmark-vote-ending-months-long-fight-over-who-controls-protocol-revenue">CoinDesk：Aave Will Win 投票报道</a>  </li>
-<li><a href="https://www.dlnews.com/articles/defi/aave-dao-members-accuse-stani-kulechov-of-power-grab/">DL News：DAO 与 Labs 摩擦报道</a>  </li>
-<li><a href="https://github.com/aave/aave-v4/blob/main/docs/overview.md">Aave V4 GitHub overview</a>  </li>
-<li><a href="https://en.wikipedia.org/wiki/Aave">Wikipedia — Aave（背景）</a>  </li>
-<li><a href="https://etherscan.io/token/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDAE9">Etherscan — AAVE Token</a>  </li>
-<li><a href="https://governance.aave.com">Aave 治理论坛</a>  </li>
-<li>DefiLlama API：<code>/protocol/aave</code>、<code>/protocols</code>、<code>/summary/fees/aave</code>、<code>coins.llama.fi</code>、<code>stablecoins.llama.fi</code>（制图数据拉取于 2026-09-07）</li>
-</ol>
+<h2 id="12-参考来源" class="lang-zh">12. 参考来源</h2><h2 class="lang-en">12. Sources</h2>
+<ol class="lang-zh"><li><a href="https://aave.com/docs/aave-v4">Aave V4 Overview（官方文档）</a>  </li><li><a href="https://aave.com/blog/understanding-aave-v4s-architecture">Understanding Aave V4’s Architecture（官方博客）</a>  </li><li><a href="https://aave.com/blog/aave-v4-live-ethereum">Aave V4 is Live on Ethereum（官方博客，2026-03-30）</a>  </li><li><a href="https://aave.com">Aave 官网</a>  </li><li><a href="https://defillama.com/protocol/aave">DefiLlama — Aave</a>  </li><li><a href="https://defillama.com/protocol/aave-v3">DefiLlama — Aave V3</a>  </li><li><a href="https://defillama.com/stablecoin/gho">DefiLlama — GHO 稳定币</a>  </li><li><a href="https://aavescan.com/protocol/totals">Aavescan Protocol Totals</a>（本次未用于制图）  </li><li><a href="https://www.coingecko.com/en/coins/aave">CoinGecko — Aave</a>（部分涨跌幅为历史引用；制图日 API 限流）  </li><li><a href="https://aave.com/help/umbrella/umbrella">Umbrella 帮助文档</a>  </li><li><a href="https://governance.aave.com/t/bgd-aave-safety-module-umbrella/18366">BGD：Safety Module — Umbrella（治理论坛）</a>  </li><li><a href="https://governance.aave.com/t/gho-stewards-august-2026-gho-borrow-rate-and-aave-savings-rate-update/25534">GHO Stewards August 2026 利率与 ASR 更新</a>  </li><li><a href="https://governance.aave.com/t/direct-to-aip-stkgho-sgho-migration-tool/25250">stkGHO → sGHO 迁移工具提案</a>  </li><li>[[ARFC] Aave Will Win Framework](https://governance.aave.com/t/arfc-aave-will-win-framework/24352)  </li><li><a href="https://www.coindesk.com/tech/2026/04/13/aave-passes-landmark-vote-ending-months-long-fight-over-who-controls-protocol-revenue">CoinDesk：Aave Will Win 投票报道</a>  </li><li><a href="https://www.dlnews.com/articles/defi/aave-dao-members-accuse-stani-kulechov-of-power-grab/">DL News：DAO 与 Labs 摩擦报道</a>  </li><li><a href="https://github.com/aave/aave-v4/blob/main/docs/overview.md">Aave V4 GitHub overview</a>  </li><li><a href="https://en.wikipedia.org/wiki/Aave">Wikipedia — Aave（背景）</a>  </li><li><a href="https://etherscan.io/token/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDAE9">Etherscan — AAVE Token</a>  </li><li><a href="https://governance.aave.com">Aave 治理论坛</a>  </li><li>DefiLlama API：<code>/protocol/aave</code>、<code>/protocols</code>、<code>/summary/fees/aave</code>、<code>coins.llama.fi</code>、<code>stablecoins.llama.fi</code>（制图数据拉取于 2026-09-07）</li></ol><ol class="lang-en"><li><a href="https://aave.com/docs/aave-v4">Aave V4 Overview (official docs)</a>  </li><li><a href="https://aave.com/blog/understanding-aave-v4s-architecture">Understanding Aave V4’s Architecture (official blog)</a>  </li><li><a href="https://aave.com/blog/aave-v4-live-ethereum">Aave V4 is Live on Ethereum (official blog, 2026-03-30)</a>  </li><li><a href="https://aave.com">Aave website</a>  </li><li><a href="https://defillama.com/protocol/aave">DefiLlama — Aave</a>  </li><li><a href="https://defillama.com/protocol/aave-v3">DefiLlama — Aave V3</a>  </li><li><a href="https://defillama.com/stablecoin/gho">DefiLlama — GHO stablecoin</a>  </li><li><a href="https://aavescan.com/protocol/totals">Aavescan Protocol Totals</a> (not used for charts this round)  </li><li><a href="https://www.coingecko.com/en/coins/aave">CoinGecko — Aave</a> (some return figures are historical cites; API throttled on chart day)  </li><li><a href="https://aave.com/help/umbrella/umbrella">Umbrella help</a>  </li><li><a href="https://governance.aave.com/t/bgd-aave-safety-module-umbrella/18366">BGD: Safety Module — Umbrella (governance forum)</a>  </li><li><a href="https://governance.aave.com/t/gho-stewards-august-2026-gho-borrow-rate-and-aave-savings-rate-update/25534">GHO Stewards August 2026 rate and ASR update</a>  </li><li><a href="https://governance.aave.com/t/direct-to-aip-stkgho-sgho-migration-tool/25250">stkGHO → sGHO migration tool proposal</a>  </li><li>[[ARFC] Aave Will Win Framework](https://governance.aave.com/t/arfc-aave-will-win-framework/24352)  </li><li><a href="https://www.coindesk.com/tech/2026/04/13/aave-passes-landmark-vote-ending-months-long-fight-over-who-controls-protocol-revenue">CoinDesk: Aave Will Win vote</a>  </li><li><a href="https://www.dlnews.com/articles/defi/aave-dao-members-accuse-stani-kulechov-of-power-grab/">DL News: DAO vs Labs friction</a>  </li><li><a href="https://github.com/aave/aave-v4/blob/main/docs/overview.md">Aave V4 GitHub overview</a>  </li><li><a href="https://en.wikipedia.org/wiki/Aave">Wikipedia — Aave (background)</a>  </li><li><a href="https://etherscan.io/token/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDAE9">Etherscan — AAVE Token</a>  </li><li><a href="https://governance.aave.com">Aave governance forum</a>  </li><li>DefiLlama API: <code>/protocol/aave</code>, <code>/protocols</code>, <code>/summary/fees/aave</code>, <code>coins.llama.fi</code>, <code>stablecoins.llama.fi</code> (chart pull 2026-09-07)</li></ol>
 <hr />
-<p><em>报告版本：2026年9月7日（Asia/Shanghai）。图表目录：<code>charts/</code>。禁止将本文用于违法或操纵市场用途。</em></p>
+<p class="lang-zh">*报告版本：2026年9月7日（Asia/Shanghai）。图表目录：<code>charts/</code>。禁止将本文用于违法或操纵市场用途。*</p><p class="lang-en">*Report version: 7 September 2026 (Asia/Shanghai). Chart folder: <code>charts/</code>. Do not use this text for illegal activity or market manipulation.*</p>
   </article>
-  <script>document.addEventListener('DOMContentLoaded', requireAuthForArticle);</script>
 
 </main>
-<footer>内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</footer>
+<footer>
+  <span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span>
+  <span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span>
+</footer>
 </div>
-<script>
-(function(){
-  const KEY='drlabs-theme'; // auto|light|dark
-  function hourTheme(){ const h=new Date().getHours(); return (h>=6 && h<18)?'light':'dark'; }
-  function resolve(mode){
-    if(mode==='light'||mode==='dark') return mode;
-    return hourTheme();
-  }
-  function apply(){
-    const mode=localStorage.getItem(KEY)||'auto';
-    document.documentElement.setAttribute('data-theme', resolve(mode));
-    const el=document.getElementById('themeLabel');
-    if(el) el.textContent = mode==='auto'?'皮肤:自动':(mode==='light'?'皮肤:白天':'皮肤:黑夜');
-  }
-  window.cycleTheme=function(){
-    const order=['auto','light','dark'];
-    const cur=localStorage.getItem(KEY)||'auto';
-    const next=order[(order.indexOf(cur)+1)%order.length];
-    localStorage.setItem(KEY,next);
-    apply();
-  };
-  apply();
-  setInterval(function(){ if((localStorage.getItem(KEY)||'auto')==='auto') apply(); }, 60*1000);
-})();
-</script>
-<script>
-(function(){
-  const USERS_KEY='drlabs-users-v1';
-  const SESSION_KEY='drlabs-session-v1';
-  function loadUsers(){ try{return JSON.parse(localStorage.getItem(USERS_KEY)||'[]');}catch(e){return [];} }
-  function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-  // Lightweight hash (not server-grade; UI gate until Worker backend ships). Store only hash.
-  async function hashPw(pw, salt){
-    const data=new TextEncoder().encode(salt+'::'+pw);
-    const buf=await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-  function validPhone(p){ return /^1[3-9]\d{9}$/.test(p) || /^\+?\d{8,15}$/.test(p); }
-  window.DRAuth={
-    me:function(){ try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');}catch(e){return null;} },
-    logout:function(){ sessionStorage.removeItem(SESSION_KEY); location.reload(); },
-    register: async function(phone, password){
-      phone=(phone||'').trim(); password=password||'';
-      if(!validPhone(phone)) throw new Error('请输入有效手机号');
-      if(password.length<6) throw new Error('密码至少 6 位');
-      const users=loadUsers();
-      if(users.some(u=>u.phone===phone)) throw new Error('该手机号已注册');
-      const salt=crypto.randomUUID();
-      const password_hash=await hashPw(password, salt);
-      users.push({phone, salt, password_hash, created_at:new Date().toISOString()});
-      saveUsers(users);
-      // Also mirror to downloadable backup the owner can export
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({phone}));
-      return true;
-    },
-    login: async function(phone, password){
-      phone=(phone||'').trim(); password=password||'';
-      const u=loadUsers().find(x=>x.phone===phone);
-      if(!u) throw new Error('账号不存在');
-      const h=await hashPw(password, u.salt);
-      if(h!==u.password_hash) throw new Error('密码错误');
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({phone}));
-      return true;
-    },
-    exportUsers:function(){
-      const blob=new Blob([localStorage.getItem(USERS_KEY)||'[]'],{type:'application/json'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='drlabs-users.json'; a.click();
-    }
-  };
-  function paintNav(){
-    const slot=document.getElementById('authSlot');
-    if(!slot) return;
-    const me=window.DRAuth.me();
-    if(me){
-      slot.innerHTML='<span class="muted">'+me.phone+'</span> <a href="#" id="logoutBtn">退出</a>';
-      const b=document.getElementById('logoutBtn'); if(b) b.onclick=function(e){e.preventDefault(); DRAuth.logout();};
-    } else {
-      slot.innerHTML='<a href="'+slot.getAttribute('data-login')+'">登录/注册</a>';
-    }
-  }
-  window.requireAuthForArticle=function(){
-    const art=document.getElementById('article');
-    const gate=document.getElementById('loginNeeded');
-    if(!art) return;
-    if(DRAuth.me()){ art.dataset.locked='0'; if(gate) gate.style.display='none'; }
-    else { art.dataset.locked='1'; if(gate) gate.style.display='block'; }
-  };
-  document.addEventListener('DOMContentLoaded', function(){ paintNav(); if(window.requireAuthForArticle) requireAuthForArticle(); });
-})();
-</script>
+<script src="../../assets/site.js"></script>
 </body>
 </html>
