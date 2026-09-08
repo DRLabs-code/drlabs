@@ -20,6 +20,8 @@ document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
   <a class="brand" href="./">DRLabs</a>
   <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span><span class="lang-ja">ホーム</span><span class="lang-ko">홈</span><span class="lang-fr">Accueil</span><span class="lang-es">Inicio</span><span class="lang-ru">Главная</span></a>
   <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a>
+  <a href="./method.html"><span class="lang-zh">方法</span><span class="lang-en">Method</span><span class="lang-ja">方法</span><span class="lang-ko">방법</span><span class="lang-fr">Méthode</span><span class="lang-es">Método</span><span class="lang-ru">Метод</span></a>
+  <a href="./desk.html"><span class="lang-zh">台历</span><span class="lang-en">Desk</span><span class="lang-ja">台帳</span><span class="lang-ko">데스크</span><span class="lang-fr">Bureau</span><span class="lang-es">Mesa</span><span class="lang-ru">Стол</span></a>
   <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a>
   <span class="spacer"></span>
   <div class="lang-wrap">
@@ -31,31 +33,115 @@ document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 </header>
 <main>
 
-  <p class="lang-zh muted">DRLabs 首席研究 · 数据驱动</p>
-<p class="lang-en muted">DRLabs chief research · data first</p>
-<p class="lang-ja muted">DRLabs チーフリサーチ · データ優先</p>
-<p class="lang-ko muted">DRLabs 수석 리서치 · 데이터 우선</p>
-<p class="lang-fr muted">Recherche DRLabs · les faits d’abord</p>
-<p class="lang-es muted">Investigación DRLabs · datos primero</p>
-<p class="lang-ru muted">Главное исследование DRLabs · сначала данные</p>
-  <h1 class="lang-zh">把链上复杂事，写成能读懂的研报</h1>
-<h1 class="lang-en">Turn on-chain complexity into reports you can actually read</h1>
-<h1 class="lang-ja">オンチェーンの複雑さを、読めるリサーチに落とす</h1>
-<h1 class="lang-ko">온체인의 복잡함을 읽을 수 있는 리서치로</h1>
-<h1 class="lang-fr">Transformer la complexité on-chain en notes lisibles</h1>
-<h1 class="lang-es">Convertir la complejidad on-chain en informes legibles</h1>
-<h1 class="lang-ru">Сложность ончейна — в читаемые записки</h1>
-  <p class="lang-zh">覆盖 DeFi、GameFi、Meme 与关键技术范式。右上角选择语言；表格单元格始终中英对照。</p>
-<p class="lang-en">Coverage: DeFi, GameFi, memes and core tech patterns. Pick a language at top right. Table cells stay Chinese + English.</p>
-<p class="lang-ja">DeFi、GameFi、ミームと技術潮流を扱う。右上で言語を選択。表は中英併記のまま。</p>
-<p class="lang-ko">DeFi, GameFi, 밈과 핵심 기술을 다룹니다. 오른쪽 위에서 언어를 고르세요. 표는 중·영 대조를 유지합니다.</p>
-<p class="lang-fr">DeFi, GameFi, memes et schémas techniques. Choisissez la langue en haut à droite. Les tableaux restent ZH+EN.</p>
-<p class="lang-es">DeFi, GameFi, memes y patrones técnicos. Elige idioma arriba a la derecha. Las tablas siguen en chino e inglés.</p>
-<p class="lang-ru">DeFi, GameFi, мемы и ключевые технологические схемы. Язык — справа сверху. Таблицы остаются китайско-английскими.</p>
+  <p class="lang-zh muted">独立研究台 · 公开数据 · 日更两篇</p>
+<p class="lang-en muted">Independent desk · public data · two notes a day</p>
+<p class="lang-ja muted">独立リサーチ · 公開データ · 毎日2本</p>
+<p class="lang-ko muted">독립 데스크 · 공개 데이터 · 하루 두 편</p>
+<p class="lang-fr muted">Bureau indépendant · données publiques · deux notes par jour</p>
+<p class="lang-es muted">Mesa independiente · datos públicos · dos notas al día</p>
+<p class="lang-ru muted">Независимый стол · открытые данные · две записки в день</p>
+  <h1 class="lang-zh">把判断写清楚，把风险说在前面。</h1>
+<h1 class="lang-en">Write the call clearly. Put risk in front of return.</h1>
+<h1 class="lang-ja">判断をはっきり書き、リスクをリターンの前に置く。</h1>
+<h1 class="lang-ko">판단을 분명히 쓰고, 수익보다 위험을 앞에 둔다.</h1>
+<h1 class="lang-fr">Écrire le jugement clairement. Mettre le risque avant le rendement.</h1>
+<h1 class="lang-es">Escribir el juicio con claridad. Poner el riesgo delante del retorno.</h1>
+<h1 class="lang-ru">Писать вывод ясно. Ставить риск раньше доходности.</h1>
+  <p class="lang-zh">DRLabs 用同一套七维框架给代币打分。分数可以低于 5。表格单元格始终中英对照。</p>
+<p class="lang-en">DRLabs scores tokens on one seven-factor frame. Scores can print below 5. Table cells stay Chinese + English.</p>
+<p class="lang-ja">DRLabsは同じ7因子で採点する。5点未満もあり得る。表は中英併記。</p>
+<p class="lang-ko">DRLabs는 같은 7요인으로 채점합니다. 5점 미만도 나옵니다. 표는 중·영 대조.</p>
+<p class="lang-fr">DRLabs note sur un cadre à sept facteurs. Un score peut passer sous 5. Tableaux ZH+EN.</p>
+<p class="lang-es">DRLabs puntúa con un marco de siete factores. La nota puede bajar de 5. Tablas ZH+EN.</p>
+<p class="lang-ru">DRLabs ставит баллы по семи факторам. Балл может быть ниже 5. Таблицы ZH+EN.</p>
+  <div class="stat-row">
+    <div class="stat"><strong>4</strong><p class="lang-zh muted">已刊研报</p>
+<p class="lang-en muted">Published notes</p>
+<p class="lang-ja muted">公開レポート</p>
+<p class="lang-ko muted">공개 리포트</p>
+<p class="lang-fr muted">Notes publiées</p>
+<p class="lang-es muted">Notas publicadas</p>
+<p class="lang-ru muted">Записки</p></div>
+    <div class="stat"><strong>2</strong><p class="lang-zh muted">每日更新目标</p>
+<p class="lang-en muted">Daily target</p>
+<p class="lang-ja muted">毎日の本数</p>
+<p class="lang-ko muted">일일 목표</p>
+<p class="lang-fr muted">Objectif quotidien</p>
+<p class="lang-es muted">Objetivo diario</p>
+<p class="lang-ru muted">Цель в день</p></div>
+    <div class="stat"><strong>4.7–6.9</strong><p class="lang-zh muted">现有评分区间</p>
+<p class="lang-en muted">Score range now</p>
+<p class="lang-ja muted">現在のスコア帯</p>
+<p class="lang-ko muted">현재 점수대</p>
+<p class="lang-fr muted">Fourchette actuelle</p>
+<p class="lang-es muted">Rango actual</p>
+<p class="lang-ru muted">Текущий диапазон</p></div>
+    <div class="stat"><strong>UTC</strong><p class="lang-zh muted">快照时区已标注</p>
+<p class="lang-en muted">Snapshot timezone marked</p>
+<p class="lang-ja muted">スナップショット時区</p>
+<p class="lang-ko muted">스냅샷 시구</p>
+<p class="lang-fr muted">Fuseau du snapshot</p>
+<p class="lang-es muted">Zona del snapshot</p>
+<p class="lang-ru muted">Пояс снимка</p></div>
+  </div>
+  <h2 class="lang-zh">今日台历</h2>
+<h2 class="lang-en">Today’s desk</h2>
+<h2 class="lang-ja">今日の台帳</h2>
+<h2 class="lang-ko">오늘 데스크</h2>
+<h2 class="lang-fr">Bureau du jour</h2>
+<h2 class="lang-es">Mesa de hoy</h2>
+<h2 class="lang-ru">Стол дня</h2>
+  <div class="card">
+    <span class="badge">6.9 / 10</span>
+    <span class="chip">DeFi</span>
+    <h2 style="margin:8px 0"><a href="research/uni/"><span class="lang-zh">UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层</span><span class="lang-en">UNI research note: a thick DEX fee pool, a thin slice for the token</span><span class="lang-ja">UNIリサーチノート：DEXの手数料は厚いが、トークンが取る分は薄い</span><span class="lang-ko">UNI 리서치 노트: DEX 수수료 풀은 두껍고, 토큰 몫은 얇다</span><span class="lang-fr">Note UNI : un gros pot de frais DEX, une fine part pour le jeton</span><span class="lang-es">Nota UNI: un pozo grueso de comisiones DEX, una lonja fina para el token</span><span class="lang-ru">Записка по UNI: толстый пул комиссий DEX, тонкий кусок для токена</span></a></h2>
+    <p class="muted"><span class="lang-zh">2026年9月9日 · UNI · DeFi</span><span class="lang-en">9 Sep 2026 · UNI · DeFi</span><span class="lang-ja">2026年9月9日 · UNI · DeFi</span><span class="lang-ko">2026년 9월 9일 · UNI · DeFi</span><span class="lang-fr">9 sept. 2026 · UNI · DeFi</span><span class="lang-es">9 sep 2026 · UNI · DeFi</span><span class="lang-ru">9 сен 2026 · UNI · DeFi</span></p>
+    <p class="lang-zh">现货 DEX 费用与成交仍是第一；近 30 日费用约 1.52 亿美元，协议收入只留下约 8%。6.9/10，谨慎跟踪。</p>
+<p class="lang-en">Still first in spot DEX fees and volume. 30-day fees about $152M; protocol keep is about 8%. 6.9/10, cautious watch.</p>
+<p class="lang-ja">現物DEXの手数料と出来高は首位。30日手数料約1.52億ドル、プロトコル取り分は約8%。6.9/10、慎重ウォッチ。</p>
+<p class="lang-ko">현물 DEX 수수료와 거래대금은 1위. 30일 수수료 약 1.52억 달러, 프로토콜 몫은 약 8%. 6.9/10, 신중 추적.</p>
+<p class="lang-fr">Toujours premier en frais et volume DEX spot. Frais 30 jours ~152 M$ ; le protocole garde ~8%. 6.9/10, suivi prudent.</p>
+<p class="lang-es">Sigue primero en comisiones y volumen DEX spot. Comisiones 30 días ~152 M$; el protocolo se queda ~8%. 6.9/10, seguimiento cauto.</p>
+<p class="lang-ru">По-прежнему первый по комиссиям и обороту спот-DEX. Комиссии за 30 дней ~$152 млн; протоколу ~8%. 6.9/10, осторожное наблюдение.</p>
+  </div>
+  <div class="card">
+    <span class="badge">4.7 / 10</span>
+    <span class="chip">Meme</span>
+    <h2 style="margin:8px 0"><a href="research/doge/"><span class="lang-zh">DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带</span><span class="lang-en">DOGE research note: twelfth by cap, still below the watch band on fundamentals</span><span class="lang-ja">DOGEリサーチノート：時価総額12位でも、ファンダメンタルはウォッチ帯に入らない</span><span class="lang-ko">DOGE 리서치 노트: 시총 12위여도 펀더멘털은 추적 밴드에 못 든다</span><span class="lang-fr">Note DOGE : 12e en capitalisation, toujours sous la bande de suivi sur les fondamentaux</span><span class="lang-es">Nota DOGE: duodécimo por capitalización, aún bajo la banda de seguimiento en fundamentales</span><span class="lang-ru">Записка по DOGE: 12-е место по капитализации, по фундаменталу всё ещё ниже полосы наблюдения</span></a></h2>
+    <p class="muted"><span class="lang-zh">2026年9月9日 · DOGE · Meme</span><span class="lang-en">9 Sep 2026 · DOGE · Meme</span><span class="lang-ja">2026年9月9日 · DOGE · Meme</span><span class="lang-ko">2026년 9월 9일 · DOGE · Meme</span><span class="lang-fr">9 sept. 2026 · DOGE · Meme</span><span class="lang-es">9 sep 2026 · DOGE · Meme</span><span class="lang-ru">9 сен 2026 · DOGE · Meme</span></p>
+    <p class="lang-zh">流动性与品牌都在，但没有协议收入、没有供应上限。买入评分 4.7/10，回避：可以交易，不能写成价值持仓。</p>
+<p class="lang-en">Liquidity and brand are real. There is no protocol revenue and no hard cap. Buy score 4.7/10, avoid: tradable, not a value book.</p>
+<p class="lang-ja">流動性とブランドは本物。プロトコル収入もハードキャップもない。4.7/10、回避。取引はできるが価値保有ではない。</p>
+<p class="lang-ko">유동성과 브랜드는 실재. 프로토콜 수입과 하드캡은 없다. 4.7/10, 회피. 거래는 가능하고 가치 보유는 아니다.</p>
+<p class="lang-fr">Liquidité et marque sont réelles. Pas de revenu protocole, pas de plafond. 4.7/10, éviter : négociable, pas un livre value.</p>
+<p class="lang-es">Liquidez y marca son reales. Sin ingreso de protocolo ni tope. 4.7/10, evitar: se negocia, no es un libro value.</p>
+<p class="lang-ru">Ликвидность и бренд реальны. Нет дохода протокола и потолка. 4.7/10, избегать: торгуется, не value-книга.</p>
+  </div>
+  <h2 class="lang-zh">评分怎么读</h2>
+<h2 class="lang-en">How to read a score</h2>
+<h2 class="lang-ja">スコアの読み方</h2>
+<h2 class="lang-ko">점수 읽는 법</h2>
+<h2 class="lang-fr">Lire un score</h2>
+<h2 class="lang-es">Cómo leer una nota</h2>
+<h2 class="lang-ru">Как читать балл</h2>
+  <div class="bands">
+    <p><span class="badge">≥ 8.0</span> <span class="lang-zh">积极跟踪</span><span class="lang-en">Active watch</span><span class="lang-ja">積極ウォッチ</span><span class="lang-ko">적극 추적</span><span class="lang-fr">Suivi actif</span><span class="lang-es">Seguimiento activo</span><span class="lang-ru">Активное наблюдение</span></p>
+    <p><span class="badge">6.5–7.9</span> <span class="lang-zh">谨慎跟踪</span><span class="lang-en">Cautious watch</span><span class="lang-ja">慎重ウォッチ</span><span class="lang-ko">신중 추적</span><span class="lang-fr">Suivi prudent</span><span class="lang-es">Seguimiento cauto</span><span class="lang-ru">Осторожное наблюдение</span></p>
+    <p><span class="badge">5.0–6.4</span> <span class="lang-zh">观望</span><span class="lang-en">Hold / wait</span><span class="lang-ja">様子見</span><span class="lang-ko">관망</span><span class="lang-fr">Attente</span><span class="lang-es">Espera</span><span class="lang-ru">Выжидание</span></p>
+    <p><span class="badge">&lt; 5.0</span> <span class="lang-zh">回避（基本面分，不是立刻下跌预测）</span><span class="lang-en">Avoid (fundamentals, not a crash call)</span><span class="lang-ja">回避（ファンダ点であり暴落予測ではない）</span><span class="lang-ko">회피(펀더멘털 점수, 급락 예측 아님)</span><span class="lang-fr">Éviter (fondamentaux, pas un crash)</span><span class="lang-es">Evitar (fundamentales, no un crash)</span><span class="lang-ru">Избегать (фундамент, не прогноз обвала)</span></p>
+  </div>
+  <p><a href="method.html"><span class="lang-zh">阅读完整方法 →</span><span class="lang-en">Full methodology →</span><span class="lang-ja">方法の全文 →</span><span class="lang-ko">방법 전문 →</span><span class="lang-fr">Méthode complète →</span><span class="lang-es">Método completo →</span><span class="lang-ru">Полный метод →</span></a></p>
+  <h2 class="lang-zh">此前报告</h2>
+<h2 class="lang-en">Earlier notes</h2>
+<h2 class="lang-ja">以前のレポート</h2>
+<h2 class="lang-ko">이전 리포트</h2>
+<h2 class="lang-fr">Notes précédentes</h2>
+<h2 class="lang-es">Notas anteriores</h2>
+<h2 class="lang-ru">Предыдущие записки</h2>
   <div class="card">
     <span class="badge">6.6 / 10</span>
     <h2 style="margin:8px 0"><a href="research/bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span><span class="lang-ja">BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格</span><span class="lang-ko">BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격</span><span class="lang-fr">Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie</span><span class="lang-es">Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte</span><span class="lang-ru">Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月8日 · BNB</span><span class="lang-en">8 Sep 2026 · BNB</span><span class="lang-ja">2026年9月8日 · BNB</span><span class="lang-ko">2026년 9월 8일 · BNB</span><span class="lang-fr">8 sept. 2026 · BNB</span><span class="lang-es">8 sep 2026 · BNB</span><span class="lang-ru">8 сен 2026 · BNB</span></p>
+    <p class="muted"><span class="lang-zh">2026年9月8日 · BNB · L1</span><span class="lang-en">8 Sep 2026 · BNB · L1</span><span class="lang-ja">2026年9月8日 · BNB · L1</span><span class="lang-ko">2026년 9월 8일 · BNB · L1</span><span class="lang-fr">8 sept. 2026 · BNB · L1</span><span class="lang-es">8 sep 2026 · BNB · L1</span><span class="lang-ru">8 сен 2026 · BNB · L1</span></p>
     <p class="lang-zh">市值第四、BSC 仍然很忙；千亿定价主要来自平台与燃烧，链上 TVL 只能解释一小部分。</p>
 <p class="lang-en">Fourth by market cap, BSC is still busy; the $100B valuation is mainly platform plus burn. On-chain TVL only explains a slice.</p>
 <p class="lang-ja">時価総額4位でBSCは依然活発。1000億ドルの価格は主にプラットフォームとバーン。オンチェーンTVLは一部しか説明しない。</p>
@@ -67,7 +153,7 @@ document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
   <div class="card">
     <span class="badge">6.7 / 10</span>
     <h2 style="margin:8px 0"><a href="research/aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span><span class="lang-ja">Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期</span><span class="lang-ko">Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기</span><span class="lang-fr">Note Aave : toujours leader du lending, V4 encore au début</span><span class="lang-es">Nota Aave: sigue siendo líder de préstamos, V4 aún temprano</span><span class="lang-ru">Записка по Aave: лидер кредитования на месте, V4 ещё ранний</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月7日 · AAVE</span><span class="lang-en">7 Sep 2026 · AAVE</span><span class="lang-ja">2026年9月7日 · AAVE</span><span class="lang-ko">2026년 9월 7일 · AAVE</span><span class="lang-fr">7 sept. 2026 · AAVE</span><span class="lang-es">7 sep 2026 · AAVE</span><span class="lang-ru">7 сен 2026 · AAVE</span></p>
+    <p class="muted"><span class="lang-zh">2026年9月7日 · AAVE · DeFi</span><span class="lang-en">7 Sep 2026 · AAVE · DeFi</span><span class="lang-ja">2026年9月7日 · AAVE · DeFi</span><span class="lang-ko">2026년 9월 7일 · AAVE · DeFi</span><span class="lang-fr">7 sept. 2026 · AAVE · DeFi</span><span class="lang-es">7 sep 2026 · AAVE · DeFi</span><span class="lang-ru">7 сен 2026 · AAVE · DeFi</span></p>
     <p class="lang-zh">仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。</p>
 <p class="lang-en">Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.</p>
 <p class="lang-ja">レンディングの規模とブランドで依然首位。主力はV3、V4は稼働済みだが上限は保守的。</p>
@@ -76,11 +162,13 @@ document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 <p class="lang-es">Sigue siendo líder en escala y marca. V3 carga el libro; V4 está vivo con techos conservadores.</p>
 <p class="lang-ru">По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.</p>
   </div>
-  <p><a href="research/"><span class="lang-zh">阅读全部研究报告 →</span><span class="lang-en">All research notes →</span><span class="lang-ja">すべてのリサーチ →</span><span class="lang-ko">전체 리서치 →</span><span class="lang-fr">Toutes les notes →</span><span class="lang-es">Todas las notas →</span><span class="lang-ru">Все записки →</span></a></p>
+  <p><a href="research/"><span class="lang-zh">全部研究报告 →</span><span class="lang-en">All research notes →</span><span class="lang-ja">すべてのリサーチ →</span><span class="lang-ko">전체 리서치 →</span><span class="lang-fr">Toutes les notes →</span><span class="lang-es">Todas las notas →</span><span class="lang-ru">Все записки →</span></a>
+  · <a href="desk.html"><span class="lang-zh">研究台历</span><span class="lang-en">Desk log</span><span class="lang-ja">台帳</span><span class="lang-ko">데스크</span><span class="lang-fr">Journal</span><span class="lang-es">Registro</span><span class="lang-ru">Журнал</span></a></p>
 
 </main>
 <footer>
-<span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span>
+<p><span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span></p>
+<p class="foot-links"><a href="./method.html"><span class="lang-zh">研究方法</span><span class="lang-en">Methodology</span><span class="lang-ja">方法</span><span class="lang-ko">방법</span><span class="lang-fr">Méthode</span><span class="lang-es">Método</span><span class="lang-ru">Метод</span></a> · <a href="./desk.html"><span class="lang-zh">研究台历</span><span class="lang-en">Desk log</span><span class="lang-ja">台帳</span><span class="lang-ko">데스크</span><span class="lang-fr">Journal</span><span class="lang-es">Registro</span><span class="lang-ru">Журнал</span></a> · <a href="./about.html#disclaimer"><span class="lang-zh">免责声明</span><span class="lang-en">Disclaimer</span><span class="lang-ja">免責</span><span class="lang-ko">면책</span><span class="lang-fr">Avertissement</span><span class="lang-es">Aviso</span><span class="lang-ru">Отказ</span></a> · <a href="./rss.xml">RSS</a></p>
 </footer>
 </div>
 <script src="./assets/site.js"></script>

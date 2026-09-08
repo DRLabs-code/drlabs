@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-title-zh="研究台历 · DRLabs" data-title-en="Desk log · DRLabs" data-title-ja="台帳 · DRLabs" data-title-ko="데스크 · DRLabs" data-title-fr="Journal · DRLabs" data-title-es="Registro · DRLabs" data-title-ru="Журнал · DRLabs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>研究台历 · DRLabs</title>
+<link rel="stylesheet" href="./assets/site.css">
+<script>
+(function(){try{var k='drlabs-lang';var allow=['zh','en','ja','ko','fr','es','ru'];
+var l=localStorage.getItem(k);var n=((navigator.language||'zh')+'').toLowerCase();
+if(allow.indexOf(l)<0){l=n.indexOf('zh')===0?'zh':n.indexOf('ja')===0?'ja':n.indexOf('ko')===0?'ko':n.indexOf('fr')===0?'fr':n.indexOf('es')===0?'es':n.indexOf('ru')===0?'ru':'en';}
+var map={zh:'zh-CN',en:'en',ja:'ja',ko:'ko',fr:'fr',es:'es',ru:'ru'};
+document.documentElement.setAttribute('data-lang',l);
+document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
+</script>
+</head>
+<body>
+<div class="wrap">
+<header class="nav">
+  <a class="brand" href="./">DRLabs</a>
+  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span><span class="lang-ja">ホーム</span><span class="lang-ko">홈</span><span class="lang-fr">Accueil</span><span class="lang-es">Inicio</span><span class="lang-ru">Главная</span></a>
+  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a>
+  <a href="./method.html"><span class="lang-zh">方法</span><span class="lang-en">Method</span><span class="lang-ja">方法</span><span class="lang-ko">방법</span><span class="lang-fr">Méthode</span><span class="lang-es">Método</span><span class="lang-ru">Метод</span></a>
+  <a href="./desk.html"><span class="lang-zh">台历</span><span class="lang-en">Desk</span><span class="lang-ja">台帳</span><span class="lang-ko">데스크</span><span class="lang-fr">Bureau</span><span class="lang-es">Mesa</span><span class="lang-ru">Стол</span></a>
+  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a>
+  <span class="spacer"></span>
+  <div class="lang-wrap">
+  <button type="button" class="lang-btn" id="langLabel" onclick="toggleLangMenu();return false;" aria-haspopup="listbox" aria-expanded="false">中文</button>
+  <div class="lang-menu" id="langMenu" hidden role="listbox"><button type="button" data-set-lang="zh">中文</button><button type="button" data-set-lang="en">English</button><button type="button" data-set-lang="ja">日本語</button><button type="button" data-set-lang="ko">한국어</button><button type="button" data-set-lang="fr">Français</button><button type="button" data-set-lang="es">Español</button><button type="button" data-set-lang="ru">Русский</button></div>
+</div>
+  <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
+  <span id="authSlot" data-login="./login.html"></span>
+</header>
+<main>
+
+  <h1 class="lang-zh">研究台历</h1>
+<h1 class="lang-en">Desk log</h1>
+<h1 class="lang-ja">研究台帳</h1>
+<h1 class="lang-ko">리서치 데스크</h1>
+<h1 class="lang-fr">Journal de bureau</h1>
+<h1 class="lang-es">Registro de mesa</h1>
+<h1 class="lang-ru">Журнал стола</h1>
+  <p class="lang-zh muted">公开记录每天写了什么、缺了什么。目标：每个日历日两篇代币研报。</p>
+<p class="lang-en muted">A public log of what shipped and what slipped. Target: two token notes each calendar day.</p>
+<p class="lang-ja muted">何を出し、何を欠いたかの公開記録。目標は各暦日2本。</p>
+<p class="lang-ko muted">무엇을 냈고 무엇을 빠뜨렸는지 공개 기록. 목표: 달력일마다 두 편.</p>
+<p class="lang-fr muted">Journal public de ce qui est sorti et de ce qui a manqué. Objectif : deux notes par jour civil.</p>
+<p class="lang-es muted">Registro público de lo publicado y lo que faltó. Objetivo: dos notas por día civil.</p>
+<p class="lang-ru muted">Открытый журнал того, что вышло и что сорвалось. Цель: две записки в календарный день.</p>
+  <div class="card">
+    <h2 class="lang-zh">2026年9月9日 · 两篇已刊</h2>
+<h2 class="lang-en">9 Sep 2026 · two shipped</h2>
+<h2 class="lang-ja">2026年9月9日 · 2本公開</h2>
+<h2 class="lang-ko">2026년 9월 9일 · 두 편 발행</h2>
+<h2 class="lang-fr">9 sept. 2026 · deux publiées</h2>
+<h2 class="lang-es">9 sep 2026 · dos publicadas</h2>
+<h2 class="lang-ru">9 сен 2026 · две вышли</h2>
+    <p><span class="chip">DeFi</span> <a href="research/uni/"><span class="lang-zh">UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层</span><span class="lang-en">UNI research note: a thick DEX fee pool, a thin slice for the token</span><span class="lang-ja">UNIリサーチノート：DEXの手数料は厚いが、トークンが取る分は薄い</span><span class="lang-ko">UNI 리서치 노트: DEX 수수료 풀은 두껍고, 토큰 몫은 얇다</span><span class="lang-fr">Note UNI : un gros pot de frais DEX, une fine part pour le jeton</span><span class="lang-es">Nota UNI: un pozo grueso de comisiones DEX, una lonja fina para el token</span><span class="lang-ru">Записка по UNI: толстый пул комиссий DEX, тонкий кусок для токена</span></a> · 6.9</p>
+    <p><span class="chip">Meme</span> <a href="research/doge/"><span class="lang-zh">DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带</span><span class="lang-en">DOGE research note: twelfth by cap, still below the watch band on fundamentals</span><span class="lang-ja">DOGEリサーチノート：時価総額12位でも、ファンダメンタルはウォッチ帯に入らない</span><span class="lang-ko">DOGE 리서치 노트: 시총 12위여도 펀더멘털은 추적 밴드에 못 든다</span><span class="lang-fr">Note DOGE : 12e en capitalisation, toujours sous la bande de suivi sur les fondamentaux</span><span class="lang-es">Nota DOGE: duodécimo por capitalización, aún bajo la banda de seguimiento en fundamentales</span><span class="lang-ru">Записка по DOGE: 12-е место по капитализации, по фундаменталу всё ещё ниже полосы наблюдения</span></a> · 4.7</p>
+    <p class="lang-zh muted">数据快照 2026-09-08 21:27 UTC。补齐 DEX 龙头与迷因样本，让评分出现 4 分带。</p>
+<p class="lang-en muted">Snapshot 8 Sep 2026 21:27 UTC. Fills the DEX leader and a meme sample, so the scoreboard can print a 4-handle.</p>
+<p class="lang-ja muted">スナップショット 2026-09-08 21:27 UTC。DEX盟主とミーム標本を補い、4点台を出せるようにした。</p>
+<p class="lang-ko muted">스냅샷 2026-09-08 21:27 UTC. DEX 선두와 밈 표본을 채워 4점대가 나오게 함.</p>
+<p class="lang-fr muted">Snapshot 8 sept. 2026 21:27 UTC. Couvre le leader DEX et un échantillon meme, pour qu’un 4 puisse s’imprimer.</p>
+<p class="lang-es muted">Snapshot 8 sep 2026 21:27 UTC. Cubre el líder DEX y una muestra meme, para que pueda salir un 4.</p>
+<p class="lang-ru muted">Снимок 8 сен 2026 21:27 UTC. Закрыли лидера DEX и мем-выборку, чтобы на табло мог выйти 4.</p>
+  </div>
+  <div class="card">
+    <h2 class="lang-zh">2026年9月8日 · 一篇已刊</h2>
+<h2 class="lang-en">8 Sep 2026 · one shipped</h2>
+<h2 class="lang-ja">2026年9月8日 · 1本公開</h2>
+<h2 class="lang-ko">2026년 9월 8일 · 한 편 발행</h2>
+<h2 class="lang-fr">8 sept. 2026 · une publiée</h2>
+<h2 class="lang-es">8 sep 2026 · una publicada</h2>
+<h2 class="lang-ru">8 сен 2026 · одна вышла</h2>
+    <p><span class="chip">L1</span> <a href="research/bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span><span class="lang-ja">BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格</span><span class="lang-ko">BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격</span><span class="lang-fr">Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie</span><span class="lang-es">Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte</span><span class="lang-ru">Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично</span></a> · 6.6</p>
+    <p class="lang-zh muted">日更两篇纪律从 9 月 9 日起算。8 日只刊 BNB，记为建台日。</p>
+<p class="lang-en muted">The two-a-day rule starts 9 Sep. The 8th shipped BNB only and is logged as a setup day.</p>
+<p class="lang-ja muted">毎日2本の規律は9月9日から。8日はBNBのみで準備日と記録。</p>
+<p class="lang-ko muted">하루 두 편 규율은 9월 9일부터. 8일은 BNB만 냈고 준비일로 기록.</p>
+<p class="lang-fr muted">La règle deux-par-jour commence le 9 sept. Le 8 n’a sorti que BNB, jour de mise en place.</p>
+<p class="lang-es muted">La regla de dos al día empieza el 9 sep. El 8 solo publicó BNB, día de montaje.</p>
+<p class="lang-ru muted">Правило двух в день с 9 сен. 8-е выпустило только BNB, день настройки.</p>
+  </div>
+  <div class="card">
+    <h2 class="lang-zh">2026年9月7日 · 一篇已刊</h2>
+<h2 class="lang-en">7 Sep 2026 · one shipped</h2>
+<h2 class="lang-ja">2026年9月7日 · 1本公開</h2>
+<h2 class="lang-ko">2026년 9월 7일 · 한 편 발행</h2>
+<h2 class="lang-fr">7 sept. 2026 · une publiée</h2>
+<h2 class="lang-es">7 sep 2026 · una publicada</h2>
+<h2 class="lang-ru">7 сен 2026 · одна вышла</h2>
+    <p><span class="chip">DeFi</span> <a href="research/aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span><span class="lang-ja">Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期</span><span class="lang-ko">Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기</span><span class="lang-fr">Note Aave : toujours leader du lending, V4 encore au début</span><span class="lang-es">Nota Aave: sigue siendo líder de préstamos, V4 aún temprano</span><span class="lang-ru">Записка по Aave: лидер кредитования на месте, V4 ещё ранний</span></a> · 6.7</p>
+  </div>
+  <h2 class="lang-zh">队列</h2>
+<h2 class="lang-en">Queue</h2>
+<h2 class="lang-ja">キュー</h2>
+<h2 class="lang-ko">대기</h2>
+<h2 class="lang-fr">File</h2>
+<h2 class="lang-es">Cola</h2>
+<h2 class="lang-ru">Очередь</h2>
+  <p class="lang-zh">下一优先：GameFi（Immutable / Axie 等，用同一框架，预计落在回避或观望）。随后轮换已覆盖标的的数据更新。</p>
+<p class="lang-en">Next priority: GameFi (Immutable / Axie and peers, same frame, likely avoid or hold). Then refresh already-covered names when prints drift.</p>
+<p class="lang-ja">次はGameFi（Immutable / Axieなど、同じ枠、回避か様子見の見込み）。その後は既報の数値ドリフト更新。</p>
+<p class="lang-ko">다음 우선: GameFi(Immutable / Axie 등, 같은 프레임, 회피 또는 관망 가능성). 이후 기존 종목 수치 드리프트 갱신.</p>
+<p class="lang-fr">Priorité suivante : GameFi (Immutable / Axie, même cadre, probablement éviter ou attendre). Puis rafraîchir les noms déjà couverts.</p>
+<p class="lang-es">Siguiente prioridad: GameFi (Immutable / Axie, mismo marco, probablemente evitar o esperar). Luego refrescar nombres ya cubiertos.</p>
+<p class="lang-ru">Дальше: GameFi (Immutable / Axie, та же рамка, скорее избегать или ждать). Затем обновлять уже покрытые имена.</p>
+
+</main>
+<footer>
+<p><span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span></p>
+<p class="foot-links"><a href="./method.html"><span class="lang-zh">研究方法</span><span class="lang-en">Methodology</span><span class="lang-ja">方法</span><span class="lang-ko">방법</span><span class="lang-fr">Méthode</span><span class="lang-es">Método</span><span class="lang-ru">Метод</span></a> · <a href="./desk.html"><span class="lang-zh">研究台历</span><span class="lang-en">Desk log</span><span class="lang-ja">台帳</span><span class="lang-ko">데스크</span><span class="lang-fr">Journal</span><span class="lang-es">Registro</span><span class="lang-ru">Журнал</span></a> · <a href="./about.html#disclaimer"><span class="lang-zh">免责声明</span><span class="lang-en">Disclaimer</span><span class="lang-ja">免責</span><span class="lang-ko">면책</span><span class="lang-fr">Avertissement</span><span class="lang-es">Aviso</span><span class="lang-ru">Отказ</span></a> · <a href="./rss.xml">RSS</a></p>
+</footer>
+</div>
+<script src="./assets/site.js"></script>
+</body>
+</html>

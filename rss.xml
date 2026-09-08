@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>DRLabs Research</title>
+<link>https://drlabs-code.github.io/drlabs/</link>
+<description>Independent crypto research. Two token notes a day.</description>
+<item><title>UNI research note</title><link>https://drlabs-code.github.io/drlabs/research/uni/</link><pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate></item>
+<item><title>DOGE research note</title><link>https://drlabs-code.github.io/drlabs/research/doge/</link><pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate></item>
+<item><title>BNB research note</title><link>https://drlabs-code.github.io/drlabs/research/bnb/</link><pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate></item>
+<item><title>Aave research note</title><link>https://drlabs-code.github.io/drlabs/research/aave/</link><pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate></item>
+</channel>
+</rss>

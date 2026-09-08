@@ -103,3 +103,15 @@ th .bi { font-weight: 400; }
 .lang-menu button:hover,
 .lang-menu button[aria-current="true"] { background: var(--quote); }
 .table-wrap { width: 100%; overflow-x: auto; }
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0 8px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.stat strong{display:block;font-size:1.35rem}
+.chip{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:1px 8px;font-size:.78rem;color:var(--muted);margin-left:6px}
+.bands p{margin:.45rem 0}
+.foot-links{margin-top:8px}
+.foot-links a{margin:0}
+@media (max-width:640px){
+  .nav{gap:8px}
+  .nav a{font-size:.86rem}
+}
