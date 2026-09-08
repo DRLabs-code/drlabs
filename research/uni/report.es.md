@@ -72,8 +72,6 @@ El interruptor de comisiones es la mayor opción binaria del múltiplo UNI. Si s
 
 ## Nota de compra 6,9 / 10
 
-Los pesos coinciden con la página de método. Cada factor 0–10, ponderado a un decimal.
-
 | Factor | Peso | Nota | Ponderado | Punto |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.6 | 1.72 | Primero en TVL y volumen DEX; libros CEX profundos |
@@ -114,4 +112,4 @@ Los pesos coinciden con la página de método. Cada factor 0–10, ponderado a u
 
 Esta nota es de DRLabs para investigación y debate. **No es consejo de inversión, financiero o legal, ni una oferta.** Los criptoactivos pueden causar pérdida parcial o total.
 
-La nota 6,9/10 y los pesos son una lectura **subjetiva** de datos públicos. No son rating de agencia ni promesa de rentabilidad. Los datos pueden ir tarde, mal definidos o erróneos. DRLabs y el autor no aceptan responsabilidad. Términos: [método](../../method.html) y [Acerca de](../../about.html#disclaimer).
+La nota 6,9/10 y los pesos son una lectura **subjetiva** de datos públicos. No son rating de agencia ni promesa de rentabilidad. Los datos pueden ir tarde, mal definidos o erróneos. DRLabs y el autor no aceptan responsabilidad. Términos: [Acerca de](../../about.html#disclaimer).

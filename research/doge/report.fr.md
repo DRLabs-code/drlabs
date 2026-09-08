@@ -66,8 +66,6 @@ DRLabs couvre les mèmes pour les écrire clairement, pas pour les habiller en v
 
 ## Score d’achat 4,7 / 10
 
-Les poids sont ceux de la page méthode. Les mèmes n’ont pas de second barème. Le traitement spécial est comme les normes glissent.
-
 | Facteur | Poids | Note | Pondéré | Point |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.4 | 1.68 | Rang 12 ; carnets CEX profonds, reconnaissance immédiate |
@@ -108,4 +106,4 @@ Les poids sont ceux de la page méthode. Les mèmes n’ont pas de second barèm
 
 Cette note est de DRLabs pour la recherche et la discussion. **Ce n’est pas un conseil d’investissement, financier ou juridique, ni une offre.** Les mèmes bougent surtout fort et peuvent entraîner une perte partielle ou totale.
 
-Le score 4,7/10 est une lecture **subjective** de données publiques. Éviter n’est pas une prévision de baisse immédiate ; suivre n’est pas une raison d’acheter. DRLabs et l’auteur n’acceptent aucune responsabilité. Termes : [méthode](../../method.html) et [À propos](../../about.html#disclaimer).
+Le score 4,7/10 est une lecture **subjective** de données publiques. Éviter n’est pas une prévision de baisse immédiate ; suivre n’est pas une raison d’acheter. DRLabs et l’auteur n’acceptent aucune responsabilité. Termes : [À propos](../../about.html#disclaimer).

@@ -66,8 +66,6 @@ DRLabs cubre memes para escribirlos con claridad, no para vestirlos de value. Un
 
 ## Nota de compra 4,7 / 10
 
-Los pesos coinciden con la página de método. Los memes no tienen una segunda cartilla. El trato especial es como se aflojan los estándares.
-
 | Factor | Peso | Nota | Ponderado | Punto |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.4 | 1.68 | Puesto 12; libros CEX profundos y reconocimiento inmediato |
@@ -108,4 +106,4 @@ Los pesos coinciden con la página de método. Los memes no tienen una segunda c
 
 Esta nota es de DRLabs para investigación y debate. **No es consejo de inversión, financiero o legal, ni una oferta.** Los memes se mueven especialmente fuerte y pueden causar pérdida parcial o total.
 
-La nota 4,7/10 es una lectura **subjetiva** de datos públicos. Evitar no es un pronóstico de caída inmediata; seguir no es motivo de compra. DRLabs y el autor no aceptan responsabilidad. Términos: [método](../../method.html) y [Acerca de](../../about.html#disclaimer).
+La nota 4,7/10 es una lectura **subjetiva** de datos públicos. Evitar no es un pronóstico de caída inmediata; seguir no es motivo de compra. DRLabs y el autor no aceptan responsabilidad. Términos: [Acerca de](../../about.html#disclaimer).

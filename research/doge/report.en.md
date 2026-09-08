@@ -67,8 +67,6 @@ DRLabs covers memes to write them plainly, not to dress them as value. A meme ca
 
 ## Buy score 4.7 / 10
 
-Weights match the methodology page. Memes do not get a second scorecard. Special treatment is how standards slip.
-
 | Factor | Weight | Score | Weighted | Note |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.4 | 1.68 | Rank 12; deep CEX books and instant recognition |
@@ -109,4 +107,4 @@ Weights match the methodology page. Memes do not get a second scorecard. Special
 
 This note is by DRLabs for research and discussion only. **It is not investment, financial or legal advice, and not an offer or invitation.** Meme assets move especially hard and can cause partial or total loss of principal, including to zero.
 
-The 4.7/10 buy score, weights and wording are a **subjective** reading of public data. Avoid is not a forecast of an immediate drop; watch is not a reason to buy. DRLabs and the author accept no liability for decisions made on this material. Full terms: [methodology](../../method.html) and [About DRLabs](../../about.html#disclaimer).
+The 4.7/10 buy score, weights and wording are a **subjective** reading of public data. Avoid is not a forecast of an immediate drop; watch is not a reason to buy. DRLabs and the author accept no liability for decisions made on this material. Full terms: [About DRLabs](../../about.html#disclaimer).

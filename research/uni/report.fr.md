@@ -72,8 +72,6 @@ L’interrupteur de frais est la plus grande option binaire du multiple UNI. S�
 
 ## Score d’achat 6,9 / 10
 
-Les poids sont ceux de la page méthode. Chaque facteur 0–10, puis pondéré à une décimale.
-
 | Facteur | Poids | Note | Pondéré | Point |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.6 | 1.72 | Premier en TVL et volume DEX ; carnets CEX profonds |
@@ -114,4 +112,4 @@ Les poids sont ceux de la page méthode. Chaque facteur 0–10, puis pondéré �
 
 Cette note est de DRLabs pour la recherche et la discussion. **Ce n’est pas un conseil d’investissement, financier ou juridique, ni une offre.** Les cryptoactifs peuvent entraîner une perte partielle ou totale.
 
-Le score 6,9/10 et les poids sont une lecture **subjective** de données publiques. Pas une note d’agence ni une promesse de rendement. Les données peuvent être tardives, mal définies ou fausses. DRLabs et l’auteur n’acceptent aucune responsabilité. Termes : [méthode](../../method.html) et [À propos](../../about.html#disclaimer).
+Le score 6,9/10 et les poids sont une lecture **subjective** de données publiques. Pas une note d’agence ni une promesse de rendement. Les données peuvent être tardives, mal définies ou fausses. DRLabs et l’auteur n’acceptent aucune responsabilité. Termes : [À propos](../../about.html#disclaimer).

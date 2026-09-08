@@ -108,8 +108,6 @@ El volumen DEX 24h es de unos **$1.33 billion**, ~**18.82 million** transaccione
 
 ## Puntuación de compra 6.6 / 10
 
-Los pesos coinciden con el marco de la página About. Cada factor es 0–10, luego se pondera y se redondea a un decimal.
-
 | Factor | Peso | Puntuación | Ponderado | Notas |
 | --- | ---: | ---: | ---: | --- |
 | Posición de mercado y liquidez | 20% | 8.4 | 1.68 | 4.º por mcap, excelente profundidad CEX, TVL de cadena 3.º |

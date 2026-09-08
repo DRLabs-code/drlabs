@@ -73,8 +73,6 @@ The fee switch is the largest binary option in the UNI multiple. If it opens, pr
 
 ## Buy score 6.9 / 10
 
-Weights match the methodology page. Each factor is 0–10, then weighted and rounded to one decimal.
-
 | Factor | Weight | Score | Weighted | Note |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.6 | 1.72 | First in DEX TVL and volume; deep CEX books |
@@ -115,4 +113,4 @@ Weights match the methodology page. Each factor is 0–10, then weighted and rou
 
 This note is by DRLabs for research and discussion only. **It is not investment, financial or legal advice, and not an offer or invitation.** Crypto prices move hard and can cause partial or total loss of principal, including to zero.
 
-The 6.9/10 buy score, weights and wording are a **subjective** reading of public data inside an internal framework. They are not an agency rating or a promise of future return. Public data can be late, differently defined, incomplete or wrong. DRLabs and the author accept no liability for decisions made on this material. Full terms: [methodology](../../method.html) and [About DRLabs](../../about.html#disclaimer).
+The 6.9/10 buy score, weights and wording are a **subjective** reading of public data inside an internal framework. They are not an agency rating or a promise of future return. Public data can be late, differently defined, incomplete or wrong. DRLabs and the author accept no liability for decisions made on this material. Full terms: [About DRLabs](../../about.html#disclaimer).

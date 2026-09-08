@@ -108,8 +108,6 @@ BSC DeFi TVL printed about **$9.18 billion** near 9 October 2025, then stepped d
 
 ## Buy score 6.6 / 10
 
-Weights match the About page framework. Each factor is 0–10, then weighted and rounded to one decimal.
-
 | Factor | Weight | Score | Weighted | Notes |
 | --- | ---: | ---: | ---: | --- |
 | Market position & liquidity | 20% | 8.4 | 1.68 | 4th by mcap, excellent CEX depth, chain TVL 3rd |

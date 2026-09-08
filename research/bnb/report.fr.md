@@ -108,8 +108,6 @@ Le volume DEX 24h est d'environ **$1.33 billion**, ~**18.82 million** transactio
 
 ## Score d'achat 6.6 / 10
 
-Les pondérations correspondent au cadre de la page About. Chaque facteur est noté de 0 à 10, puis pondéré et arrondi à une décimale.
-
 | Facteur | Poids | Score | Pondéré | Notes |
 | --- | ---: | ---: | ---: | --- |
 | Position de marché & liquidité | 20% | 8.4 | 1.68 | 4e en mcap, excellente profondeur CEX, TVL de chaîne 3e |
