@@ -49,10 +49,21 @@ html, body { max-width:100vw; overflow-x:hidden; }
 #article pre { white-space:pre-wrap; word-break:break-word; max-width:100%; }
 img, figure, figure img { max-width:100% !important; height:auto; }
 
-/* Language: chrome and prose switch; table cells stay bilingual */
+/* Language: chrome and prose switch; table cells stay zh+en bilingual */
+.lang-zh,.lang-en,.lang-ja,.lang-ko,.lang-fr,.lang-es,.lang-ru {}
 html:not([data-lang]) .lang-en,
-html[data-lang="zh"] .lang-en { display: none !important; }
-html[data-lang="en"] .lang-zh { display: none !important; }
+html:not([data-lang]) .lang-ja,
+html:not([data-lang]) .lang-ko,
+html:not([data-lang]) .lang-fr,
+html:not([data-lang]) .lang-es,
+html:not([data-lang]) .lang-ru { display: none !important; }
+html[data-lang]:not([data-lang="zh"]) .lang-zh { display: none !important; }
+html[data-lang]:not([data-lang="en"]) .lang-en { display: none !important; }
+html[data-lang]:not([data-lang="ja"]) .lang-ja { display: none !important; }
+html[data-lang]:not([data-lang="ko"]) .lang-ko { display: none !important; }
+html[data-lang]:not([data-lang="fr"]) .lang-fr { display: none !important; }
+html[data-lang]:not([data-lang="es"]) .lang-es { display: none !important; }
+html[data-lang]:not([data-lang="ru"]) .lang-ru { display: none !important; }
 .bi {
   display: block;
   font-size: 0.78em;
@@ -62,5 +73,33 @@ html[data-lang="en"] .lang-zh { display: none !important; }
   line-height: 1.35;
 }
 th .bi { font-weight: 400; }
-.lang-btn[aria-pressed="true"] { font-weight: 700; }
+.lang-wrap { position: relative; }
+.lang-btn[aria-expanded="true"] { font-weight: 700; }
+.lang-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 40;
+  min-width: 148px;
+  padding: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.16);
+}
+.lang-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 7px 10px;
+  cursor: pointer;
+  border-radius: 7px;
+  font: inherit;
+  font-size: .92rem;
+}
+.lang-menu button:hover,
+.lang-menu button[aria-current="true"] { background: var(--quote); }
 .table-wrap { width: 100%; overflow-x: auto; }

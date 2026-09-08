@@ -1,50 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-title-zh="关于 · DRLabs" data-title-en="About · DRLabs">
+<html lang="zh-CN" data-title-zh="关于 · DRLabs" data-title-en="About · DRLabs" data-title-ja="概要 · DRLabs" data-title-ko="소개 · DRLabs" data-title-fr="À propos · DRLabs" data-title-es="Acerca de · DRLabs" data-title-ru="О нас · DRLabs">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>关于 · DRLabs</title>
 <link rel="stylesheet" href="./assets/site.css">
 <script>
-(function(){try{var k='drlabs-lang';var l=localStorage.getItem(k);
-if(l!=='zh'&&l!=='en'){l=((navigator.language||'zh')+'').toLowerCase().indexOf('zh')===0?'zh':'en';}
+(function(){try{var k='drlabs-lang';var allow=['zh','en','ja','ko','fr','es','ru'];
+var l=localStorage.getItem(k);var n=((navigator.language||'zh')+'').toLowerCase();
+if(allow.indexOf(l)<0){l=n.indexOf('zh')===0?'zh':n.indexOf('ja')===0?'ja':n.indexOf('ko')===0?'ko':n.indexOf('fr')===0?'fr':n.indexOf('es')===0?'es':n.indexOf('ru')===0?'ru':'en';}
+var map={zh:'zh-CN',en:'en',ja:'ja',ko:'ko',fr:'fr',es:'es',ru:'ru'};
 document.documentElement.setAttribute('data-lang',l);
-document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':'en');}catch(e){}})();
+document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 </script>
 </head>
 <body>
 <div class="wrap">
 <header class="nav">
   <a class="brand" href="./">DRLabs</a>
-  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span></a>
-  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span></a>
-  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span></a>
+  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span><span class="lang-ja">ホーム</span><span class="lang-ko">홈</span><span class="lang-fr">Accueil</span><span class="lang-es">Inicio</span><span class="lang-ru">Главная</span></a>
+  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a>
+  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a>
   <span class="spacer"></span>
-  <a class="lang-btn" href="#" onclick="cycleLang();return false;" id="langLabel" title="Language / 语言">中文 · EN</a>
+  <div class="lang-wrap">
+  <button type="button" class="lang-btn" id="langLabel" onclick="toggleLangMenu();return false;" aria-haspopup="listbox" aria-expanded="false">中文</button>
+  <div class="lang-menu" id="langMenu" hidden role="listbox"><button type="button" data-set-lang="zh">中文</button><button type="button" data-set-lang="en">English</button><button type="button" data-set-lang="ja">日本語</button><button type="button" data-set-lang="ko">한국어</button><button type="button" data-set-lang="fr">Français</button><button type="button" data-set-lang="es">Español</button><button type="button" data-set-lang="ru">Русский</button></div>
+</div>
   <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
   <span id="authSlot" data-login="./login.html"></span>
 </header>
 <main>
 
   <h1 class="lang-zh">关于 DRLabs</h1>
-  <h1 class="lang-en">About DRLabs</h1>
+<h1 class="lang-en">About DRLabs</h1>
+<h1 class="lang-ja">DRLabs について</h1>
+<h1 class="lang-ko">DRLabs 소개</h1>
+<h1 class="lang-fr">À propos de DRLabs</h1>
+<h1 class="lang-es">Acerca de DRLabs</h1>
+<h1 class="lang-ru">О DRLabs</h1>
   <p class="lang-zh">DRLabs 发布加密货币与链上协议研究报告，侧重 DeFi、GameFi、Meme 与技术范式拆解，并以多平台内容服务社区读者。</p>
-  <p class="lang-en">DRLabs publishes crypto and on-chain protocol research, focused on DeFi, GameFi, memes and tech patterns, and serves community readers across platforms.</p>
+<p class="lang-en">DRLabs publishes crypto and on-chain protocol research, focused on DeFi, GameFi, memes and tech patterns, and serves community readers across platforms.</p>
+<p class="lang-ja">DRLabsは暗号資産とオンチェーンプロトコルのリサーチを公開し、DeFi、GameFi、ミームと技術潮流を扱い、コミュニティ読者に届けます。</p>
+<p class="lang-ko">DRLabs는 암호화폐와 온체인 프로토콜 리서치를 공개하며 DeFi, GameFi, 밈과 기술 흐름을 다루고 커뮤니티 독자에게 제공합니다.</p>
+<p class="lang-fr">DRLabs publie des notes crypto et protocoles on-chain, centrées DeFi, GameFi, memes et schémas techniques, pour les lecteurs de la communauté.</p>
+<p class="lang-es">DRLabs publica investigación cripto y de protocolos on-chain, centrada en DeFi, GameFi, memes y patrones técnicos, para lectores de la comunidad.</p>
+<p class="lang-ru">DRLabs публикует исследования крипто и ончейн-протоколов: DeFi, GameFi, мемы и технологические схемы — для читателей сообщества.</p>
   <h2 class="lang-zh">语言</h2>
-  <h2 class="lang-en">Language</h2>
-  <p class="lang-zh">右上角可切换中文 / English。正文与导航随语言切换；表格单元格同时保留中英对照，切换后数字仍可对照。</p>
-  <p class="lang-en">Use the top-right control to switch Chinese / English. Prose and navigation switch with the UI. Table cells keep both languages so numbers stay comparable.</p>
+<h2 class="lang-en">Language</h2>
+<h2 class="lang-ja">言語</h2>
+<h2 class="lang-ko">언어</h2>
+<h2 class="lang-fr">Langue</h2>
+<h2 class="lang-es">Idioma</h2>
+<h2 class="lang-ru">Язык</h2>
+  <p class="lang-zh">右上角可选择中文、English、日本語、한국어、Français、Español、Русский。正文与导航随语言切换；表格单元格仍保留中英对照。</p>
+<p class="lang-en">Top right: Chinese, English, Japanese, Korean, French, Spanish, Russian. Prose and navigation switch; table cells stay Chinese + English.</p>
+<p class="lang-ja">右上で中文・English・日本語・한국어・Français・Español・Русскийを選択。本文とナビは切り替わり、表は中英併記のまま。</p>
+<p class="lang-ko">오른쪽 위에서 中文, English, 日本語, 한국어, Français, Español, Русский를 고릅니다. 본문과 탐색은 바뀌고, 표는 중·영 대조를 유지합니다.</p>
+<p class="lang-fr">En haut à droite : chinois, anglais, japonais, coréen, français, espagnol, russe. Le texte change ; les tableaux restent ZH+EN.</p>
+<p class="lang-es">Arriba a la derecha: chino, inglés, japonés, coreano, francés, español, ruso. El texto cambia; las tablas siguen ZH+EN.</p>
+<p class="lang-ru">Справа сверху: китайский, английский, японский, корейский, французский, испанский, русский. Текст переключается; таблицы остаются ZH+EN.</p>
   <div id="disclaimer">
   <h2 class="lang-zh">免责声明</h2>
-  <h2 class="lang-en">Disclaimer</h2>
+<h2 class="lang-en">Disclaimer</h2>
+<h2 class="lang-ja">免責</h2>
+<h2 class="lang-ko">면책</h2>
+<h2 class="lang-fr">Avertissement</h2>
+<h2 class="lang-es">Aviso legal</h2>
+<h2 class="lang-ru">Отказ от ответственности</h2>
   <p class="lang-zh">本站内容基于公开信息整理，仅供一般性信息参考与研究讨论，不构成投资建议、要约或承诺。加密资产波动剧烈，可能导致部分或全部本金损失。读者应独立判断并自行承担决策后果。文中买入评分为主观量化结果，不代表买卖推荐。数据可能存在延迟、口径差异或错误，DRLabs 不保证其完整性与时效性。</p>
-  <p class="lang-en">Site content is compiled from public information for general reference and research discussion. It is not investment advice, an offer or a commitment. Crypto is volatile and can cause partial or total loss of principal. Readers should judge independently and own the consequences. Buy scores are subjective quantifications, not trade recommendations. Data may be delayed, differently defined or wrong; DRLabs does not warrant completeness or timeliness.</p>
+<p class="lang-en">Site content is compiled from public information for general reference and research discussion. It is not investment advice, an offer or a commitment. Crypto is volatile and can cause partial or total loss of principal. Readers should judge independently and own the consequences. Buy scores are subjective quantifications, not trade recommendations. Data may be delayed, differently defined or wrong; DRLabs does not warrant completeness or timeliness.</p>
+<p class="lang-ja">本サイトは公開情報に基づく一般的な参考・研究討議であり、投資助言・募集・約束ではありません。暗号資産は変動が大きく、元本の一部または全部を失う可能性があります。判断と結果は読者自身に帰属します。買いスコアは主観的な定量であり売買推奨ではありません。データは遅延・定義差・誤りの可能性があり、完全性や適時性を保証しません。</p>
+<p class="lang-ko">본 사이트는 공개 정보를 정리한 일반 참고 및 연구 토론이며 투자 자문, 청약, 약속이 아닙니다. 암호화폐는 변동성이 커 원금 일부 또는 전액 손실이 날 수 있습니다. 판단과 결과는 독자 책임입니다. 매수 점수는 주관적 정량이며 매매 추천이 아닙니다. 데이터는 지연·정의 차이·오류가 있을 수 있으며 완전성과 적시를 보장하지 않습니다.</p>
+<p class="lang-fr">Le contenu est compilé à partir d’informations publiques pour référence générale et discussion. Ce n’est pas un conseil d’investissement, une offre ou un engagement. Les cryptoactifs sont volatils et peuvent entraîner une perte partielle ou totale. Les lecteurs jugent et assument. Les scores d’achat sont subjectifs, pas des recommandations. Les données peuvent être tardives, mal définies ou fausses ; aucune garantie d’exhaustivité ni d’actualité.</p>
+<p class="lang-es">El contenido se compila de información pública para referencia general y debate. No es consejo de inversión, oferta ni compromiso. Los criptoactivos son volátiles y pueden causar pérdida parcial o total. El lector decide y asume. Las puntuaciones de compra son subjetivas, no recomendaciones. Los datos pueden ir retrasados, mal definidos o erróneos; no se garantiza integridad ni actualidad.</p>
+<p class="lang-ru">Материалы собраны из открытых источников для справки и обсуждения. Это не инвестиционная рекомендация, оферта или обязательство. Криптоактивы волатильны и могут привести к частичной или полной потере средств. Решения и последствия — на читателе. Баллы покупки субъективны и не являются советом торговать. Данные могут запаздывать, отличаться по методике или содержать ошибки; полнота и актуальность не гарантируются.</p>
   </div>
 
 </main>
 <footer>
-  <span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span>
-  <span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span>
+<span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span>
 </footer>
 </div>
 <script src="./assets/site.js"></script>

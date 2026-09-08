@@ -1,26 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-title-zh="登录/注册 · DRLabs" data-title-en="Log in / Sign up · DRLabs">
+<html lang="zh-CN" data-title-zh="登录/注册 · DRLabs" data-title-en="Log in / Sign up · DRLabs" data-title-ja="ログイン · DRLabs" data-title-ko="로그인 · DRLabs" data-title-fr="Connexion · DRLabs" data-title-es="Entrar · DRLabs" data-title-ru="Вход · DRLabs">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>登录/注册 · DRLabs</title>
 <link rel="stylesheet" href="./assets/site.css">
 <script>
-(function(){try{var k='drlabs-lang';var l=localStorage.getItem(k);
-if(l!=='zh'&&l!=='en'){l=((navigator.language||'zh')+'').toLowerCase().indexOf('zh')===0?'zh':'en';}
+(function(){try{var k='drlabs-lang';var allow=['zh','en','ja','ko','fr','es','ru'];
+var l=localStorage.getItem(k);var n=((navigator.language||'zh')+'').toLowerCase();
+if(allow.indexOf(l)<0){l=n.indexOf('zh')===0?'zh':n.indexOf('ja')===0?'ja':n.indexOf('ko')===0?'ko':n.indexOf('fr')===0?'fr':n.indexOf('es')===0?'es':n.indexOf('ru')===0?'ru':'en';}
+var map={zh:'zh-CN',en:'en',ja:'ja',ko:'ko',fr:'fr',es:'es',ru:'ru'};
 document.documentElement.setAttribute('data-lang',l);
-document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':'en');}catch(e){}})();
+document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 </script>
 </head>
 <body>
 <div class="wrap">
 <header class="nav">
   <a class="brand" href="./">DRLabs</a>
-  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span></a>
-  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span></a>
-  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span></a>
+  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span><span class="lang-ja">ホーム</span><span class="lang-ko">홈</span><span class="lang-fr">Accueil</span><span class="lang-es">Inicio</span><span class="lang-ru">Главная</span></a>
+  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a>
+  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a>
   <span class="spacer"></span>
-  <a class="lang-btn" href="#" onclick="cycleLang();return false;" id="langLabel" title="Language / 语言">中文 · EN</a>
+  <div class="lang-wrap">
+  <button type="button" class="lang-btn" id="langLabel" onclick="toggleLangMenu();return false;" aria-haspopup="listbox" aria-expanded="false">中文</button>
+  <div class="lang-menu" id="langMenu" hidden role="listbox"><button type="button" data-set-lang="zh">中文</button><button type="button" data-set-lang="en">English</button><button type="button" data-set-lang="ja">日本語</button><button type="button" data-set-lang="ko">한국어</button><button type="button" data-set-lang="fr">Français</button><button type="button" data-set-lang="es">Español</button><button type="button" data-set-lang="ru">Русский</button></div>
+</div>
   <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
   <span id="authSlot" data-login="./login.html"></span>
 </header>
@@ -28,26 +33,35 @@ document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':'en');}catch(e){}}
 
 <div class="gate card">
   <h1 class="lang-zh">登录 / 注册</h1>
-  <h1 class="lang-en">Log in / Sign up</h1>
-  <p class="muted lang-zh">使用手机号 + 密码。阅读研报前需登录。我们仅保存手机号与密码哈希，用于阅读权限；不出售数据。</p>
-  <p class="muted lang-en">Use phone number + password. Login is required before full reports. We store only the phone number and a password hash for reading access. We do not sell data.</p>
+<h1 class="lang-en">Log in / Sign up</h1>
+<h1 class="lang-ja">ログイン / 登録</h1>
+<h1 class="lang-ko">로그인 / 가입</h1>
+<h1 class="lang-fr">Connexion / Inscription</h1>
+<h1 class="lang-es">Entrar / Registrarse</h1>
+<h1 class="lang-ru">Вход / Регистрация</h1>
+  <p class="lang-zh muted">使用手机号 + 密码。阅读研报前需登录。我们仅保存手机号与密码哈希，用于阅读权限；不出售数据。</p>
+<p class="lang-en muted">Use phone number + password. Login is required before full reports. We store only the phone number and a password hash for reading access. We do not sell data.</p>
+<p class="lang-ja muted">電話番号とパスワード。本文はログイン後。電話番号とパスワードハッシュのみ保存し、閲覧権限に使います。データは販売しません。</p>
+<p class="lang-ko muted">전화번호와 비밀번호. 전문은 로그인 후. 번호와 비밀번호 해시만 저장하며 열람 권한에 씁니다. 데이터를 팔지 않습니다.</p>
+<p class="lang-fr muted">Téléphone + mot de passe. Connexion requise pour le texte intégral. Nous stockons le numéro et un hash, pour l’accès lecture. Pas de vente de données.</p>
+<p class="lang-es muted">Teléfono + contraseña. Hay que entrar para el texto completo. Solo guardamos el número y un hash para el acceso. No vendemos datos.</p>
+<p class="lang-ru muted">Телефон и пароль. Полный текст — после входа. Храним номер и хеш пароля для доступа. Данные не продаём.</p>
   <div>
-    <label><span class="lang-zh">手机号</span><span class="lang-en">Phone</span></label>
+    <label><span class="lang-zh">手机号</span><span class="lang-en">Phone</span><span class="lang-ja">電話番号</span><span class="lang-ko">전화번호</span><span class="lang-fr">Téléphone</span><span class="lang-es">Teléfono</span><span class="lang-ru">Телефон</span></label>
     <input id="phone" type="tel" data-i18n-placeholder="auth.phonePh" autocomplete="username">
-    <label><span class="lang-zh">密码</span><span class="lang-en">Password</span></label>
+    <label><span class="lang-zh">密码</span><span class="lang-en">Password</span><span class="lang-ja">パスワード</span><span class="lang-ko">비밀번호</span><span class="lang-fr">Mot de passe</span><span class="lang-es">Contraseña</span><span class="lang-ru">Пароль</span></label>
     <input id="password" type="password" data-i18n-placeholder="auth.passwordPh" autocomplete="new-password">
     <p id="msg" class="err"></p>
     <p>
-      <button class="btn" type="button" onclick="doLogin()"><span class="lang-zh">登录</span><span class="lang-en">Log in</span></button>
-      <button class="btn secondary" type="button" onclick="doRegister()"><span class="lang-zh">注册</span><span class="lang-en">Sign up</span></button>
+      <button class="btn" type="button" onclick="doLogin()"><span class="lang-zh">登录</span><span class="lang-en">Log in</span><span class="lang-ja">ログイン</span><span class="lang-ko">로그인</span><span class="lang-fr">Connexion</span><span class="lang-es">Entrar</span><span class="lang-ru">Войти</span></button>
+      <button class="btn secondary" type="button" onclick="doRegister()"><span class="lang-zh">注册</span><span class="lang-en">Sign up</span><span class="lang-ja">登録</span><span class="lang-ko">가입</span><span class="lang-fr">Inscription</span><span class="lang-es">Registrarse</span><span class="lang-ru">Регистрация</span></button>
     </p>
   </div>
 </div>
 
 </main>
 <footer>
-  <span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span>
-  <span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span>
+<span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span>
 </footer>
 </div>
 <script src="./assets/site.js"></script>

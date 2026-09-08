@@ -1,57 +1,86 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-title-zh="DRLabs — 加密货币研究" data-title-en="DRLabs — Crypto Research">
+<html lang="zh-CN" data-title-zh="DRLabs — 加密货币研究" data-title-en="DRLabs — Crypto Research" data-title-ja="DRLabs — 暗号資産リサーチ" data-title-ko="DRLabs — 암호화폐 리서치" data-title-fr="DRLabs — Recherche crypto" data-title-es="DRLabs — Investigación cripto" data-title-ru="DRLabs — Криптоисследования">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DRLabs — 加密货币研究</title>
 <link rel="stylesheet" href="./assets/site.css">
 <script>
-(function(){try{var k='drlabs-lang';var l=localStorage.getItem(k);
-if(l!=='zh'&&l!=='en'){l=((navigator.language||'zh')+'').toLowerCase().indexOf('zh')===0?'zh':'en';}
+(function(){try{var k='drlabs-lang';var allow=['zh','en','ja','ko','fr','es','ru'];
+var l=localStorage.getItem(k);var n=((navigator.language||'zh')+'').toLowerCase();
+if(allow.indexOf(l)<0){l=n.indexOf('zh')===0?'zh':n.indexOf('ja')===0?'ja':n.indexOf('ko')===0?'ko':n.indexOf('fr')===0?'fr':n.indexOf('es')===0?'es':n.indexOf('ru')===0?'ru':'en';}
+var map={zh:'zh-CN',en:'en',ja:'ja',ko:'ko',fr:'fr',es:'es',ru:'ru'};
 document.documentElement.setAttribute('data-lang',l);
-document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':'en');}catch(e){}})();
+document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 </script>
 </head>
 <body>
 <div class="wrap">
 <header class="nav">
   <a class="brand" href="./">DRLabs</a>
-  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span></a>
-  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span></a>
-  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span></a>
+  <a href="./"><span class="lang-zh">首页</span><span class="lang-en">Home</span><span class="lang-ja">ホーム</span><span class="lang-ko">홈</span><span class="lang-fr">Accueil</span><span class="lang-es">Inicio</span><span class="lang-ru">Главная</span></a>
+  <a href="./research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a>
+  <a href="./about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a>
   <span class="spacer"></span>
-  <a class="lang-btn" href="#" onclick="cycleLang();return false;" id="langLabel" title="Language / 语言">中文 · EN</a>
+  <div class="lang-wrap">
+  <button type="button" class="lang-btn" id="langLabel" onclick="toggleLangMenu();return false;" aria-haspopup="listbox" aria-expanded="false">中文</button>
+  <div class="lang-menu" id="langMenu" hidden role="listbox"><button type="button" data-set-lang="zh">中文</button><button type="button" data-set-lang="en">English</button><button type="button" data-set-lang="ja">日本語</button><button type="button" data-set-lang="ko">한국어</button><button type="button" data-set-lang="fr">Français</button><button type="button" data-set-lang="es">Español</button><button type="button" data-set-lang="ru">Русский</button></div>
+</div>
   <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
   <span id="authSlot" data-login="./login.html"></span>
 </header>
 <main>
 
-  <p class="muted lang-zh">DRLabs 首席研究 · 数据驱动</p>
-  <p class="muted lang-en">DRLabs chief research · data first</p>
+  <p class="lang-zh muted">DRLabs 首席研究 · 数据驱动</p>
+<p class="lang-en muted">DRLabs chief research · data first</p>
+<p class="lang-ja muted">DRLabs チーフリサーチ · データ優先</p>
+<p class="lang-ko muted">DRLabs 수석 리서치 · 데이터 우선</p>
+<p class="lang-fr muted">Recherche DRLabs · les faits d’abord</p>
+<p class="lang-es muted">Investigación DRLabs · datos primero</p>
+<p class="lang-ru muted">Главное исследование DRLabs · сначала данные</p>
   <h1 class="lang-zh">把链上复杂事，写成能读懂的研报</h1>
-  <h1 class="lang-en">Turn on-chain complexity into reports you can actually read</h1>
-  <p class="lang-zh">覆盖 DeFi、GameFi、Meme 与关键技术范式。右上角可切换中文 / English；表格单元格始终中英对照。</p>
-  <p class="lang-en">Coverage: DeFi, GameFi, memes and core tech patterns. Switch Chinese / English at top right. Table cells stay bilingual.</p>
+<h1 class="lang-en">Turn on-chain complexity into reports you can actually read</h1>
+<h1 class="lang-ja">オンチェーンの複雑さを、読めるリサーチに落とす</h1>
+<h1 class="lang-ko">온체인의 복잡함을 읽을 수 있는 리서치로</h1>
+<h1 class="lang-fr">Transformer la complexité on-chain en notes lisibles</h1>
+<h1 class="lang-es">Convertir la complejidad on-chain en informes legibles</h1>
+<h1 class="lang-ru">Сложность ончейна — в читаемые записки</h1>
+  <p class="lang-zh">覆盖 DeFi、GameFi、Meme 与关键技术范式。右上角选择语言；表格单元格始终中英对照。</p>
+<p class="lang-en">Coverage: DeFi, GameFi, memes and core tech patterns. Pick a language at top right. Table cells stay Chinese + English.</p>
+<p class="lang-ja">DeFi、GameFi、ミームと技術潮流を扱う。右上で言語を選択。表は中英併記のまま。</p>
+<p class="lang-ko">DeFi, GameFi, 밈과 핵심 기술을 다룹니다. 오른쪽 위에서 언어를 고르세요. 표는 중·영 대조를 유지합니다.</p>
+<p class="lang-fr">DeFi, GameFi, memes et schémas techniques. Choisissez la langue en haut à droite. Les tableaux restent ZH+EN.</p>
+<p class="lang-es">DeFi, GameFi, memes y patrones técnicos. Elige idioma arriba a la derecha. Las tablas siguen en chino e inglés.</p>
+<p class="lang-ru">DeFi, GameFi, мемы и ключевые технологические схемы. Язык — справа сверху. Таблицы остаются китайско-английскими.</p>
   <div class="card">
     <span class="badge">6.6 / 10</span>
-    <h2 style="margin:8px 0"><a href="research/bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月8日 · BNB</span><span class="lang-en">8 Sep 2026 · BNB</span></p>
+    <h2 style="margin:8px 0"><a href="research/bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span><span class="lang-ja">BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格</span><span class="lang-ko">BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격</span><span class="lang-fr">Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie</span><span class="lang-es">Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte</span><span class="lang-ru">Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично</span></a></h2>
+    <p class="muted"><span class="lang-zh">2026年9月8日 · BNB</span><span class="lang-en">8 Sep 2026 · BNB</span><span class="lang-ja">2026年9月8日 · BNB</span><span class="lang-ko">2026년 9월 8일 · BNB</span><span class="lang-fr">8 sept. 2026 · BNB</span><span class="lang-es">8 sep 2026 · BNB</span><span class="lang-ru">8 сен 2026 · BNB</span></p>
     <p class="lang-zh">市值第四、BSC 仍然很忙；千亿定价主要来自平台与燃烧，链上 TVL 只能解释一小部分。</p>
-    <p class="lang-en">Fourth by market cap, BSC is still busy; the $100B valuation is mainly platform plus burn. On-chain TVL only explains a slice.</p>
+<p class="lang-en">Fourth by market cap, BSC is still busy; the $100B valuation is mainly platform plus burn. On-chain TVL only explains a slice.</p>
+<p class="lang-ja">時価総額4位でBSCは依然活発。1000億ドルの価格は主にプラットフォームとバーン。オンチェーンTVLは一部しか説明しない。</p>
+<p class="lang-ko">시가총액 4위, BSC는 여전히 분주합니다. 1000억 달러 가치는 주로 플랫폼과 소각이며, 온체인 TVL은 일부만 설명합니다.</p>
+<p class="lang-fr">4e en capitalisation, BSC reste actif ; les 100 Md$ viennent surtout de la plateforme et du burn. La TVL n’explique qu’une part.</p>
+<p class="lang-es">Cuarto por capitalización; BSC sigue activo. Los 100 000 M$ vienen sobre todo de la plataforma y el burn; el TVL solo explica una parte.</p>
+<p class="lang-ru">4-е место по капитализации, BSC по-прежнему активен. Оценка $100 млрд — в основном платформа и сжигание; TVL объясняет лишь часть.</p>
   </div>
   <div class="card">
     <span class="badge">6.7 / 10</span>
-    <h2 style="margin:8px 0"><a href="research/aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月7日 · AAVE</span><span class="lang-en">7 Sep 2026 · AAVE</span></p>
+    <h2 style="margin:8px 0"><a href="research/aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span><span class="lang-ja">Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期</span><span class="lang-ko">Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기</span><span class="lang-fr">Note Aave : toujours leader du lending, V4 encore au début</span><span class="lang-es">Nota Aave: sigue siendo líder de préstamos, V4 aún temprano</span><span class="lang-ru">Записка по Aave: лидер кредитования на месте, V4 ещё ранний</span></a></h2>
+    <p class="muted"><span class="lang-zh">2026年9月7日 · AAVE</span><span class="lang-en">7 Sep 2026 · AAVE</span><span class="lang-ja">2026年9月7日 · AAVE</span><span class="lang-ko">2026년 9월 7일 · AAVE</span><span class="lang-fr">7 sept. 2026 · AAVE</span><span class="lang-es">7 sep 2026 · AAVE</span><span class="lang-ru">7 сен 2026 · AAVE</span></p>
     <p class="lang-zh">仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。</p>
-    <p class="lang-en">Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.</p>
+<p class="lang-en">Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.</p>
+<p class="lang-ja">レンディングの規模とブランドで依然首位。主力はV3、V4は稼働済みだが上限は保守的。</p>
+<p class="lang-ko">대출 규모와 브랜드에서 여전히 선두. V3가 본장이고 V4는 출시됐지만 한도는 보수적입니다.</p>
+<p class="lang-fr">Toujours leader en taille et en marque. V3 porte le livre ; V4 est live avec des plafonds prudents.</p>
+<p class="lang-es">Sigue siendo líder en escala y marca. V3 carga el libro; V4 está vivo con techos conservadores.</p>
+<p class="lang-ru">По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.</p>
   </div>
-  <p><a href="research/"><span class="lang-zh">阅读全部研究报告 →</span><span class="lang-en">All research notes →</span></a></p>
+  <p><a href="research/"><span class="lang-zh">阅读全部研究报告 →</span><span class="lang-en">All research notes →</span><span class="lang-ja">すべてのリサーチ →</span><span class="lang-ko">전체 리서치 →</span><span class="lang-fr">Toutes les notes →</span><span class="lang-es">Todas las notas →</span><span class="lang-ru">Все записки →</span></a></p>
 
 </main>
 <footer>
-  <span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span>
-  <span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span>
+<span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span>
 </footer>
 </div>
 <script src="./assets/site.js"></script>

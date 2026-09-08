@@ -4,6 +4,17 @@
   const LANG_KEY = "drlabs-lang";
   const USERS_KEY = "drlabs-users-v1";
   const SESSION_KEY = "drlabs-session-v1";
+  const LANGS = ["zh", "en", "ja", "ko", "fr", "es", "ru"];
+  const LANG_LABEL = {
+    zh: "中文",
+    en: "English",
+    ja: "日本語",
+    ko: "한국어",
+    fr: "Français",
+    es: "Español",
+    ru: "Русский",
+  };
+  const LANG_HTML = { zh: "zh-CN", en: "en", ja: "ja", ko: "ko", fr: "fr", es: "es", ru: "ru" };
 
   const I18N = {
     zh: {
@@ -15,12 +26,6 @@
       "theme.auto": "皮肤:自动",
       "theme.light": "皮肤:白天",
       "theme.dark": "皮肤:黑夜",
-      "lang.label": "中文 · EN",
-      "footer": "内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。",
-      "gate.title": "登录后阅读完整研报",
-      "gate.body": "未登录不展示正文，避免只看到图片预览。",
-      "gate.hint": "注册只需手机号 + 密码（无短信费用）。",
-      "gate.cta": "去登录 / 注册",
       "auth.invalidPhone": "请输入有效手机号",
       "auth.shortPassword": "密码至少 6 位",
       "auth.exists": "该手机号已注册",
@@ -39,12 +44,6 @@
       "theme.auto": "Theme: Auto",
       "theme.light": "Theme: Light",
       "theme.dark": "Theme: Dark",
-      "lang.label": "中 · English",
-      "footer": "For research only. Not investment advice. Crypto can result in partial or total loss.",
-      "gate.title": "Log in to read the full report",
-      "gate.body": "The body is hidden until you log in, so the charts are not shown as a free preview.",
-      "gate.hint": "Sign up with phone number + password. No SMS fee.",
-      "gate.cta": "Log in / Sign up",
       "auth.invalidPhone": "Enter a valid phone number",
       "auth.shortPassword": "Password must be at least 6 characters",
       "auth.exists": "This phone number is already registered",
@@ -53,6 +52,96 @@
       "auth.registered": "Registered and signed in",
       "auth.phonePh": "Phone number",
       "auth.passwordPh": "At least 6 characters",
+    },
+    ja: {
+      "nav.home": "ホーム",
+      "nav.research": "リサーチ",
+      "nav.about": "概要",
+      "nav.login": "ログイン / 登録",
+      "nav.logout": "ログアウト",
+      "theme.auto": "テーマ:自動",
+      "theme.light": "テーマ:ライト",
+      "theme.dark": "テーマ:ダーク",
+      "auth.invalidPhone": "有効な電話番号を入力してください",
+      "auth.shortPassword": "パスワードは6文字以上",
+      "auth.exists": "この電話番号は登録済みです",
+      "auth.missing": "アカウントが見つかりません",
+      "auth.badPassword": "パスワードが違います",
+      "auth.registered": "登録してログインしました",
+      "auth.phonePh": "電話番号",
+      "auth.passwordPh": "6文字以上",
+    },
+    ko: {
+      "nav.home": "홈",
+      "nav.research": "리서치",
+      "nav.about": "소개",
+      "nav.login": "로그인 / 가입",
+      "nav.logout": "로그아웃",
+      "theme.auto": "테마:자동",
+      "theme.light": "테마:라이트",
+      "theme.dark": "테마:다크",
+      "auth.invalidPhone": "유효한 전화번호를 입력하세요",
+      "auth.shortPassword": "비밀번호는 6자 이상",
+      "auth.exists": "이미 등록된 번호입니다",
+      "auth.missing": "계정을 찾을 수 없습니다",
+      "auth.badPassword": "비밀번호가 올바르지 않습니다",
+      "auth.registered": "가입되어 로그인되었습니다",
+      "auth.phonePh": "전화번호",
+      "auth.passwordPh": "6자 이상",
+    },
+    fr: {
+      "nav.home": "Accueil",
+      "nav.research": "Recherche",
+      "nav.about": "À propos",
+      "nav.login": "Connexion / Inscription",
+      "nav.logout": "Déconnexion",
+      "theme.auto": "Thème : Auto",
+      "theme.light": "Thème : Clair",
+      "theme.dark": "Thème : Sombre",
+      "auth.invalidPhone": "Entrez un numéro valide",
+      "auth.shortPassword": "Mot de passe : 6 caractères min.",
+      "auth.exists": "Ce numéro est déjà inscrit",
+      "auth.missing": "Compte introuvable",
+      "auth.badPassword": "Mot de passe incorrect",
+      "auth.registered": "Inscrit et connecté",
+      "auth.phonePh": "Téléphone",
+      "auth.passwordPh": "Au moins 6 caractères",
+    },
+    es: {
+      "nav.home": "Inicio",
+      "nav.research": "Investigación",
+      "nav.about": "Acerca de",
+      "nav.login": "Entrar / Registrarse",
+      "nav.logout": "Salir",
+      "theme.auto": "Tema: Auto",
+      "theme.light": "Tema: Claro",
+      "theme.dark": "Tema: Oscuro",
+      "auth.invalidPhone": "Introduce un teléfono válido",
+      "auth.shortPassword": "La contraseña debe tener 6+ caracteres",
+      "auth.exists": "Este teléfono ya está registrado",
+      "auth.missing": "Cuenta no encontrada",
+      "auth.badPassword": "Contraseña incorrecta",
+      "auth.registered": "Registrado e iniciado",
+      "auth.phonePh": "Teléfono",
+      "auth.passwordPh": "Al menos 6 caracteres",
+    },
+    ru: {
+      "nav.home": "Главная",
+      "nav.research": "Исследования",
+      "nav.about": "О нас",
+      "nav.login": "Вход / Регистрация",
+      "nav.logout": "Выйти",
+      "theme.auto": "Тема: авто",
+      "theme.light": "Тема: день",
+      "theme.dark": "Тема: ночь",
+      "auth.invalidPhone": "Введите корректный телефон",
+      "auth.shortPassword": "Пароль не короче 6 символов",
+      "auth.exists": "Этот номер уже зарегистрирован",
+      "auth.missing": "Аккаунт не найден",
+      "auth.badPassword": "Неверный пароль",
+      "auth.registered": "Регистрация выполнена, вы вошли",
+      "auth.phonePh": "Телефон",
+      "auth.passwordPh": "Не менее 6 символов",
     },
   };
 
@@ -66,16 +155,22 @@
   }
   function detectLang() {
     const saved = localStorage.getItem(LANG_KEY);
-    if (saved === "zh" || saved === "en") return saved;
+    if (LANGS.indexOf(saved) !== -1) return saved;
     const nav = (navigator.language || "zh").toLowerCase();
-    return nav.startsWith("zh") ? "zh" : "en";
+    if (nav.startsWith("zh")) return "zh";
+    if (nav.startsWith("ja")) return "ja";
+    if (nav.startsWith("ko")) return "ko";
+    if (nav.startsWith("fr")) return "fr";
+    if (nav.startsWith("es")) return "es";
+    if (nav.startsWith("ru")) return "ru";
+    return "en";
   }
   function lang() {
     return document.documentElement.getAttribute("data-lang") || "zh";
   }
   function t(key) {
     const pack = I18N[lang()] || I18N.zh;
-    return pack[key] || I18N.zh[key] || key;
+    return pack[key] || I18N.en[key] || I18N.zh[key] || key;
   }
 
   function applyTheme() {
@@ -96,17 +191,23 @@
 
   function applyTitle() {
     const current = lang();
-    const zh = document.documentElement.getAttribute("data-title-zh");
-    const en = document.documentElement.getAttribute("data-title-en");
-    if (current === "en" && en) document.title = en;
-    else if (zh) document.title = zh;
+    const titled = document.documentElement.getAttribute("data-title-" + current);
+    if (titled) document.title = titled;
+  }
+
+  function paintLangMenu(current) {
+    const menu = document.getElementById("langMenu");
+    if (!menu) return;
+    menu.querySelectorAll("[data-set-lang]").forEach(function (btn) {
+      btn.setAttribute("aria-current", btn.getAttribute("data-set-lang") === current ? "true" : "false");
+    });
   }
 
   function applyLang() {
     const current = detectLang();
     localStorage.setItem(LANG_KEY, current);
     document.documentElement.setAttribute("data-lang", current);
-    document.documentElement.setAttribute("lang", current === "zh" ? "zh-CN" : "en");
+    document.documentElement.setAttribute("lang", LANG_HTML[current] || "en");
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       const key = el.getAttribute("data-i18n");
       if (key) el.textContent = t(key);
@@ -116,17 +217,31 @@
       if (key) el.setAttribute("placeholder", t(key));
     });
     const langBtn = document.getElementById("langLabel");
-    if (langBtn) {
-      langBtn.textContent = t("lang.label");
-      langBtn.setAttribute("aria-pressed", current === "en" ? "true" : "false");
-    }
+    if (langBtn) langBtn.textContent = LANG_LABEL[current] || current;
+    paintLangMenu(current);
     applyTitle();
     applyTheme();
     paintNav();
   }
-  window.cycleLang = function () {
-    localStorage.setItem(LANG_KEY, detectLang() === "zh" ? "en" : "zh");
+  window.setLang = function (next) {
+    if (LANGS.indexOf(next) === -1) return;
+    localStorage.setItem(LANG_KEY, next);
+    const menu = document.getElementById("langMenu");
+    if (menu) menu.hidden = true;
+    const langBtn = document.getElementById("langLabel");
+    if (langBtn) langBtn.setAttribute("aria-expanded", "false");
     applyLang();
+  };
+  window.toggleLangMenu = function () {
+    const menu = document.getElementById("langMenu");
+    const langBtn = document.getElementById("langLabel");
+    if (!menu) return;
+    menu.hidden = !menu.hidden;
+    if (langBtn) langBtn.setAttribute("aria-expanded", menu.hidden ? "false" : "true");
+  };
+  window.cycleLang = function () {
+    const i = LANGS.indexOf(detectLang());
+    window.setLang(LANGS[(i + 1) % LANGS.length]);
   };
 
   function loadUsers() {
@@ -257,11 +372,26 @@
     }
   };
 
-  window.DRI18N = { t: t, applyLang: applyLang };
+  window.DRI18N = { t: t, applyLang: applyLang, setLang: window.setLang };
 
   document.addEventListener("DOMContentLoaded", function () {
     applyLang();
     if (window.requireAuthForArticle) requireAuthForArticle();
+    document.querySelectorAll("[data-set-lang]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        window.setLang(btn.getAttribute("data-set-lang"));
+      });
+    });
+    document.addEventListener("click", function (e) {
+      const wrap = document.querySelector(".lang-wrap");
+      const menu = document.getElementById("langMenu");
+      if (!wrap || !menu || menu.hidden) return;
+      if (!wrap.contains(e.target)) {
+        menu.hidden = true;
+        const langBtn = document.getElementById("langLabel");
+        if (langBtn) langBtn.setAttribute("aria-expanded", "false");
+      }
+    });
   });
   setInterval(function () {
     if ((localStorage.getItem(THEME_KEY) || "auto") === "auto") applyTheme();
