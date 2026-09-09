@@ -38,3 +38,17 @@ python3 scripts/daily_desk.py --force
 仓库：`DRLabs-code/drlabs`  
 工作流：`.github/workflows/daily-desk.yml`  
 可在 Actions 里 `workflow_dispatch` 手跑。公开站不写「日更两篇」。
+
+## 更新后通知
+
+站点内容一旦写上线，必须在对话里用中文告诉用户，并附上链接：
+
+- 首页：https://drlabs-code.github.io/drlabs/
+- 目录：https://drlabs-code.github.io/drlabs/research/
+- 每篇新研报：https://drlabs-code.github.io/drlabs/research/\<slug\>/
+
+本地打印当日链接：
+
+```bash
+python3 scripts/daily_desk.py --status
+```

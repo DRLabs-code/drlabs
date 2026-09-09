@@ -17,6 +17,7 @@ ROOT = Path(os.environ.get("DRLABS_ROOT", "/tmp/drlabs-live"))
 ASTRO_CONTENT = Path(os.environ.get("ASTRO_CONTENT", "/workspace/src/content/research"))
 HERE = Path(__file__).resolve().parent
 UNIVERSE_PATH = Path(os.environ.get("DESK_UNIVERSE", HERE / "desk_universe.json"))
+SITE = os.environ.get("DRLABS_SITE", "https://drlabs-code.github.io/drlabs").rstrip("/")
 UA = "DRLabs-desk/1.0 (+https://github.com/DRLabs-code)"
 LANES = ("DeFi", "GameFi", "Meme")
 LANGS = ("zh", "en", "ja", "ko", "fr", "es", "ru")
@@ -84,18 +85,61 @@ def published_tickers() -> set[str]:
 
 
 def notes_on(day: str) -> list[str]:
+    return [item["slug"] for item in list_notes() if item["date"] == day]
+
+
+def parse_head(text: str) -> dict[str, str]:
+    data: dict[str, str] = {}
+    if not text.startswith("---"):
+        return data
+    end = text.find("\n---\n", 4)
+    if end == -1:
+        return data
+    for line in text[4:end].split("\n"):
+        if ":" in line and not line.startswith(" "):
+            key, raw = line.split(":", 1)
+            data[key.strip()] = raw.strip().strip('"')
+    return data
+
+
+def list_notes() -> list[dict[str, str]]:
     research = ROOT / "research"
-    found: list[str] = []
+    notes: list[dict[str, str]] = []
     if not research.exists():
-        return found
+        return notes
     for folder in research.iterdir():
         report = folder / "report.md"
         if not folder.is_dir() or not report.exists():
             continue
-        text = report.read_text(encoding="utf-8")
-        if f"date: {day}" in text[:400]:
-            found.append(folder.name)
-    return found
+        head = parse_head(report.read_text(encoding="utf-8"))
+        notes.append(
+            {
+                "slug": folder.name,
+                "ticker": head.get("ticker") or folder.name.upper(),
+                "title": head.get("title") or folder.name.upper(),
+                "date": (head.get("date") or "")[:10],
+                "score": head.get("score") or "",
+                "url": f"{SITE}/research/{folder.name}/",
+            }
+        )
+    notes.sort(key=lambda n: (n["date"], n["score"]), reverse=True)
+    return notes
+
+
+def print_status(day: str | None = None) -> None:
+    notes = list_notes()
+    focus = [n for n in notes if n["date"] == day] if day else notes[:2]
+    print(f"首页 {SITE}/")
+    print(f"目录 {SITE}/research/")
+    if day:
+        print(f"当日 {day}")
+    if not focus:
+        print("当日还没有新研报。")
+        return
+    for note in focus:
+        score = f"{note['score']} / 10" if note["score"] else ""
+        print(f"- {note['ticker']} {score} {note['title']}")
+        print(f"  {note['url']}")
 
 
 def get_json(url: str, retries: int = 3) -> dict | list:
@@ -877,6 +921,7 @@ def run(dry_run: bool, force: bool) -> int:
     existing = notes_on(day)
     if len(existing) >= 2 and not force:
         print(f"already have {len(existing)} notes on {day}: {', '.join(existing)}")
+        print_status(day)
         return 0
     as_of = utc_now().strftime("%Y-%m-%d %H:%M UTC")
     pair = select_pair(as_of)
@@ -894,6 +939,7 @@ def run(dry_run: bool, force: bool) -> int:
     if dry_run:
         print("dry-run: no files written")
         return 0
+    print_status(day)
     return 0
 
 
@@ -901,7 +947,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Publish two DRLabs desk notes from public data.")
     parser.add_argument("--dry-run", action="store_true", help="pick names and fetch prints, do not write")
     parser.add_argument("--force", action="store_true", help="ignore the two-notes-per-day stop")
+    parser.add_argument("--status", action="store_true", help="print public URLs for today's notes")
     args = parser.parse_args()
+    if args.status:
+        print_status(today_utc())
+        return
     raise SystemExit(run(dry_run=args.dry_run, force=args.force))
 
 
