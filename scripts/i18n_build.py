@@ -354,8 +354,10 @@ def nav(prefix: str) -> str:
   <span class="spacer"></span>
   {lang_menu()}
   <button type="button" class="theme-btn" id="themeToggle" onclick="cycleTheme();return false;" aria-label="Toggle theme">
-    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 3v1.7M12 19.3V21M4.93 4.93l1.2 1.2M17.87 17.87l1.2 1.2M3 12h1.7M19.3 12H21M4.93 19.07l1.2-1.2M17.87 6.13l1.2-1.2"/></g></svg>
-    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.2 14.3A8.2 8.2 0 0 1 9.7 3.8 7.2 7.2 0 1 0 20.2 14.3z"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <g class="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/></g>
+      <g class="moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></g>
+    </svg>
   </button>
   <span id="authSlot" data-login="{login}"></span>
 </header>"""

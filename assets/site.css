@@ -31,14 +31,14 @@ input{width:100%;padding:10px 12px;margin:8px 0 14px;border:1px solid var(--bord
 label{font-size:.9rem;color:var(--muted)}
 .theme-btn,.auth-link,.lang-btn{font-size:.9rem;white-space:nowrap}
 .theme-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:34px;height:34px;padding:0;border:1px solid var(--border);
-  border-radius:999px;background:transparent;color:var(--text);cursor:pointer;flex-shrink:0;
+  display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;
+  padding:0;border:1px solid var(--border);border-radius:999px;
+  background:transparent;color:var(--text);cursor:pointer;overflow:hidden;
 }
-.theme-btn svg{width:18px;height:18px;display:none}
-[data-theme="light"] .theme-btn .icon-sun,
-html:not([data-theme]) .theme-btn .icon-sun{display:block}
-[data-theme="dark"] .theme-btn .icon-moon{display:block}
+.theme-btn svg{width:18px;height:18px;display:block;overflow:visible}
+.theme-btn .sun,.theme-btn .moon{display:none!important}
+[data-theme="light"] .theme-btn .sun{display:block!important}
+[data-theme="dark"] .theme-btn .moon{display:block!important}
 .theme-btn:hover{border-color:var(--brand)}
 .gate{max-width:420px;margin:40px auto}
 .err{color:#c62828;font-size:.9rem}

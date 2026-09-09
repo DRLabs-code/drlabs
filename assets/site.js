@@ -173,6 +173,10 @@
     if (el) {
       el.setAttribute("aria-label", resolved === "dark" ? t("theme.toLight") : t("theme.toDark"));
       el.setAttribute("title", resolved === "dark" ? t("theme.toLight") : t("theme.toDark"));
+      var sun = el.querySelector(".sun");
+      var moon = el.querySelector(".moon");
+      if (sun) sun.hidden = resolved !== "light";
+      if (moon) moon.hidden = resolved !== "dark";
     }
   }
   window.cycleTheme = function () {
