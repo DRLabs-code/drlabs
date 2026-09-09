@@ -1,3 +1,16 @@
+---
+title: "Aave 研究简报：借贷龙头仍在，V4 仍处早期"
+description: "仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。"
+date: 2026-09-07
+asOf: "2026-09-07"
+ticker: AAVE
+score: 6.7
+tags:
+  - DeFi
+  - AAVE
+conclusion: "仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。"
+---
+
 # Aave（AAVE）项目研究报告
 
 **DRLabs 加密货币研究**  

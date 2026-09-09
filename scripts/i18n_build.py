@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import html
+import os
 import re
+from datetime import datetime, timezone
+from email.utils import format_datetime
 from pathlib import Path
 
-ROOT = Path("/tmp/drlabs-live")
-ASTRO_GEN = Path("/workspace/src/generated")
+ROOT = Path(os.environ.get("DRLABS_ROOT", "/tmp/drlabs-live"))
+ASTRO_GEN = Path(os.environ.get("ASTRO_GEN", "/workspace/src/generated"))
 
 LANGS = ("zh", "en", "ja", "ko", "fr", "es", "ru")
 LANG_HTML = {"zh": "zh-CN", "en": "en", "ja": "ja", "ko": "ko", "fr": "fr", "es": "es", "ru": "ru"}
@@ -208,10 +211,8 @@ def slugify(text: str) -> str:
 
 def rewrite_img(src: str, kind: str) -> str:
     name = Path(src).name
-    folder = {"aave": "aave", "bnb": "bnb", "uni": "uni", "doge": "doge"}.get(kind)
-    if folder:
-        return f"../../assets/{folder}/{name}"
-    return src
+    slug = kind.replace("-astro", "")
+    return f"../../assets/{slug}/{name}"
 
 
 def rewrite_img_astro(src: str, slug: str) -> str:
@@ -225,14 +226,11 @@ def rewrite_img_astro(src: str, slug: str) -> str:
         "06_lending_competitors_tvl.png": "competitor-tvl-comparison.png",
         "07_aave_tvl_trend.png": "tvl-trend.png",
     }
-    if slug.startswith("aave"):
+    stem = slug.replace(".html", "")
+    ticker = stem.split("-")[0]
+    if ticker == "aave":
         name = aave_map.get(name, name)
-        return f"../aave/{name}"
-    if slug.startswith("uni"):
-        return f"../uni/{name}"
-    if slug.startswith("doge"):
-        return f"../doge/{name}"
-    return f"../bnb/{name}"
+    return f"../{ticker}/{name}"
 
 
 def bundle(tag: str, texts: dict[str, str], cls: str = "") -> str:
@@ -410,6 +408,162 @@ def archive_item(href: str, topics: str, ticker: str, dates: dict[str, str], as_
 """
 
 
+def parse_frontmatter(md: str) -> dict:
+    md = md.replace("\r\n", "\n")
+    if not md.startswith("---\n"):
+        return {}
+    end = md.find("\n---\n", 4)
+    if end == -1:
+        return {}
+    data: dict = {}
+    key = None
+    for line in md[4:end].split("\n"):
+        if key and line.startswith("  - "):
+            cur = data.get(key)
+            if not isinstance(cur, list):
+                data[key] = []
+            data[key].append(line[4:].strip().strip('"'))
+            continue
+        if ":" in line and not line.startswith(" "):
+            key, raw = line.split(":", 1)
+            key = key.strip()
+            val = raw.strip().strip('"')
+            data[key] = val
+    return data
+
+
+def localize_date(value: str) -> dict[str, str]:
+    try:
+        dt = datetime.strptime(value[:10], "%Y-%m-%d")
+    except ValueError:
+        return {lang: value for lang in LANGS}
+    return {
+        "zh": f"{dt.year}年{dt.month}月{dt.day}日",
+        "en": dt.strftime("%-d %b %Y") if os.name != "nt" else dt.strftime("%d %b %Y").lstrip("0"),
+        "ja": f"{dt.year}年{dt.month}月{dt.day}日",
+        "ko": f"{dt.year}년 {dt.month}월 {dt.day}일",
+        "fr": dt.strftime("%-d %b %Y").replace("  ", " ") if os.name != "nt" else dt.strftime("%d %b %Y").lstrip("0"),
+        "es": dt.strftime("%-d %b %Y") if os.name != "nt" else dt.strftime("%d %b %Y").lstrip("0"),
+        "ru": dt.strftime("%-d %b %Y") if os.name != "nt" else dt.strftime("%d %b %Y").lstrip("0"),
+    }
+
+
+def topic_attr(tags: list[str] | str) -> str:
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",") if t.strip()]
+    known = [t for t in ("DeFi", "GameFi", "Meme", "L1") if t in tags]
+    return " ".join(known) or "DeFi"
+
+
+# Older notes (notably Aave) were written before YAML heads. Keep cards readable.
+KNOWN_META = {
+    "aave": {
+        "date": "2026-09-07",
+        "asOf": "2026-09-07",
+        "ticker": "AAVE",
+        "score": "6.7",
+        "tags": ["DeFi"],
+        "titles": {
+            "zh": "Aave 研究简报：借贷龙头仍在，V4 仍处早期",
+            "en": "Aave research note: lending leader still, V4 still early",
+            "ja": "Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期",
+            "ko": "Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기",
+            "fr": "Note Aave : toujours leader du lending, V4 encore au début",
+            "es": "Nota Aave: sigue siendo líder de préstamos, V4 aún temprano",
+            "ru": "Записка по Aave: лидер кредитования на месте, V4 ещё ранний",
+        },
+        "summaries": {
+            "zh": "仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。",
+            "en": "Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.",
+            "ja": "レンディングの規模とブランドで依然首位。主力はV3、V4は稼働済みだが上限は保守的。",
+            "ko": "대출 규모와 브랜드에서 여전히 선두. V3가 본장이고 V4는 출시됐지만 한도는 보수적입니다.",
+            "fr": "Toujours leader en taille et en marque. V3 porte le livre ; V4 est live avec des plafonds prudents.",
+            "es": "Sigue siendo líder en escala y marca. V3 carga el libro; V4 está vivo con techos conservadores.",
+            "ru": "По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.",
+        },
+    }
+}
+
+
+def discover_notes() -> list[dict]:
+    research = ROOT / "research"
+    if not research.exists():
+        return []
+    notes = []
+    for folder in research.iterdir():
+        report = folder / "report.md"
+        if not folder.is_dir() or not report.exists():
+            continue
+        known = KNOWN_META.get(folder.name, {})
+        zh = parse_frontmatter(report.read_text(encoding="utf-8"))
+        if not zh.get("title") and known.get("titles"):
+            zh = {
+                "title": known["titles"]["zh"],
+                "date": known["date"],
+                "asOf": known["asOf"],
+                "ticker": known["ticker"],
+                "score": known["score"],
+                "tags": known["tags"],
+                "conclusion": known["summaries"]["zh"],
+            }
+        titles: dict[str, str] = {}
+        summaries: dict[str, str] = {}
+        for lang, name in (
+            ("zh", "report.md"),
+            ("en", "report.en.md"),
+            ("ja", "report.ja.md"),
+            ("ko", "report.ko.md"),
+            ("fr", "report.fr.md"),
+            ("es", "report.es.md"),
+            ("ru", "report.ru.md"),
+        ):
+            path = folder / name
+            if not path.exists():
+                continue
+            fm = parse_frontmatter(path.read_text(encoding="utf-8"))
+            if fm.get("title"):
+                titles[lang] = fm["title"]
+            if fm.get("conclusion") or fm.get("description"):
+                summaries[lang] = fm.get("conclusion") or fm["description"]
+        if known.get("titles"):
+            for lang, text in known["titles"].items():
+                titles.setdefault(lang, text)
+            for lang, text in known.get("summaries", {}).items():
+                summaries.setdefault(lang, text)
+        if "en" in titles:
+            for lang in LANGS:
+                titles.setdefault(lang, titles["en"])
+                summaries.setdefault(lang, summaries.get("en") or summaries.get("zh") or "")
+        titles.setdefault("zh", folder.name.upper())
+        summaries.setdefault("zh", zh.get("conclusion") or zh.get("description") or "")
+        date = str(zh.get("date") or "1970-01-01")[:10]
+        tags = zh.get("tags") if isinstance(zh.get("tags"), list) else []
+        notes.append(
+            {
+                "slug": folder.name,
+                "ticker": zh.get("ticker") or folder.name.upper(),
+                "date": date,
+                "as_of": zh.get("asOf") or date,
+                "score": str(zh.get("score") or ""),
+                "topics": topic_attr(tags),
+                "titles": titles,
+                "summaries": summaries,
+                "page_titles": {
+                    lang: f"{titles.get(lang, titles.get('zh', folder.name.upper()))} · DRLabs"
+                    for lang in LANGS
+                },
+            }
+        )
+    def score_key(note: dict) -> float:
+        try:
+            return float(note["score"])
+        except (TypeError, ValueError):
+            return 0.0
+
+    notes.sort(key=lambda n: (n["date"], score_key(n)), reverse=True)
+    return notes
+
+
 def filter_bar() -> str:
     return f"""
 <div class="filter-bar" data-filter-bar>
@@ -449,137 +603,43 @@ def page(titles: dict[str, str], prefix: str, body: str) -> str:
 """
 
 
-BNB_TITLE = {
-    "zh": "BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分",
-    "en": "BNB research note: a $100B price tag that on-chain TVL only partly explains",
-    "ja": "BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格",
-    "ko": "BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격",
-    "fr": "Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie",
-    "es": "Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte",
-    "ru": "Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично",
-}
-BNB_SUM = {
-    "zh": "市值第四、BSC 仍然很忙；千亿定价主要来自平台与燃烧，链上 TVL 只能解释一小部分。",
-    "en": "Fourth by market cap, BSC is still busy; the $100B valuation is mainly platform plus burn. On-chain TVL only explains a slice.",
-    "ja": "時価総額4位でBSCは依然活発。1000億ドルの価格は主にプラットフォームとバーン。オンチェーンTVLは一部しか説明しない。",
-    "ko": "시가총액 4위, BSC는 여전히 분주합니다. 1000억 달러 가치는 주로 플랫폼과 소각이며, 온체인 TVL은 일부만 설명합니다.",
-    "fr": "4e en capitalisation, BSC reste actif ; les 100 Md$ viennent surtout de la plateforme et du burn. La TVL n’explique qu’une part.",
-    "es": "Cuarto por capitalización; BSC sigue activo. Los 100 000 M$ vienen sobre todo de la plataforma y el burn; el TVL solo explica una parte.",
-    "ru": "4-е место по капитализации, BSC по-прежнему активен. Оценка $100 млрд — в основном платформа и сжигание; TVL объясняет лишь часть.",
-}
-BNB_DATE = {
-    "zh": "2026年9月8日",
-    "en": "8 Sep 2026",
-    "ja": "2026年9月8日",
-    "ko": "2026년 9월 8일",
-    "fr": "8 sept. 2026",
-    "es": "8 sep 2026",
-    "ru": "8 сен 2026",
-}
-AAVE_TITLE = {
-    "zh": "Aave 研究简报：借贷龙头仍在，V4 仍处早期",
-    "en": "Aave research note: lending leader still, V4 still early",
-    "ja": "Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期",
-    "ko": "Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기",
-    "fr": "Note Aave : toujours leader du lending, V4 encore au début",
-    "es": "Nota Aave: sigue siendo líder de préstamos, V4 aún temprano",
-    "ru": "Записка по Aave: лидер кредитования на месте, V4 ещё ранний",
-}
-AAVE_SUM = {
-    "zh": "仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。",
-    "en": "Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.",
-    "ja": "レンディングの規模とブランドで依然首位。主力はV3、V4は稼働済みだが上限は保守的。",
-    "ko": "대출 규모와 브랜드에서 여전히 선두. V3가 본장이고 V4는 출시됐지만 한도는 보수적입니다.",
-    "fr": "Toujours leader en taille et en marque. V3 porte le livre ; V4 est live avec des plafonds prudents.",
-    "es": "Sigue siendo líder en escala y marca. V3 carga el libro; V4 está vivo con techos conservadores.",
-    "ru": "По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.",
-}
-AAVE_DATE = {
-    "zh": "2026年9月7日",
-    "en": "7 Sep 2026",
-    "ja": "2026年9月7日",
-    "ko": "2026년 9월 7일",
-    "fr": "7 sept. 2026",
-    "es": "7 sep 2026",
-    "ru": "7 сен 2026",
-}
-UNI_TITLE = {
-    "zh": "UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层",
-    "en": "UNI research note: a thick DEX fee pool, a thin slice for the token",
-    "ja": "UNIリサーチノート：DEXの手数料は厚いが、トークンが取る分は薄い",
-    "ko": "UNI 리서치 노트: DEX 수수료 풀은 두껍고, 토큰 몫은 얇다",
-    "fr": "Note UNI : un gros pot de frais DEX, une fine part pour le jeton",
-    "es": "Nota UNI: un pozo grueso de comisiones DEX, una lonja fina para el token",
-    "ru": "Записка по UNI: толстый пул комиссий DEX, тонкий кусок для токена",
-}
-UNI_SUM = {
-    "zh": "现货 DEX 费用与成交仍是第一；近 30 日费用约 1.52 亿美元，协议收入只留下约 8%。6.9/10，谨慎跟踪。",
-    "en": "Still first in spot DEX fees and volume. 30-day fees about $152M; protocol keep is about 8%. 6.9/10, cautious watch.",
-    "ja": "現物DEXの手数料と出来高は首位。30日手数料約1.52億ドル、プロトコル取り分は約8%。6.9/10、慎重ウォッチ。",
-    "ko": "현물 DEX 수수료와 거래대금은 1위. 30일 수수료 약 1.52억 달러, 프로토콜 몫은 약 8%. 6.9/10, 신중 추적.",
-    "fr": "Toujours premier en frais et volume DEX spot. Frais 30 jours ~152 M$ ; le protocole garde ~8%. 6.9/10, suivi prudent.",
-    "es": "Sigue primero en comisiones y volumen DEX spot. Comisiones 30 días ~152 M$; el protocolo se queda ~8%. 6.9/10, seguimiento cauto.",
-    "ru": "По-прежнему первый по комиссиям и обороту спот-DEX. Комиссии за 30 дней ~$152 млн; протоколу ~8%. 6.9/10, осторожное наблюдение.",
-}
-UNI_DATE = {
-    "zh": "2026年9月9日",
-    "en": "9 Sep 2026",
-    "ja": "2026年9月9日",
-    "ko": "2026년 9월 9일",
-    "fr": "9 sept. 2026",
-    "es": "9 sep 2026",
-    "ru": "9 сен 2026",
-}
-DOGE_TITLE = {
-    "zh": "DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带",
-    "en": "DOGE research note: twelfth by cap, still below the watch band on fundamentals",
-    "ja": "DOGEリサーチノート：時価総額12位でも、ファンダメンタルはウォッチ帯に入らない",
-    "ko": "DOGE 리서치 노트: 시총 12위여도 펀더멘털은 추적 밴드에 못 든다",
-    "fr": "Note DOGE : 12e en capitalisation, toujours sous la bande de suivi sur les fondamentaux",
-    "es": "Nota DOGE: duodécimo por capitalización, aún bajo la banda de seguimiento en fundamentales",
-    "ru": "Записка по DOGE: 12-е место по капитализации, по фундаменталу всё ещё ниже полосы наблюдения",
-}
-DOGE_SUM = {
-    "zh": "流动性与品牌都在，但没有协议收入、没有供应上限。买入评分 4.7/10，回避：可以交易，不能写成价值持仓。",
-    "en": "Liquidity and brand are real. There is no protocol revenue and no hard cap. Buy score 4.7/10, avoid: tradable, not a value book.",
-    "ja": "流動性とブランドは本物。プロトコル収入もハードキャップもない。4.7/10、回避。取引はできるが価値保有ではない。",
-    "ko": "유동성과 브랜드는 실재. 프로토콜 수입과 하드캡은 없다. 4.7/10, 회피. 거래는 가능하고 가치 보유는 아니다.",
-    "fr": "Liquidité et marque sont réelles. Pas de revenu protocole, pas de plafond. 4.7/10, éviter : négociable, pas un livre value.",
-    "es": "Liquidez y marca son reales. Sin ingreso de protocolo ni tope. 4.7/10, evitar: se negocia, no es un libro value.",
-    "ru": "Ликвидность и бренд реальны. Нет дохода протокола и потолка. 4.7/10, избегать: торгуется, не value-книга.",
-}
-DOGE_DATE = {
-    "zh": "2026年9月9日",
-    "en": "9 Sep 2026",
-    "ja": "2026年9月9日",
-    "ko": "2026년 9월 9일",
-    "fr": "9 sept. 2026",
-    "es": "9 sep 2026",
-    "ru": "9 сен 2026",
-}
-
-def archive_block(prefix: str) -> str:
-    return (
-        archive_item(f"{prefix}uni/", "DeFi", "UNI", UNI_DATE, "2026-09-08 21:27 UTC", UNI_TITLE, UNI_SUM, "6.9")
-        + archive_item(f"{prefix}doge/", "Meme", "DOGE", DOGE_DATE, "2026-09-08 21:27 UTC", DOGE_TITLE, DOGE_SUM, "4.7")
-        + archive_item(f"{prefix}bnb/", "DeFi L1", "BNB", BNB_DATE, "2026-09-08", BNB_TITLE, BNB_SUM, "6.6")
-        + archive_item(f"{prefix}aave/", "DeFi", "AAVE", AAVE_DATE, "2026-09-07", AAVE_TITLE, AAVE_SUM, "6.7")
-    )
+def archive_block(prefix: str, limit: int | None = None) -> str:
+    notes = discover_notes()
+    if limit is not None:
+        notes = notes[:limit]
+    parts: list[str] = []
+    for note in notes:
+        parts.append(
+            archive_item(
+                f"{prefix}{note['slug']}/",
+                note["topics"],
+                note["ticker"],
+                localize_date(note["date"]),
+                note["as_of"],
+                note["titles"],
+                note["summaries"],
+                note["score"] or "—",
+            )
+        )
+    return "".join(parts)
 
 
-HOME_BODY = f"""
+def home_body() -> str:
+    return f"""
   {bundle("p", {"zh": "DRLabs", "en": "DRLabs", "ja": "DRLabs", "ko": "DRLabs", "fr": "DRLabs", "es": "DRLabs", "ru": "DRLabs"}, cls="muted")}
   {bundle("h1", {"zh": "分布式加密项目研究室", "en": "A distributed crypto research lab", "ja": "分散型暗号プロジェクト研究室", "ko": "분산형 암호화 프로젝트 연구실", "fr": "Laboratoire de recherche crypto distribué", "es": "Laboratorio de investigación cripto distribuido", "ru": "Распределённая лаборатория криптоисследований"})}
   {bundle("p", {"zh": "成员在新加坡、澳大利亚与英国。我们发布 DeFi、GameFi 与 Meme 研究报告。数字写清出处与截止时间。不是投资建议。", "en": "Members in Singapore, Australia and the United Kingdom. We publish research on DeFi, GameFi and memes. Figures carry sources and as-of times. Not investment advice.", "ja": "メンバーはシンガポール、オーストラリア、英国。DeFi、GameFi、ミームのリサーチを公開。数字には出典と基準時点を付けます。投資助言ではありません。", "ko": "구성원은 싱가포르, 호주, 영국. DeFi, GameFi, 밈 리서치를 공개합니다. 숫자는 출처와 기준 시점을 밝힙니다. 투자 자문이 아닙니다.", "fr": "Membres à Singapour, en Australie et au Royaume-Uni. Notes sur DeFi, GameFi et les memes. Les chiffres portent source et date. Pas un conseil d’investissement.", "es": "Miembros en Singapur, Australia y Reino Unido. Publicamos DeFi, GameFi y memes. Las cifras llevan fuente y fecha. No es consejo de inversión.", "ru": "Участники в Сингапуре, Австралии и Великобритании. Публикуем DeFi, GameFi и мемы. Цифры — с источником и датой. Не инвестиционная рекомендация."})}
   {bundle("h2", {"zh": "最新报告", "en": "Latest notes", "ja": "最新ノート", "ko": "최신 노트", "fr": "Dernières notes", "es": "Últimas notas", "ru": "Последние записки"})}
   <div class="archive-list">
-  {archive_block("research/")}
+  {archive_block("research/", limit=6)}
   </div>
   <p><a href="research/">{spans({"zh": "全部报告 →", "en": "All notes →", "ja": "すべて →", "ko": "전체 →", "fr": "Tout →", "es": "Todas →", "ru": "Все →"})}</a>
   · <a href="about.html">{spans({"zh": "关于研究室", "en": "About the lab", "ja": "研究室について", "ko": "연구실 소개", "fr": "À propos", "es": "Sobre el laboratorio", "ru": "О лаборатории"})}</a></p>
 """
 
-RESEARCH_BODY = f"""
+
+def research_body() -> str:
+    return f"""
   {bundle("p", {"zh": "研究报告", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"}, cls="muted")}
   {bundle("h1", {"zh": "出版目录", "en": "Publication index", "ja": "刊行目録", "ko": "출판 목록", "fr": "Catalogue", "es": "Catálogo", "ru": "Каталог публикаций"})}
   {bundle("p", {"zh": "按发布日期倒序。可按主题筛选。摘要公开，正文需登录。", "en": "Newest first. Filter by topic. Abstracts are public; full text needs login.", "ja": "新しい順。テーマで絞り込めます。要約は公開、本文はログイン。", "ko": "최신순. 주제로 걸러 볼 수 있습니다. 요약은 공개, 본문은 로그인.", "fr": "Les plus récentes d’abord. Filtrer par thème. Résumés publics ; texte après connexion.", "es": "Las más nuevas primero. Filtra por tema. Resúmenes públicos; el texto pide login.", "ru": "Сначала новые. Фильтр по теме. Аннотации открыты, текст после входа."}, cls="muted")}
@@ -663,6 +723,32 @@ def load_mds(folder: Path) -> dict[str, str]:
     return out
 
 
+def astro_dir() -> Path | None:
+    raw = os.environ.get("ASTRO_GEN", str(ASTRO_GEN))
+    if not raw:
+        return None
+    path = Path(raw)
+    if not path.parent.exists():
+        return None
+    return path
+
+
+def note_meta(note: dict) -> dict[str, str]:
+    dates = localize_date(note["date"])
+    as_of = note["as_of"]
+    ticker = note["ticker"]
+    score = note["score"] or "—"
+    return {
+        "zh": f"发布 {dates['zh']} · 数据 {as_of} · {ticker} · {score} / 10",
+        "en": f"Published {dates['en']} · as-of {as_of} · {ticker} · {score} / 10",
+        "ja": f"公開 {dates['ja']} · 基準 {as_of} · {ticker} · {score} / 10",
+        "ko": f"게시 {dates['ko']} · 기준 {as_of} · {ticker} · {score} / 10",
+        "fr": f"Publication {dates['fr']} · as-of {as_of} · {ticker} · {score} / 10",
+        "es": f"Publicado {dates['es']} · as-of {as_of} · {ticker} · {score} / 10",
+        "ru": f"Публикация {dates['ru']} · as-of {as_of} · {ticker} · {score} / 10",
+    }
+
+
 def write_note(slug: str, titles: dict[str, str], meta: dict[str, str], astro_name: str) -> None:
     mds = load_mds(ROOT / f"research/{slug}")
     html_body = article_from_mds(mds, lambda s, k=slug: rewrite_img(s, k), slug)
@@ -670,18 +756,52 @@ def write_note(slug: str, titles: dict[str, str], meta: dict[str, str], astro_na
         page(titles, "../../", article_shell("../../", meta, html_body)),
         encoding="utf-8",
     )
-    if ASTRO_GEN.parent.exists():
-        ASTRO_GEN.mkdir(parents=True, exist_ok=True)
-        (ASTRO_GEN / astro_name).write_text(
+    generated = astro_dir()
+    if generated is not None:
+        generated.mkdir(parents=True, exist_ok=True)
+        (generated / astro_name).write_text(
             article_from_mds(mds, lambda s, n=astro_name: rewrite_img_astro(s, n), f"{slug}-astro"),
             encoding="utf-8",
         )
 
 
+def write_rss(notes: list[dict]) -> None:
+    items: list[str] = []
+    for note in notes:
+        try:
+            dt = datetime.strptime(note["date"][:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            pub = format_datetime(dt)
+        except ValueError:
+            pub = format_datetime(datetime.now(timezone.utc))
+        title = html.escape(note["titles"].get("en") or note["titles"].get("zh") or note["ticker"])
+        slug = html.escape(note["slug"])
+        items.append(
+            f"<item><title>{title}</title>"
+            f"<link>https://drlabs-code.github.io/drlabs/research/{slug}/</link>"
+            f"<pubDate>{pub}</pubDate></item>"
+        )
+    (ROOT / "rss.xml").write_text(
+        """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>DRLabs Research</title>
+<link>https://drlabs-code.github.io/drlabs/</link>
+<description>DRLabs — distributed crypto research lab. DeFi, GameFi and meme notes.</description>
+"""
+        + "\n".join(items)
+        + """
+</channel>
+</rss>
+""",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
+    notes = discover_notes()
     pages = [
-        (ROOT / "index.html", {"zh": "DRLabs — 加密货币研究", "en": "DRLabs — Crypto Research", "ja": "DRLabs — 暗号資産リサーチ", "ko": "DRLabs — 암호화폐 리서치", "fr": "DRLabs — Recherche crypto", "es": "DRLabs — Investigación cripto", "ru": "DRLabs — Криптоисследования"}, "./", HOME_BODY),
-        (ROOT / "research/index.html", {"zh": "研究报告 · DRLabs", "en": "Research · DRLabs", "ja": "リサーチ · DRLabs", "ko": "리서치 · DRLabs", "fr": "Recherche · DRLabs", "es": "Investigación · DRLabs", "ru": "Исследования · DRLabs"}, "../", RESEARCH_BODY),
+        (ROOT / "index.html", {"zh": "DRLabs — 加密货币研究", "en": "DRLabs — Crypto Research", "ja": "DRLabs — 暗号資産リサーチ", "ko": "DRLabs — 암호화폐 리서치", "fr": "DRLabs — Recherche crypto", "es": "DRLabs — Investigación cripto", "ru": "DRLabs — Криптоисследования"}, "./", home_body()),
+        (ROOT / "research/index.html", {"zh": "研究报告 · DRLabs", "en": "Research · DRLabs", "ja": "リサーチ · DRLabs", "ko": "리서치 · DRLabs", "fr": "Recherche · DRLabs", "es": "Investigación · DRLabs", "ru": "Исследования · DRLabs"}, "../", research_body()),
         (ROOT / "about.html", {"zh": "关于 · DRLabs", "en": "About · DRLabs", "ja": "概要 · DRLabs", "ko": "소개 · DRLabs", "fr": "À propos · DRLabs", "es": "Acerca de · DRLabs", "ru": "О нас · DRLabs"}, "./", ABOUT_BODY),
         (ROOT / "login.html", {"zh": "登录/注册 · DRLabs", "en": "Log in / Sign up · DRLabs", "ja": "ログイン · DRLabs", "ko": "로그인 · DRLabs", "fr": "Connexion · DRLabs", "es": "Entrar · DRLabs", "ru": "Вход · DRLabs"}, "./", LOGIN_BODY),
     ]
@@ -691,28 +811,11 @@ def main() -> None:
         if stale.exists():
             stale.unlink()
 
-    write_note("aave", {"zh": "Aave 研报 · DRLabs", "en": "Aave report · DRLabs", "ja": "Aave レポート · DRLabs", "ko": "Aave 리포트 · DRLabs", "fr": "Rapport Aave · DRLabs", "es": "Informe Aave · DRLabs", "ru": "Отчёт Aave · DRLabs"}, {"zh": "发布 2026年9月7日 · 数据 2026年9月7日 · AAVE · 6.7 / 10", "en": "Published 7 Sep 2026 · as-of 7 Sep 2026 · AAVE · 6.7 / 10", "ja": "公開 2026年9月7日 · 基準 2026年9月7日 · AAVE · 6.7 / 10", "ko": "게시 2026년 9월 7일 · 기준 2026년 9월 7일 · AAVE · 6.7 / 10", "fr": "Publication 7 sept. 2026 · as-of 7 sept. 2026 · AAVE · 6.7 / 10", "es": "Publicado 7 sep 2026 · as-of 7 sep 2026 · AAVE · 6.7 / 10", "ru": "Публикация 7 сен 2026 · as-of 7 сен 2026 · AAVE · 6.7 / 10"}, "aave-2026-09-07.html")
-    write_note("bnb", {"zh": "BNB 研报 · DRLabs", "en": "BNB report · DRLabs", "ja": "BNB レポート · DRLabs", "ko": "BNB 리포트 · DRLabs", "fr": "Rapport BNB · DRLabs", "es": "Informe BNB · DRLabs", "ru": "Отчёт BNB · DRLabs"}, {"zh": "发布 2026年9月8日 · 数据 2026年9月8日 · BNB · 6.6 / 10", "en": "Published 8 Sep 2026 · as-of 8 Sep 2026 · BNB · 6.6 / 10", "ja": "公開 2026年9月8日 · 基準 2026年9月8日 · BNB · 6.6 / 10", "ko": "게시 2026년 9월 8일 · 기준 2026년 9월 8일 · BNB · 6.6 / 10", "fr": "Publication 8 sept. 2026 · as-of 8 sept. 2026 · BNB · 6.6 / 10", "es": "Publicado 8 sep 2026 · as-of 8 sep 2026 · BNB · 6.6 / 10", "ru": "Публикация 8 сен 2026 · as-of 8 сен 2026 · BNB · 6.6 / 10"}, "bnb-2026-09-08.html")
-    write_note("uni", {"zh": "UNI 研报 · DRLabs", "en": "UNI report · DRLabs", "ja": "UNI レポート · DRLabs", "ko": "UNI 리포트 · DRLabs", "fr": "Rapport UNI · DRLabs", "es": "Informe UNI · DRLabs", "ru": "Отчёт UNI · DRLabs"}, {"zh": "发布 2026年9月9日 · 数据 2026年9月8日 21:27 UTC · UNI · 6.9 / 10", "en": "Published 9 Sep 2026 · as-of 8 Sep 2026 21:27 UTC · UNI · 6.9 / 10", "ja": "公開 2026年9月9日 · 基準 2026年9月8日 21:27 UTC · UNI · 6.9 / 10", "ko": "게시 2026년 9월 9일 · 기준 2026년 9월 8일 21:27 UTC · UNI · 6.9 / 10", "fr": "Publication 9 sept. 2026 · as-of 8 sept. 2026 21:27 UTC · UNI · 6.9 / 10", "es": "Publicado 9 sep 2026 · as-of 8 sep 2026 21:27 UTC · UNI · 6.9 / 10", "ru": "Публикация 9 сен 2026 · as-of 8 сен 2026 21:27 UTC · UNI · 6.9 / 10"}, "uni-2026-09-09.html")
-    write_note("doge", {"zh": "DOGE 研报 · DRLabs", "en": "DOGE report · DRLabs", "ja": "DOGE レポート · DRLabs", "ko": "DOGE 리포트 · DRLabs", "fr": "Rapport DOGE · DRLabs", "es": "Informe DOGE · DRLabs", "ru": "Отчёт DOGE · DRLabs"}, {"zh": "发布 2026年9月9日 · 数据 2026年9月8日 21:27 UTC · DOGE · 4.7 / 10", "en": "Published 9 Sep 2026 · as-of 8 Sep 2026 21:27 UTC · DOGE · 4.7 / 10", "ja": "公開 2026年9月9日 · 基準 2026年9月8日 21:27 UTC · DOGE · 4.7 / 10", "ko": "게시 2026년 9월 9일 · 기준 2026년 9월 8일 21:27 UTC · DOGE · 4.7 / 10", "fr": "Publication 9 sept. 2026 · as-of 8 sept. 2026 21:27 UTC · DOGE · 4.7 / 10", "es": "Publicado 9 sep 2026 · as-of 8 sep 2026 21:27 UTC · DOGE · 4.7 / 10", "ru": "Публикация 9 сен 2026 · as-of 8 сен 2026 21:27 UTC · DOGE · 4.7 / 10"}, "doge-2026-09-09.html")
+    for note in notes:
+        write_note(note["slug"], note["page_titles"], note_meta(note), f"{note['slug']}-{note['date']}.html")
 
-    (ROOT / "rss.xml").write_text(
-        """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-<channel>
-<title>DRLabs Research</title>
-<link>https://drlabs-code.github.io/drlabs/</link>
-<description>DRLabs — distributed crypto research lab. DeFi, GameFi and meme notes.</description>
-<item><title>UNI research note</title><link>https://drlabs-code.github.io/drlabs/research/uni/</link><pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate></item>
-<item><title>DOGE research note</title><link>https://drlabs-code.github.io/drlabs/research/doge/</link><pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate></item>
-<item><title>BNB research note</title><link>https://drlabs-code.github.io/drlabs/research/bnb/</link><pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate></item>
-<item><title>Aave research note</title><link>https://drlabs-code.github.io/drlabs/research/aave/</link><pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate></item>
-</channel>
-</rss>
-""",
-        encoding="utf-8",
-    )
-    print("done")
+    write_rss(notes)
+    print(f"done ({len(notes)} notes)")
 
 
 if __name__ == "__main__":

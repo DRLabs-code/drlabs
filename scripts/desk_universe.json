@@ -1,0 +1,72 @@
+{
+  "majors": [
+    {"ticker": "BTC", "cg": "bitcoin", "llama": null, "chain": "Bitcoin", "tags": ["L1"]},
+    {"ticker": "ETH", "cg": "ethereum", "llama": null, "chain": "Ethereum", "tags": ["L1", "DeFi"]},
+    {"ticker": "SOL", "cg": "solana", "llama": null, "chain": "Solana", "tags": ["L1"]},
+    {"ticker": "XRP", "cg": "ripple", "llama": null, "chain": null, "tags": ["L1"]},
+    {"ticker": "ADA", "cg": "cardano", "llama": null, "chain": "Cardano", "tags": ["L1"]},
+    {"ticker": "TON", "cg": "the-open-network", "llama": null, "chain": "TON", "tags": ["L1"]},
+    {"ticker": "TRX", "cg": "tron", "llama": null, "chain": "Tron", "tags": ["L1"]},
+    {"ticker": "SUI", "cg": "sui", "llama": null, "chain": "Sui", "tags": ["L1"]},
+    {"ticker": "AVAX", "cg": "avalanche-2", "llama": null, "chain": "Avalanche", "tags": ["L1"]},
+    {"ticker": "DOT", "cg": "polkadot", "llama": null, "chain": "Polkadot", "tags": ["L1"]},
+    {"ticker": "LINK", "cg": "chainlink", "llama": null, "chain": null, "tags": ["DeFi"]},
+    {"ticker": "TAO", "cg": "bittensor", "llama": null, "chain": null, "tags": ["L1"]},
+    {"ticker": "NEAR", "cg": "near", "llama": null, "chain": "Near", "tags": ["L1"]},
+    {"ticker": "APT", "cg": "aptos", "llama": null, "chain": "Aptos", "tags": ["L1"]},
+    {"ticker": "LTC", "cg": "litecoin", "llama": null, "chain": null, "tags": ["L1"]},
+    {"ticker": "ATOM", "cg": "cosmos", "llama": null, "chain": "Cosmos", "tags": ["L1"]},
+    {"ticker": "FIL", "cg": "filecoin", "llama": null, "chain": "Filecoin", "tags": ["L1"]},
+    {"ticker": "INJ", "cg": "injective-protocol", "llama": null, "chain": "Injective", "tags": ["L1"]},
+    {"ticker": "SEI", "cg": "sei-network", "llama": null, "chain": "Sei", "tags": ["L1"]},
+    {"ticker": "HBAR", "cg": "hedera-hashgraph", "llama": null, "chain": null, "tags": ["L1"]}
+  ],
+  "lanes": {
+    "DeFi": [
+      {"ticker": "LDO", "cg": "lido-dao", "llama": "lido", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "MKR", "cg": "maker", "llama": "makerdao", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "CRV", "cg": "curve-dao-token", "llama": "curve-dex", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "PENDLE", "cg": "pendle", "llama": "pendle", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "ENA", "cg": "ethena", "llama": "ethena", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "ONDO", "cg": "ondo-finance", "llama": "ondo-finance", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "CAKE", "cg": "pancakeswap-token", "llama": "pancakeswap", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "JUP", "cg": "jupiter-exchange-solana", "llama": "jupiter", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "COMP", "cg": "compound-governance-token", "llama": "compound-finance", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "GMX", "cg": "gmx", "llama": "gmx", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "SNX", "cg": "havven", "llama": "synthetix", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "AERO", "cg": "aerodrome-finance", "llama": "aerodrome", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "MORPHO", "cg": "morpho", "llama": "morpho", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "ETHFI", "cg": "ether-fi", "llama": "ether.fi", "chain": null, "tags": ["DeFi"]},
+      {"ticker": "RPL", "cg": "rocket-pool", "llama": "rocket-pool", "chain": null, "tags": ["DeFi"]}
+    ],
+    "GameFi": [
+      {"ticker": "IMX", "cg": "immutable-x", "llama": null, "chain": "Immutable zkEVM", "tags": ["GameFi"]},
+      {"ticker": "AXS", "cg": "axie-infinity", "llama": null, "chain": "Ronin", "tags": ["GameFi"]},
+      {"ticker": "SAND", "cg": "the-sandbox", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "MANA", "cg": "decentraland", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "GALA", "cg": "gala", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "RON", "cg": "ronin", "llama": null, "chain": "Ronin", "tags": ["GameFi", "L1"]},
+      {"ticker": "PRIME", "cg": "echelon-prime", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "ILV", "cg": "illuvium", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "PIXEL", "cg": "pixels", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "BEAM", "cg": "onbeam", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "SUPER", "cg": "superfarm", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "GODS", "cg": "gods-unchained", "llama": null, "chain": null, "tags": ["GameFi"]},
+      {"ticker": "YGG", "cg": "yield-guild-games", "llama": null, "chain": null, "tags": ["GameFi"]}
+    ],
+    "Meme": [
+      {"ticker": "SHIB", "cg": "shiba-inu", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "PEPE", "cg": "pepe", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "WIF", "cg": "dogwifcoin", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "BONK", "cg": "bonk", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "FLOKI", "cg": "floki", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "TRUMP", "cg": "official-trump", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "PENGU", "cg": "pudgy-penguins", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "BRETT", "cg": "based-brett", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "TURBO", "cg": "turbo", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "MOG", "cg": "mog-coin", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "POPCAT", "cg": "popcat", "llama": null, "chain": null, "tags": ["Meme"]},
+      {"ticker": "MEW", "cg": "cat-in-a-dogs-world", "llama": null, "chain": null, "tags": ["Meme"]}
+    ]
+  }
+}

@@ -2,6 +2,7 @@
 title: "BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分"
 description: "截至 2026-09-08，BNB 约 751 美元、流通市值约 1000 亿美元；BSC DeFi TVL 约 56.7 亿美元，位列公链第三。买入评分 6.6/10。"
 date: 2026-09-08
+asOf: "2026-09-08"
 ticker: BNB
 score: 6.6
 tags:
