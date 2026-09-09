@@ -392,6 +392,26 @@
         if (langBtn) langBtn.setAttribute("aria-expanded", "false");
       }
     });
+    var bar = document.querySelector("[data-filter-bar]");
+    if (bar) {
+      bar.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-filter-topic]");
+        if (!btn) return;
+        var topic = btn.getAttribute("data-filter-topic") || "all";
+        bar.querySelectorAll("[data-filter-topic]").forEach(function (el) {
+          el.setAttribute("aria-pressed", el === btn ? "true" : "false");
+        });
+        var visible = 0;
+        document.querySelectorAll("[data-topics]").forEach(function (el) {
+          var topics = (el.getAttribute("data-topics") || "").split(/\s+/);
+          var show = topic === "all" || topics.indexOf(topic) !== -1;
+          el.hidden = !show;
+          if (show) visible += 1;
+        });
+        var empty = document.getElementById("filterEmpty");
+        if (empty) empty.hidden = visible > 0;
+      });
+    }
   });
   setInterval(function () {
     if ((localStorage.getItem(THEME_KEY) || "auto") === "auto") applyTheme();

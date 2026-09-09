@@ -111,6 +111,22 @@ th .bi { font-weight: 400; }
 .bands p{margin:.45rem 0}
 .foot-links{margin-top:8px}
 .foot-links a{margin:0}
+.archive-list{display:flex;flex-direction:column}
+.archive-item{padding:16px 0;border-bottom:1px solid var(--border)}
+.archive-item:first-child{border-top:1px solid var(--border)}
+.archive-item h2{margin:6px 0 8px;font-size:1.18rem}
+.archive-meta{margin:0;color:var(--muted);font-size:.9rem}
+.archive-foot{margin:.35rem 0 0;font-size:.85rem}
+.ticker{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem;margin-right:8px}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+.filter-bar button{min-height:2rem;padding:4px 12px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;cursor:pointer}
+.filter-bar button:hover,.filter-bar button[aria-pressed="true"]{border-color:var(--text);color:var(--text)}
+.people-list{list-style:none;margin:12px 0 20px;padding:0}
+.people-list li{padding:10px 0;border-bottom:1px solid var(--border);color:var(--muted)}
+.people-list li strong{color:var(--text)}
+.site-footer .footer-grid,.footer-grid{display:grid;grid-template-columns:1.3fr .8fr 1.1fr;gap:18px}
+.footer-title{margin:0 0 6px;color:var(--text);font-weight:700}
+@media (max-width:860px){.footer-grid{grid-template-columns:1fr}}
 @media (max-width:640px){
   .nav{gap:8px}
   .nav a{font-size:.86rem}

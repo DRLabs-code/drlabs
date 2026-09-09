@@ -356,8 +356,27 @@ def nav(prefix: str) -> str:
 
 def footer(prefix: str = "./") -> str:
     return (
-        "<footer>\n<p>"
-        + spans({
+        "<footer class=\"site-footer\">\n"
+        "<div class=\"footer-grid\">\n<div>\n"
+        + bundle("p", {"zh": "DRLabs", "en": "DRLabs", "ja": "DRLabs", "ko": "DRLabs", "fr": "DRLabs", "es": "DRLabs", "ru": "DRLabs"}, cls="footer-title")
+        + bundle("p", {
+            "zh": "分布式加密项目研究室。成员在新加坡、澳大利亚与英国。",
+            "en": "Distributed crypto research lab. Members in Singapore, Australia and the United Kingdom.",
+            "ja": "分散型暗号プロジェクト研究室。メンバーはシンガポール、オーストラリア、英国。",
+            "ko": "분산형 암호화 프로젝트 연구실. 구성원은 싱가포르, 호주, 영국.",
+            "fr": "Laboratoire crypto distribué. Membres à Singapour, en Australie et au Royaume-Uni.",
+            "es": "Laboratorio cripto distribuido. Miembros en Singapur, Australia y Reino Unido.",
+            "ru": "Распределённая криптолаборатория. Участники в Сингапуре, Австралии и Великобритании.",
+        }, cls="muted")
+        + "</div>\n<div>\n"
+        + bundle("p", {"zh": "目录", "en": "Index", "ja": "目次", "ko": "목차", "fr": "Index", "es": "Índice", "ru": "Содержание"}, cls="footer-title")
+        + f'<p><a href="{prefix}research/">{spans({"zh": "研究报告", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}</a>'
+        + f' · <a href="{prefix}about.html">{spans({"zh": "关于", "en": "About", "ja": "概要", "ko": "소개", "fr": "À propos", "es": "Acerca de", "ru": "О нас"})}</a>'
+        + f' · <a href="{prefix}rss.xml">RSS</a></p>\n</div>\n<div>\n'
+        + bundle("p", {"zh": "联系", "en": "Contact", "ja": "連絡", "ko": "연락", "fr": "Contact", "es": "Contacto", "ru": "Контакты"}, cls="footer-title")
+        + f'<p><a href="https://github.com/DRLabs-code" rel="noreferrer">DRLabs-code</a>'
+        + f' · <a href="{prefix}about.html#disclaimer">{spans({"zh": "免责声明", "en": "Disclaimer", "ja": "免責", "ko": "면책", "fr": "Avertissement", "es": "Aviso", "ru": "Отказ"})}</a></p>'
+        + bundle("p", {
             "zh": "内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。",
             "en": "For research only. Not investment advice. Crypto can result in partial or total loss.",
             "ja": "研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。",
@@ -365,22 +384,33 @@ def footer(prefix: str = "./") -> str:
             "fr": "Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.",
             "es": "Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.",
             "ru": "Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.",
-        })
-        + "</p>\n<p class=\"foot-links\">"
-        + spans({
-            "zh": "分布式加密项目研究室 · 成员来自新加坡、澳大利亚与英国。",
-            "en": "Distributed crypto research lab · members in Singapore, Australia and the United Kingdom.",
-            "ja": "分散型暗号プロジェクト研究室 · メンバーはシンガポール、オーストラリア、英国。",
-            "ko": "분산형 암호화 프로젝트 연구실 · 구성원은 싱가포르, 호주, 영국.",
-            "fr": "Laboratoire crypto distribué · membres à Singapour, en Australie et au Royaume-Uni.",
-            "es": "Laboratorio cripto distribuido · miembros en Singapur, Australia y Reino Unido.",
-            "ru": "Распределённая криптолаборатория · участники в Сингапуре, Австралии и Великобритании.",
-        })
-        + f' · <a href="{prefix}about.html">{spans({"zh": "关于研究室", "en": "About the lab", "ja": "研究室について", "ko": "연구실 소개", "fr": "À propos", "es": "Acerca de", "ru": "О лаборатории"})}</a>'
-        + f' · <a href="{prefix}about.html#disclaimer">{spans({"zh": "免责声明", "en": "Disclaimer", "ja": "免責", "ko": "면책", "fr": "Avertissement", "es": "Aviso", "ru": "Отказ"})}</a>'
-        + f' · <a href="{prefix}rss.xml">RSS</a>'
-        + "</p>\n</footer>"
+        }, cls="muted")
+        + "</div>\n</div>\n</footer>"
     )
+
+
+def archive_item(href: str, topics: str, ticker: str, dates: dict[str, str], as_of: str, titles: dict[str, str], summary: dict[str, str], score: str) -> str:
+    chips = "".join(f'<span class="chip">{html.escape(topic)}</span>' for topic in topics.split())
+    return f"""
+<article class="archive-item" data-topics="{html.escape(topics)}">
+  <p class="archive-meta"><span class="ticker">{html.escape(ticker)}</span>{chips} {spans(dates)} · as-of {html.escape(as_of)}</p>
+  <h2><a href="{href}">{spans(titles)}</a></h2>
+  {bundle("p", summary)}
+  <p class="muted archive-foot">{html.escape(score)} / 10</p>
+</article>
+"""
+
+
+def filter_bar() -> str:
+    return f"""
+<div class="filter-bar" data-filter-bar>
+  <button type="button" data-filter-topic="all" aria-pressed="true">{spans({"zh": "全部", "en": "All", "ja": "すべて", "ko": "전체", "fr": "Tout", "es": "Todas", "ru": "Все"})}</button>
+  <button type="button" data-filter-topic="DeFi" aria-pressed="false">DeFi</button>
+  <button type="button" data-filter-topic="GameFi" aria-pressed="false">GameFi</button>
+  <button type="button" data-filter-topic="Meme" aria-pressed="false">Meme</button>
+  <button type="button" data-filter-topic="L1" aria-pressed="false">L1</button>
+</div>
+"""
 
 
 def page(titles: dict[str, str], prefix: str, body: str) -> str:
@@ -429,13 +459,13 @@ BNB_SUM = {
     "ru": "4-е место по капитализации, BSC по-прежнему активен. Оценка $100 млрд — в основном платформа и сжигание; TVL объясняет лишь часть.",
 }
 BNB_DATE = {
-    "zh": "2026年9月8日 · BNB · L1",
-    "en": "8 Sep 2026 · BNB · L1",
-    "ja": "2026年9月8日 · BNB · L1",
-    "ko": "2026년 9월 8일 · BNB · L1",
-    "fr": "8 sept. 2026 · BNB · L1",
-    "es": "8 sep 2026 · BNB · L1",
-    "ru": "8 сен 2026 · BNB · L1",
+    "zh": "2026年9月8日",
+    "en": "8 Sep 2026",
+    "ja": "2026年9月8日",
+    "ko": "2026년 9월 8일",
+    "fr": "8 sept. 2026",
+    "es": "8 sep 2026",
+    "ru": "8 сен 2026",
 }
 AAVE_TITLE = {
     "zh": "Aave 研究简报：借贷龙头仍在，V4 仍处早期",
@@ -456,13 +486,13 @@ AAVE_SUM = {
     "ru": "По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.",
 }
 AAVE_DATE = {
-    "zh": "2026年9月7日 · AAVE · DeFi",
-    "en": "7 Sep 2026 · AAVE · DeFi",
-    "ja": "2026年9月7日 · AAVE · DeFi",
-    "ko": "2026년 9월 7일 · AAVE · DeFi",
-    "fr": "7 sept. 2026 · AAVE · DeFi",
-    "es": "7 sep 2026 · AAVE · DeFi",
-    "ru": "7 сен 2026 · AAVE · DeFi",
+    "zh": "2026年9月7日",
+    "en": "7 Sep 2026",
+    "ja": "2026年9月7日",
+    "ko": "2026년 9월 7일",
+    "fr": "7 sept. 2026",
+    "es": "7 sep 2026",
+    "ru": "7 сен 2026",
 }
 UNI_TITLE = {
     "zh": "UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层",
@@ -483,13 +513,13 @@ UNI_SUM = {
     "ru": "По-прежнему первый по комиссиям и обороту спот-DEX. Комиссии за 30 дней ~$152 млн; протоколу ~8%. 6.9/10, осторожное наблюдение.",
 }
 UNI_DATE = {
-    "zh": "2026年9月9日 · UNI · DeFi",
-    "en": "9 Sep 2026 · UNI · DeFi",
-    "ja": "2026年9月9日 · UNI · DeFi",
-    "ko": "2026년 9월 9일 · UNI · DeFi",
-    "fr": "9 sept. 2026 · UNI · DeFi",
-    "es": "9 sep 2026 · UNI · DeFi",
-    "ru": "9 сен 2026 · UNI · DeFi",
+    "zh": "2026年9月9日",
+    "en": "9 Sep 2026",
+    "ja": "2026年9月9日",
+    "ko": "2026년 9월 9일",
+    "fr": "9 sept. 2026",
+    "es": "9 sep 2026",
+    "ru": "9 сен 2026",
 }
 DOGE_TITLE = {
     "zh": "DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带",
@@ -510,99 +540,66 @@ DOGE_SUM = {
     "ru": "Ликвидность и бренд реальны. Нет дохода протокола и потолка. 4.7/10, избегать: торгуется, не value-книга.",
 }
 DOGE_DATE = {
-    "zh": "2026年9月9日 · DOGE · Meme",
-    "en": "9 Sep 2026 · DOGE · Meme",
-    "ja": "2026年9月9日 · DOGE · Meme",
-    "ko": "2026년 9월 9일 · DOGE · Meme",
-    "fr": "9 sept. 2026 · DOGE · Meme",
-    "es": "9 sep 2026 · DOGE · Meme",
-    "ru": "9 сен 2026 · DOGE · Meme",
+    "zh": "2026年9月9日",
+    "en": "9 Sep 2026",
+    "ja": "2026年9月9日",
+    "ko": "2026년 9월 9일",
+    "fr": "9 sept. 2026",
+    "es": "9 sep 2026",
+    "ru": "9 сен 2026",
 }
 
+def archive_block(prefix: str) -> str:
+    return (
+        archive_item(f"{prefix}uni/", "DeFi", "UNI", UNI_DATE, "2026-09-08 21:27 UTC", UNI_TITLE, UNI_SUM, "6.9")
+        + archive_item(f"{prefix}doge/", "Meme", "DOGE", DOGE_DATE, "2026-09-08 21:27 UTC", DOGE_TITLE, DOGE_SUM, "4.7")
+        + archive_item(f"{prefix}bnb/", "DeFi L1", "BNB", BNB_DATE, "2026-09-08", BNB_TITLE, BNB_SUM, "6.6")
+        + archive_item(f"{prefix}aave/", "DeFi", "AAVE", AAVE_DATE, "2026-09-07", AAVE_TITLE, AAVE_SUM, "6.7")
+    )
+
+
 HOME_BODY = f"""
-  {bundle("p", {"zh": "分布式加密项目研究室 · 新加坡 / 澳大利亚 / 英国", "en": "Distributed crypto research lab · Singapore / Australia / UK", "ja": "分散型暗号プロジェクト研究室 · シンガポール / オーストラリア / 英国", "ko": "분산형 암호화 프로젝트 연구실 · 싱가포르 / 호주 / 영국", "fr": "Laboratoire crypto distribué · Singapour / Australie / Royaume-Uni", "es": "Laboratorio cripto distribuido · Singapur / Australia / Reino Unido", "ru": "Распределённая криптолаборатория · Сингапур / Австралия / Великобритания"}, cls="muted")}
-  {bundle("h1", {"zh": "把链上复杂事，写成能读懂的研报。", "en": "Turn on-chain complexity into reports you can actually read.", "ja": "オンチェーンの複雑さを、読めるリサーチに落とす。", "ko": "온체인의 복잡함을 읽을 수 있는 리서치로.", "fr": "Transformer la complexité on-chain en notes lisibles.", "es": "Convertir la complejidad on-chain en informes legibles.", "ru": "Сложность ончейна — в читаемые записки."})}
-  {bundle("p", {"zh": "DRLabs 发布 DeFi、GameFi 与 Meme 研究报告。右上角选择语言；表格单元格始终中英对照。", "en": "DRLabs publishes DeFi, GameFi and meme research. Pick a language at top right. Tables stay Chinese + English.", "ja": "DRLabsはDeFi、GameFi、ミームのリサーチを公開。右上で言語を選択。表は中英併記。", "ko": "DRLabs는 DeFi, GameFi, 밈 리서치를 공개합니다. 오른쪽 위에서 언어를 고르세요. 표는 중·영 대조.", "fr": "DRLabs publie de la recherche DeFi, GameFi et meme. Choisissez la langue en haut à droite. Tableaux ZH+EN.", "es": "DRLabs publica investigación DeFi, GameFi y meme. Elige idioma arriba a la derecha. Tablas ZH+EN.", "ru": "DRLabs публикует исследования DeFi, GameFi и мемов. Язык — справа сверху. Таблицы ZH+EN."})}
-  {bundle("h2", {"zh": "研究报告", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}
-  <div class="card">
-    <span class="badge">6.9 / 10</span>
-    <span class="chip">DeFi</span>
-    <h2 style="margin:8px 0"><a href="research/uni/">{spans(UNI_TITLE)}</a></h2>
-    <p class="muted">{spans(UNI_DATE)}</p>
-    {bundle("p", UNI_SUM)}
+  {bundle("p", {"zh": "DRLabs", "en": "DRLabs", "ja": "DRLabs", "ko": "DRLabs", "fr": "DRLabs", "es": "DRLabs", "ru": "DRLabs"}, cls="muted")}
+  {bundle("h1", {"zh": "分布式加密项目研究室", "en": "A distributed crypto research lab", "ja": "分散型暗号プロジェクト研究室", "ko": "분산형 암호화 프로젝트 연구실", "fr": "Laboratoire de recherche crypto distribué", "es": "Laboratorio de investigación cripto distribuido", "ru": "Распределённая лаборатория криптоисследований"})}
+  {bundle("p", {"zh": "成员在新加坡、澳大利亚与英国。我们发布 DeFi、GameFi 与 Meme 研究报告。数字写清出处与截止时间。不是投资建议。", "en": "Members in Singapore, Australia and the United Kingdom. We publish research on DeFi, GameFi and memes. Figures carry sources and as-of times. Not investment advice.", "ja": "メンバーはシンガポール、オーストラリア、英国。DeFi、GameFi、ミームのリサーチを公開。数字には出典と基準時点を付けます。投資助言ではありません。", "ko": "구성원은 싱가포르, 호주, 영국. DeFi, GameFi, 밈 리서치를 공개합니다. 숫자는 출처와 기준 시점을 밝힙니다. 투자 자문이 아닙니다.", "fr": "Membres à Singapour, en Australie et au Royaume-Uni. Notes sur DeFi, GameFi et les memes. Les chiffres portent source et date. Pas un conseil d’investissement.", "es": "Miembros en Singapur, Australia y Reino Unido. Publicamos DeFi, GameFi y memes. Las cifras llevan fuente y fecha. No es consejo de inversión.", "ru": "Участники в Сингапуре, Австралии и Великобритании. Публикуем DeFi, GameFi и мемы. Цифры — с источником и датой. Не инвестиционная рекомендация."})}
+  {bundle("h2", {"zh": "最新报告", "en": "Latest notes", "ja": "最新ノート", "ko": "최신 노트", "fr": "Dernières notes", "es": "Últimas notas", "ru": "Последние записки"})}
+  <div class="archive-list">
+  {archive_block("research/")}
   </div>
-  <div class="card">
-    <span class="badge">4.7 / 10</span>
-    <span class="chip">Meme</span>
-    <h2 style="margin:8px 0"><a href="research/doge/">{spans(DOGE_TITLE)}</a></h2>
-    <p class="muted">{spans(DOGE_DATE)}</p>
-    {bundle("p", DOGE_SUM)}
-  </div>
-  <div class="card">
-    <span class="badge">6.6 / 10</span>
-    <h2 style="margin:8px 0"><a href="research/bnb/">{spans(BNB_TITLE)}</a></h2>
-    <p class="muted">{spans(BNB_DATE)}</p>
-    {bundle("p", BNB_SUM)}
-  </div>
-  <div class="card">
-    <span class="badge">6.7 / 10</span>
-    <h2 style="margin:8px 0"><a href="research/aave/">{spans(AAVE_TITLE)}</a></h2>
-    <p class="muted">{spans(AAVE_DATE)}</p>
-    {bundle("p", AAVE_SUM)}
-  </div>
-  <p><a href="research/">{spans({"zh": "全部研究报告 →", "en": "All research notes →", "ja": "すべてのリサーチ →", "ko": "전체 리서치 →", "fr": "Toutes les notes →", "es": "Todas las notas →", "ru": "Все записки →"})}</a>
+  <p><a href="research/">{spans({"zh": "全部报告 →", "en": "All notes →", "ja": "すべて →", "ko": "전체 →", "fr": "Tout →", "es": "Todas →", "ru": "Все →"})}</a>
   · <a href="about.html">{spans({"zh": "关于研究室", "en": "About the lab", "ja": "研究室について", "ko": "연구실 소개", "fr": "À propos", "es": "Sobre el laboratorio", "ru": "О лаборатории"})}</a></p>
 """
 
 RESEARCH_BODY = f"""
-  {bundle("h1", {"zh": "研究报告", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}
-  {bundle("p", {"zh": "按发布日期倒序。摘要公开，正文需登录。", "en": "Newest first. Abstracts are public; full text needs login.", "ja": "新しい順。要約は公開、本文はログイン。", "ko": "최신순. 요약은 공개, 본문은 로그인.", "fr": "Les plus récentes d’abord. Résumés publics ; texte après connexion.", "es": "Las más nuevas primero. Resúmenes públicos; el texto pide login.", "ru": "Сначала новые. Аннотации открыты, текст после входа."}, cls="muted")}
-  <div class="card">
-    <span class="badge">6.9 / 10</span>
-    <span class="chip">DeFi</span>
-    <h2 style="margin:8px 0"><a href="uni/">{spans(UNI_TITLE)}</a></h2>
-    <p class="muted">{spans(UNI_DATE)}</p>
-    {bundle("p", UNI_SUM)}
+  {bundle("p", {"zh": "研究报告", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"}, cls="muted")}
+  {bundle("h1", {"zh": "出版目录", "en": "Publication index", "ja": "刊行目録", "ko": "출판 목록", "fr": "Catalogue", "es": "Catálogo", "ru": "Каталог публикаций"})}
+  {bundle("p", {"zh": "按发布日期倒序。可按主题筛选。摘要公开，正文需登录。", "en": "Newest first. Filter by topic. Abstracts are public; full text needs login.", "ja": "新しい順。テーマで絞り込めます。要約は公開、本文はログイン。", "ko": "최신순. 주제로 걸러 볼 수 있습니다. 요약은 공개, 본문은 로그인.", "fr": "Les plus récentes d’abord. Filtrer par thème. Résumés publics ; texte après connexion.", "es": "Las más nuevas primero. Filtra por tema. Resúmenes públicos; el texto pide login.", "ru": "Сначала новые. Фильтр по теме. Аннотации открыты, текст после входа."}, cls="muted")}
+  {filter_bar()}
+  <div class="archive-list">
+  {archive_block("")}
   </div>
-  <div class="card">
-    <span class="badge">4.7 / 10</span>
-    <span class="chip">Meme</span>
-    <h2 style="margin:8px 0"><a href="doge/">{spans(DOGE_TITLE)}</a></h2>
-    <p class="muted">{spans(DOGE_DATE)}</p>
-    {bundle("p", DOGE_SUM)}
-  </div>
-  <div class="card">
-    <span class="badge">6.6 / 10</span>
-    <span class="chip">L1</span>
-    <h2 style="margin:8px 0"><a href="bnb/">{spans(BNB_TITLE)}</a></h2>
-    <p class="muted">{spans(BNB_DATE)}</p>
-    {bundle("p", BNB_SUM)}
-  </div>
-  <div class="card">
-    <span class="badge">6.7 / 10</span>
-    <span class="chip">DeFi</span>
-    <h2 style="margin:8px 0"><a href="aave/">{spans(AAVE_TITLE)}</a></h2>
-    <p class="muted">{spans(AAVE_DATE)}</p>
-    {bundle("p", AAVE_SUM)}
-  </div>
+  <p id="filterEmpty" class="muted" hidden>{spans({"zh": "该主题暂无已发布报告。", "en": "No published notes in this topic yet.", "ja": "このテーマの公開レポートはまだありません。", "ko": "이 주제의 공개 리포트가 아직 없습니다.", "fr": "Pas encore de notes dans ce thème.", "es": "Aún no hay notas en este tema.", "ru": "По этой теме записок пока нет."})}</p>
 """
 
 ABOUT_BODY = f"""
   {bundle("h1", {"zh": "关于 DRLabs", "en": "About DRLabs", "ja": "DRLabs について", "ko": "DRLabs 소개", "fr": "À propos de DRLabs", "es": "Acerca de DRLabs", "ru": "О DRLabs"})}
-  {bundle("p", {"zh": "DRLabs 是分布式加密项目研究室。我们研究 DeFi、GameFi 与 Meme，把链上项目写成可阅读的报告。", "en": "DRLabs is a distributed crypto research lab. We study DeFi, GameFi and memes, and write on-chain projects into reports you can read.", "ja": "DRLabsは分散型の暗号プロジェクト研究室です。DeFi、GameFi、ミームを扱い、オンチェーンの案件を読めるレポートにします。", "ko": "DRLabs는 분산형 암호화 프로젝트 연구실입니다. DeFi, GameFi, 밈을 다루며 온체인 프로젝트를 읽을 수 있는 리포트로 씁니다.", "fr": "DRLabs est un laboratoire de recherche crypto distribué. Nous étudions DeFi, GameFi et les memes, et écrivons des notes lisibles sur les projets on-chain.", "es": "DRLabs es un laboratorio de investigación cripto distribuido. Estudiamos DeFi, GameFi y memes, y escribimos informes legibles sobre proyectos on-chain.", "ru": "DRLabs — распределённая лаборатория криптоисследований. Пишем читаемые записки по DeFi, GameFi и мемам."})}
+  {bundle("p", {"zh": "DRLabs 是分布式加密项目研究室。我们研究 DeFi、GameFi 与 Meme，把链上项目写成可阅读的报告。对外以研究室名义发表。", "en": "DRLabs is a distributed crypto research lab. We study DeFi, GameFi and memes, and write on-chain projects into reports you can read. Notes are published in the lab’s name.", "ja": "DRLabsは分散型の暗号プロジェクト研究室です。DeFi、GameFi、ミームを扱い、オンチェーンの案件を読めるレポートにします。対外発表は研究室名義です。", "ko": "DRLabs는 분산형 암호화 프로젝트 연구실입니다. DeFi, GameFi, 밈을 다루며 온체인 프로젝트를 읽을 수 있는 리포트로 씁니다. 대외 발표는 연구실 명의입니다.", "fr": "DRLabs est un laboratoire de recherche crypto distribué. Nous étudions DeFi, GameFi et les memes. Les notes sont publiées au nom du laboratoire.", "es": "DRLabs es un laboratorio de investigación cripto distribuido. Estudiamos DeFi, GameFi y memes. Las notas se publican a nombre del laboratorio.", "ru": "DRLabs — распределённая лаборатория криптоисследований. Пишем читаемые записки по DeFi, GameFi и мемам. Публикации — от имени лаборатории."})}
   {bundle("h2", {"zh": "成员", "en": "Members", "ja": "メンバー", "ko": "구성원", "fr": "Membres", "es": "Miembros", "ru": "Участники"})}
-  {bundle("p", {"zh": "研究室成员来自新加坡、澳大利亚与英国。", "en": "Lab members are based in Singapore, Australia and the United Kingdom.", "ja": "研究室のメンバーはシンガポール、オーストラリア、英国にいます。", "ko": "연구실 구성원은 싱가포르, 호주, 영국에 있습니다.", "fr": "Les membres du laboratoire sont à Singapour, en Australie et au Royaume-Uni.", "es": "Los miembros del laboratorio están en Singapur, Australia y el Reino Unido.", "ru": "Участники лаборатории — в Сингапуре, Австралии и Великобритании."})}
-  <div class="stat-row">
-    <div class="stat"><strong>{spans({"zh": "新加坡", "en": "Singapore", "ja": "シンガポール", "ko": "싱가포르", "fr": "Singapour", "es": "Singapur", "ru": "Сингапур"})}</strong></div>
-    <div class="stat"><strong>{spans({"zh": "澳大利亚", "en": "Australia", "ja": "オーストラリア", "ko": "호주", "fr": "Australie", "es": "Australia", "ru": "Австралия"})}</strong></div>
-    <div class="stat"><strong>{spans({"zh": "英国", "en": "United Kingdom", "ja": "英国", "ko": "영국", "fr": "Royaume-Uni", "es": "Reino Unido", "ru": "Великобритания"})}</strong></div>
-  </div>
+  {bundle("p", {"zh": "研究室成员在新加坡、澳大利亚与英国工作。", "en": "Lab members work in Singapore, Australia and the United Kingdom.", "ja": "研究室のメンバーはシンガポール、オーストラリア、英国で働いています。", "ko": "연구실 구성원은 싱가포르, 호주, 영국에서 일합니다.", "fr": "Les membres du laboratoire travaillent à Singapour, en Australie et au Royaume-Uni.", "es": "Los miembros del laboratorio trabajan en Singapur, Australia y el Reino Unido.", "ru": "Участники лаборатории работают в Сингапуре, Австралии и Великобритании."}, cls="muted")}
+  <ul class="people-list">
+    <li><strong>{spans({"zh": "研究", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}</strong> · {spans({"zh": "新加坡", "en": "Singapore", "ja": "シンガポール", "ko": "싱가포르", "fr": "Singapour", "es": "Singapur", "ru": "Сингапур"})}</li>
+    <li><strong>{spans({"zh": "研究", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}</strong> · {spans({"zh": "澳大利亚", "en": "Australia", "ja": "オーストラリア", "ko": "호주", "fr": "Australie", "es": "Australia", "ru": "Австралия"})}</li>
+    <li><strong>{spans({"zh": "研究", "en": "Research", "ja": "リサーチ", "ko": "리서치", "fr": "Recherche", "es": "Investigación", "ru": "Исследования"})}</strong> · {spans({"zh": "英国", "en": "United Kingdom", "ja": "英国", "ko": "영국", "fr": "Royaume-Uni", "es": "Reino Unido", "ru": "Великобритания"})}</li>
+  </ul>
   {bundle("h2", {"zh": "研究范围", "en": "Coverage", "ja": "対象", "ko": "범위", "fr": "Couverture", "es": "Cobertura", "ru": "Охват"})}
-  <div class="stat-row">
-    <div class="stat"><strong>DeFi</strong></div>
-    <div class="stat"><strong>GameFi</strong></div>
-    <div class="stat"><strong>Meme</strong></div>
-  </div>
+  <ul class="people-list">
+    <li><strong>DeFi</strong> · {spans({"zh": "协议、市场结构与链上费用", "en": "Protocols, market structure and on-chain fees", "ja": "プロトコル、市場構造、オンチェーン手数料", "ko": "프로토콜, 시장 구조, 온체인 수수료", "fr": "Protocoles, structure de marché et frais on-chain", "es": "Protocolos, estructura de mercado y comisiones on-chain", "ru": "Протоколы, структура рынка и ончейн-комиссии"})}</li>
+    <li><strong>GameFi</strong> · {spans({"zh": "链上游戏与相关资产", "en": "On-chain games and related assets", "ja": "オンチェーンゲームと関連資産", "ko": "온체인 게임과 관련 자산", "fr": "Jeux on-chain et actifs liés", "es": "Juegos on-chain y activos relacionados", "ru": "Ончейн-игры и связанные активы"})}</li>
+    <li><strong>Meme</strong> · {spans({"zh": "高流动性迷因资产", "en": "Highly liquid meme assets", "ja": "流動性の高いミーム資産", "ko": "유동성이 높은 밈 자산", "fr": "Memes très liquides", "es": "Memes de alta liquidez", "ru": "Высоколиквидные мемы"})}</li>
+  </ul>
+  {bundle("h2", {"zh": "联系", "en": "Contact", "ja": "連絡", "ko": "연락", "fr": "Contact", "es": "Contacto", "ru": "Контакты"})}
+  {bundle("p", {"zh": "研究与媒体问询请通过 GitHub 联系研究室。", "en": "For research or media questions, contact the lab on GitHub.", "ja": "研究・取材の問い合わせは GitHub で研究室へ。", "ko": "연구·미디어 문의는 GitHub로 연구실에 연락하세요.", "fr": "Pour la recherche ou la presse, contactez le laboratoire sur GitHub.", "es": "Para investigación o prensa, contacta al laboratorio en GitHub.", "ru": "По вопросам исследований и прессы — лаборатория в GitHub."}, cls="muted")}
+  <p><a href="https://github.com/DRLabs-code" rel="noreferrer">DRLabs-code</a> · <a href="rss.xml">RSS</a></p>
   {bundle("h2", {"zh": "语言", "en": "Language", "ja": "言語", "ko": "언어", "fr": "Langue", "es": "Idioma", "ru": "Язык"})}
   {bundle("p", {"zh": "右上角可选择中文、English、日本語、한국어、Français、Español、Русский。正文与导航随语言切换；表格单元格仍保留中英对照。", "en": "Top right: Chinese, English, Japanese, Korean, French, Spanish, Russian. Prose and navigation switch; table cells stay Chinese + English.", "ja": "右上で7言語を選択。本文とナビは切り替わり、表は中英併記のまま。", "ko": "오른쪽 위에서 7개 언어를 고릅니다. 본문과 탐색은 바뀌고, 표는 중·영 대조를 유지합니다.", "fr": "7 langues en haut à droite. Le texte change ; les tableaux restent ZH+EN.", "es": "7 idiomas arriba a la derecha. El texto cambia; las tablas siguen ZH+EN.", "ru": "7 языков справа сверху. Текст переключается; таблицы остаются ZH+EN."})}
   <div id="disclaimer">

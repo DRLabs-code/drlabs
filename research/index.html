@@ -31,77 +31,134 @@ document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
 </header>
 <main>
 
-  <h1 class="lang-zh">研究报告</h1>
-<h1 class="lang-en">Research</h1>
-<h1 class="lang-ja">リサーチ</h1>
-<h1 class="lang-ko">리서치</h1>
-<h1 class="lang-fr">Recherche</h1>
-<h1 class="lang-es">Investigación</h1>
-<h1 class="lang-ru">Исследования</h1>
-  <p class="lang-zh muted">按发布日期倒序。摘要公开，正文需登录。</p>
-<p class="lang-en muted">Newest first. Abstracts are public; full text needs login.</p>
-<p class="lang-ja muted">新しい順。要約は公開、本文はログイン。</p>
-<p class="lang-ko muted">최신순. 요약은 공개, 본문은 로그인.</p>
-<p class="lang-fr muted">Les plus récentes d’abord. Résumés publics ; texte après connexion.</p>
-<p class="lang-es muted">Las más nuevas primero. Resúmenes públicos; el texto pide login.</p>
-<p class="lang-ru muted">Сначала новые. Аннотации открыты, текст после входа.</p>
-  <div class="card">
-    <span class="badge">6.9 / 10</span>
-    <span class="chip">DeFi</span>
-    <h2 style="margin:8px 0"><a href="uni/"><span class="lang-zh">UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层</span><span class="lang-en">UNI research note: a thick DEX fee pool, a thin slice for the token</span><span class="lang-ja">UNIリサーチノート：DEXの手数料は厚いが、トークンが取る分は薄い</span><span class="lang-ko">UNI 리서치 노트: DEX 수수료 풀은 두껍고, 토큰 몫은 얇다</span><span class="lang-fr">Note UNI : un gros pot de frais DEX, une fine part pour le jeton</span><span class="lang-es">Nota UNI: un pozo grueso de comisiones DEX, una lonja fina para el token</span><span class="lang-ru">Записка по UNI: толстый пул комиссий DEX, тонкий кусок для токена</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月9日 · UNI · DeFi</span><span class="lang-en">9 Sep 2026 · UNI · DeFi</span><span class="lang-ja">2026年9月9日 · UNI · DeFi</span><span class="lang-ko">2026년 9월 9일 · UNI · DeFi</span><span class="lang-fr">9 sept. 2026 · UNI · DeFi</span><span class="lang-es">9 sep 2026 · UNI · DeFi</span><span class="lang-ru">9 сен 2026 · UNI · DeFi</span></p>
-    <p class="lang-zh">现货 DEX 费用与成交仍是第一；近 30 日费用约 1.52 亿美元，协议收入只留下约 8%。6.9/10，谨慎跟踪。</p>
+  <p class="lang-zh muted">研究报告</p>
+<p class="lang-en muted">Research</p>
+<p class="lang-ja muted">リサーチ</p>
+<p class="lang-ko muted">리서치</p>
+<p class="lang-fr muted">Recherche</p>
+<p class="lang-es muted">Investigación</p>
+<p class="lang-ru muted">Исследования</p>
+  <h1 class="lang-zh">出版目录</h1>
+<h1 class="lang-en">Publication index</h1>
+<h1 class="lang-ja">刊行目録</h1>
+<h1 class="lang-ko">출판 목록</h1>
+<h1 class="lang-fr">Catalogue</h1>
+<h1 class="lang-es">Catálogo</h1>
+<h1 class="lang-ru">Каталог публикаций</h1>
+  <p class="lang-zh muted">按发布日期倒序。可按主题筛选。摘要公开，正文需登录。</p>
+<p class="lang-en muted">Newest first. Filter by topic. Abstracts are public; full text needs login.</p>
+<p class="lang-ja muted">新しい順。テーマで絞り込めます。要約は公開、本文はログイン。</p>
+<p class="lang-ko muted">최신순. 주제로 걸러 볼 수 있습니다. 요약은 공개, 본문은 로그인.</p>
+<p class="lang-fr muted">Les plus récentes d’abord. Filtrer par thème. Résumés publics ; texte après connexion.</p>
+<p class="lang-es muted">Las más nuevas primero. Filtra por tema. Resúmenes públicos; el texto pide login.</p>
+<p class="lang-ru muted">Сначала новые. Фильтр по теме. Аннотации открыты, текст после входа.</p>
+  
+<div class="filter-bar" data-filter-bar>
+  <button type="button" data-filter-topic="all" aria-pressed="true"><span class="lang-zh">全部</span><span class="lang-en">All</span><span class="lang-ja">すべて</span><span class="lang-ko">전체</span><span class="lang-fr">Tout</span><span class="lang-es">Todas</span><span class="lang-ru">Все</span></button>
+  <button type="button" data-filter-topic="DeFi" aria-pressed="false">DeFi</button>
+  <button type="button" data-filter-topic="GameFi" aria-pressed="false">GameFi</button>
+  <button type="button" data-filter-topic="Meme" aria-pressed="false">Meme</button>
+  <button type="button" data-filter-topic="L1" aria-pressed="false">L1</button>
+</div>
+
+  <div class="archive-list">
+  
+<article class="archive-item" data-topics="DeFi">
+  <p class="archive-meta"><span class="ticker">UNI</span><span class="chip">DeFi</span> <span class="lang-zh">2026年9月9日</span><span class="lang-en">9 Sep 2026</span><span class="lang-ja">2026年9月9日</span><span class="lang-ko">2026년 9월 9일</span><span class="lang-fr">9 sept. 2026</span><span class="lang-es">9 sep 2026</span><span class="lang-ru">9 сен 2026</span> · as-of 2026-09-08 21:27 UTC</p>
+  <h2><a href="uni/"><span class="lang-zh">UNI 研究简报：DEX 费用池很厚，代币仍只分到一薄层</span><span class="lang-en">UNI research note: a thick DEX fee pool, a thin slice for the token</span><span class="lang-ja">UNIリサーチノート：DEXの手数料は厚いが、トークンが取る分は薄い</span><span class="lang-ko">UNI 리서치 노트: DEX 수수료 풀은 두껍고, 토큰 몫은 얇다</span><span class="lang-fr">Note UNI : un gros pot de frais DEX, une fine part pour le jeton</span><span class="lang-es">Nota UNI: un pozo grueso de comisiones DEX, una lonja fina para el token</span><span class="lang-ru">Записка по UNI: толстый пул комиссий DEX, тонкий кусок для токена</span></a></h2>
+  <p class="lang-zh">现货 DEX 费用与成交仍是第一；近 30 日费用约 1.52 亿美元，协议收入只留下约 8%。6.9/10，谨慎跟踪。</p>
 <p class="lang-en">Still first in spot DEX fees and volume. 30-day fees about $152M; protocol keep is about 8%. 6.9/10, cautious watch.</p>
 <p class="lang-ja">現物DEXの手数料と出来高は首位。30日手数料約1.52億ドル、プロトコル取り分は約8%。6.9/10、慎重ウォッチ。</p>
 <p class="lang-ko">현물 DEX 수수료와 거래대금은 1위. 30일 수수료 약 1.52억 달러, 프로토콜 몫은 약 8%. 6.9/10, 신중 추적.</p>
 <p class="lang-fr">Toujours premier en frais et volume DEX spot. Frais 30 jours ~152 M$ ; le protocole garde ~8%. 6.9/10, suivi prudent.</p>
 <p class="lang-es">Sigue primero en comisiones y volumen DEX spot. Comisiones 30 días ~152 M$; el protocolo se queda ~8%. 6.9/10, seguimiento cauto.</p>
 <p class="lang-ru">По-прежнему первый по комиссиям и обороту спот-DEX. Комиссии за 30 дней ~$152 млн; протоколу ~8%. 6.9/10, осторожное наблюдение.</p>
-  </div>
-  <div class="card">
-    <span class="badge">4.7 / 10</span>
-    <span class="chip">Meme</span>
-    <h2 style="margin:8px 0"><a href="doge/"><span class="lang-zh">DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带</span><span class="lang-en">DOGE research note: twelfth by cap, still below the watch band on fundamentals</span><span class="lang-ja">DOGEリサーチノート：時価総額12位でも、ファンダメンタルはウォッチ帯に入らない</span><span class="lang-ko">DOGE 리서치 노트: 시총 12위여도 펀더멘털은 추적 밴드에 못 든다</span><span class="lang-fr">Note DOGE : 12e en capitalisation, toujours sous la bande de suivi sur les fondamentaux</span><span class="lang-es">Nota DOGE: duodécimo por capitalización, aún bajo la banda de seguimiento en fundamentales</span><span class="lang-ru">Записка по DOGE: 12-е место по капитализации, по фундаменталу всё ещё ниже полосы наблюдения</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月9日 · DOGE · Meme</span><span class="lang-en">9 Sep 2026 · DOGE · Meme</span><span class="lang-ja">2026年9月9日 · DOGE · Meme</span><span class="lang-ko">2026년 9월 9일 · DOGE · Meme</span><span class="lang-fr">9 sept. 2026 · DOGE · Meme</span><span class="lang-es">9 sep 2026 · DOGE · Meme</span><span class="lang-ru">9 сен 2026 · DOGE · Meme</span></p>
-    <p class="lang-zh">流动性与品牌都在，但没有协议收入、没有供应上限。买入评分 4.7/10，回避：可以交易，不能写成价值持仓。</p>
+  <p class="muted archive-foot">6.9 / 10</p>
+</article>
+
+<article class="archive-item" data-topics="Meme">
+  <p class="archive-meta"><span class="ticker">DOGE</span><span class="chip">Meme</span> <span class="lang-zh">2026年9月9日</span><span class="lang-en">9 Sep 2026</span><span class="lang-ja">2026年9月9日</span><span class="lang-ko">2026년 9월 9일</span><span class="lang-fr">9 sept. 2026</span><span class="lang-es">9 sep 2026</span><span class="lang-ru">9 сен 2026</span> · as-of 2026-09-08 21:27 UTC</p>
+  <h2><a href="doge/"><span class="lang-zh">DOGE 研究简报：市值第十二，基本面评分仍进不了跟踪带</span><span class="lang-en">DOGE research note: twelfth by cap, still below the watch band on fundamentals</span><span class="lang-ja">DOGEリサーチノート：時価総額12位でも、ファンダメンタルはウォッチ帯に入らない</span><span class="lang-ko">DOGE 리서치 노트: 시총 12위여도 펀더멘털은 추적 밴드에 못 든다</span><span class="lang-fr">Note DOGE : 12e en capitalisation, toujours sous la bande de suivi sur les fondamentaux</span><span class="lang-es">Nota DOGE: duodécimo por capitalización, aún bajo la banda de seguimiento en fundamentales</span><span class="lang-ru">Записка по DOGE: 12-е место по капитализации, по фундаменталу всё ещё ниже полосы наблюдения</span></a></h2>
+  <p class="lang-zh">流动性与品牌都在，但没有协议收入、没有供应上限。买入评分 4.7/10，回避：可以交易，不能写成价值持仓。</p>
 <p class="lang-en">Liquidity and brand are real. There is no protocol revenue and no hard cap. Buy score 4.7/10, avoid: tradable, not a value book.</p>
 <p class="lang-ja">流動性とブランドは本物。プロトコル収入もハードキャップもない。4.7/10、回避。取引はできるが価値保有ではない。</p>
 <p class="lang-ko">유동성과 브랜드는 실재. 프로토콜 수입과 하드캡은 없다. 4.7/10, 회피. 거래는 가능하고 가치 보유는 아니다.</p>
 <p class="lang-fr">Liquidité et marque sont réelles. Pas de revenu protocole, pas de plafond. 4.7/10, éviter : négociable, pas un livre value.</p>
 <p class="lang-es">Liquidez y marca son reales. Sin ingreso de protocolo ni tope. 4.7/10, evitar: se negocia, no es un libro value.</p>
 <p class="lang-ru">Ликвидность и бренд реальны. Нет дохода протокола и потолка. 4.7/10, избегать: торгуется, не value-книга.</p>
-  </div>
-  <div class="card">
-    <span class="badge">6.6 / 10</span>
-    <span class="chip">L1</span>
-    <h2 style="margin:8px 0"><a href="bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span><span class="lang-ja">BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格</span><span class="lang-ko">BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격</span><span class="lang-fr">Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie</span><span class="lang-es">Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte</span><span class="lang-ru">Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月8日 · BNB · L1</span><span class="lang-en">8 Sep 2026 · BNB · L1</span><span class="lang-ja">2026年9月8日 · BNB · L1</span><span class="lang-ko">2026년 9월 8일 · BNB · L1</span><span class="lang-fr">8 sept. 2026 · BNB · L1</span><span class="lang-es">8 sep 2026 · BNB · L1</span><span class="lang-ru">8 сен 2026 · BNB · L1</span></p>
-    <p class="lang-zh">市值第四、BSC 仍然很忙；千亿定价主要来自平台与燃烧，链上 TVL 只能解释一小部分。</p>
+  <p class="muted archive-foot">4.7 / 10</p>
+</article>
+
+<article class="archive-item" data-topics="DeFi L1">
+  <p class="archive-meta"><span class="ticker">BNB</span><span class="chip">DeFi</span><span class="chip">L1</span> <span class="lang-zh">2026年9月8日</span><span class="lang-en">8 Sep 2026</span><span class="lang-ja">2026年9月8日</span><span class="lang-ko">2026년 9월 8일</span><span class="lang-fr">8 sept. 2026</span><span class="lang-es">8 sep 2026</span><span class="lang-ru">8 сен 2026</span> · as-of 2026-09-08</p>
+  <h2><a href="bnb/"><span class="lang-zh">BNB 研究简报：百亿美元定价，链上锁仓只解释一小部分</span><span class="lang-en">BNB research note: a $100B price tag that on-chain TVL only partly explains</span><span class="lang-ja">BNBリサーチノート：オンチェーンTVLだけでは部分的にしか説明できない1000億ドルの価格</span><span class="lang-ko">BNB 리서치 노트: 온체인 TVL이 일부만 설명하는 1000억 달러 가격</span><span class="lang-fr">Note BNB : une valorisation de 100 Md$ que la TVL on-chain n’explique qu’en partie</span><span class="lang-es">Nota BNB: una etiqueta de 100 000 M$ que el TVL on-chain solo explica en parte</span><span class="lang-ru">Записка по BNB: оценка $100 млрд, которую ончейн-TVL объясняет лишь частично</span></a></h2>
+  <p class="lang-zh">市值第四、BSC 仍然很忙；千亿定价主要来自平台与燃烧，链上 TVL 只能解释一小部分。</p>
 <p class="lang-en">Fourth by market cap, BSC is still busy; the $100B valuation is mainly platform plus burn. On-chain TVL only explains a slice.</p>
 <p class="lang-ja">時価総額4位でBSCは依然活発。1000億ドルの価格は主にプラットフォームとバーン。オンチェーンTVLは一部しか説明しない。</p>
 <p class="lang-ko">시가총액 4위, BSC는 여전히 분주합니다. 1000억 달러 가치는 주로 플랫폼과 소각이며, 온체인 TVL은 일부만 설명합니다.</p>
 <p class="lang-fr">4e en capitalisation, BSC reste actif ; les 100 Md$ viennent surtout de la plateforme et du burn. La TVL n’explique qu’une part.</p>
 <p class="lang-es">Cuarto por capitalización; BSC sigue activo. Los 100 000 M$ vienen sobre todo de la plataforma y el burn; el TVL solo explica una parte.</p>
 <p class="lang-ru">4-е место по капитализации, BSC по-прежнему активен. Оценка $100 млрд — в основном платформа и сжигание; TVL объясняет лишь часть.</p>
-  </div>
-  <div class="card">
-    <span class="badge">6.7 / 10</span>
-    <span class="chip">DeFi</span>
-    <h2 style="margin:8px 0"><a href="aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span><span class="lang-ja">Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期</span><span class="lang-ko">Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기</span><span class="lang-fr">Note Aave : toujours leader du lending, V4 encore au début</span><span class="lang-es">Nota Aave: sigue siendo líder de préstamos, V4 aún temprano</span><span class="lang-ru">Записка по Aave: лидер кредитования на месте, V4 ещё ранний</span></a></h2>
-    <p class="muted"><span class="lang-zh">2026年9月7日 · AAVE · DeFi</span><span class="lang-en">7 Sep 2026 · AAVE · DeFi</span><span class="lang-ja">2026年9月7日 · AAVE · DeFi</span><span class="lang-ko">2026년 9월 7일 · AAVE · DeFi</span><span class="lang-fr">7 sept. 2026 · AAVE · DeFi</span><span class="lang-es">7 sep 2026 · AAVE · DeFi</span><span class="lang-ru">7 сен 2026 · AAVE · DeFi</span></p>
-    <p class="lang-zh">仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。</p>
+  <p class="muted archive-foot">6.6 / 10</p>
+</article>
+
+<article class="archive-item" data-topics="DeFi">
+  <p class="archive-meta"><span class="ticker">AAVE</span><span class="chip">DeFi</span> <span class="lang-zh">2026年9月7日</span><span class="lang-en">7 Sep 2026</span><span class="lang-ja">2026年9月7日</span><span class="lang-ko">2026년 9월 7일</span><span class="lang-fr">7 sept. 2026</span><span class="lang-es">7 sep 2026</span><span class="lang-ru">7 сен 2026</span> · as-of 2026-09-07</p>
+  <h2><a href="aave/"><span class="lang-zh">Aave 研究简报：借贷龙头仍在，V4 仍处早期</span><span class="lang-en">Aave research note: lending leader still, V4 still early</span><span class="lang-ja">Aaveリサーチノート：レンディングの盟主は健在、V4はまだ初期</span><span class="lang-ko">Aave 리서치 노트: 대출 선두는 유지, V4는 아직 초기</span><span class="lang-fr">Note Aave : toujours leader du lending, V4 encore au début</span><span class="lang-es">Nota Aave: sigue siendo líder de préstamos, V4 aún temprano</span><span class="lang-ru">Записка по Aave: лидер кредитования на месте, V4 ещё ранний</span></a></h2>
+  <p class="lang-zh">仍是借贷赛道规模与品牌龙头；V3 扛主力，V4 已上线但保守放量。</p>
 <p class="lang-en">Still the scale and brand leader in lending. V3 carries the book; V4 is live with conservative caps.</p>
 <p class="lang-ja">レンディングの規模とブランドで依然首位。主力はV3、V4は稼働済みだが上限は保守的。</p>
 <p class="lang-ko">대출 규모와 브랜드에서 여전히 선두. V3가 본장이고 V4는 출시됐지만 한도는 보수적입니다.</p>
 <p class="lang-fr">Toujours leader en taille et en marque. V3 porte le livre ; V4 est live avec des plafonds prudents.</p>
 <p class="lang-es">Sigue siendo líder en escala y marca. V3 carga el libro; V4 está vivo con techos conservadores.</p>
 <p class="lang-ru">По-прежнему лидер по масштабу и бренду. V3 несёт основную книгу; V4 запущен с консервативными лимитами.</p>
+  <p class="muted archive-foot">6.7 / 10</p>
+</article>
+
   </div>
+  <p id="filterEmpty" class="muted" hidden><span class="lang-zh">该主题暂无已发布报告。</span><span class="lang-en">No published notes in this topic yet.</span><span class="lang-ja">このテーマの公開レポートはまだありません。</span><span class="lang-ko">이 주제의 공개 리포트가 아직 없습니다.</span><span class="lang-fr">Pas encore de notes dans ce thème.</span><span class="lang-es">Aún no hay notas en este tema.</span><span class="lang-ru">По этой теме записок пока нет.</span></p>
 
 </main>
-<footer>
-<p><span class="lang-zh">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</span><span class="lang-en">For research only. Not investment advice. Crypto can result in partial or total loss.</span><span class="lang-ja">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</span><span class="lang-ko">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</span><span class="lang-fr">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</span><span class="lang-es">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</span><span class="lang-ru">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</span></p>
-<p class="foot-links"><span class="lang-zh">分布式加密项目研究室 · 成员来自新加坡、澳大利亚与英国。</span><span class="lang-en">Distributed crypto research lab · members in Singapore, Australia and the United Kingdom.</span><span class="lang-ja">分散型暗号プロジェクト研究室 · メンバーはシンガポール、オーストラリア、英国。</span><span class="lang-ko">분산형 암호화 프로젝트 연구실 · 구성원은 싱가포르, 호주, 영국.</span><span class="lang-fr">Laboratoire crypto distribué · membres à Singapour, en Australie et au Royaume-Uni.</span><span class="lang-es">Laboratorio cripto distribuido · miembros en Singapur, Australia y Reino Unido.</span><span class="lang-ru">Распределённая криптолаборатория · участники в Сингапуре, Австралии и Великобритании.</span> · <a href="../about.html"><span class="lang-zh">关于研究室</span><span class="lang-en">About the lab</span><span class="lang-ja">研究室について</span><span class="lang-ko">연구실 소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О лаборатории</span></a> · <a href="../about.html#disclaimer"><span class="lang-zh">免责声明</span><span class="lang-en">Disclaimer</span><span class="lang-ja">免責</span><span class="lang-ko">면책</span><span class="lang-fr">Avertissement</span><span class="lang-es">Aviso</span><span class="lang-ru">Отказ</span></a> · <a href="../rss.xml">RSS</a></p>
+<footer class="site-footer">
+<div class="footer-grid">
+<div>
+<p class="lang-zh footer-title">DRLabs</p>
+<p class="lang-en footer-title">DRLabs</p>
+<p class="lang-ja footer-title">DRLabs</p>
+<p class="lang-ko footer-title">DRLabs</p>
+<p class="lang-fr footer-title">DRLabs</p>
+<p class="lang-es footer-title">DRLabs</p>
+<p class="lang-ru footer-title">DRLabs</p><p class="lang-zh muted">分布式加密项目研究室。成员在新加坡、澳大利亚与英国。</p>
+<p class="lang-en muted">Distributed crypto research lab. Members in Singapore, Australia and the United Kingdom.</p>
+<p class="lang-ja muted">分散型暗号プロジェクト研究室。メンバーはシンガポール、オーストラリア、英国。</p>
+<p class="lang-ko muted">분산형 암호화 프로젝트 연구실. 구성원은 싱가포르, 호주, 영국.</p>
+<p class="lang-fr muted">Laboratoire crypto distribué. Membres à Singapour, en Australie et au Royaume-Uni.</p>
+<p class="lang-es muted">Laboratorio cripto distribuido. Miembros en Singapur, Australia y Reino Unido.</p>
+<p class="lang-ru muted">Распределённая криптолаборатория. Участники в Сингапуре, Австралии и Великобритании.</p></div>
+<div>
+<p class="lang-zh footer-title">目录</p>
+<p class="lang-en footer-title">Index</p>
+<p class="lang-ja footer-title">目次</p>
+<p class="lang-ko footer-title">목차</p>
+<p class="lang-fr footer-title">Index</p>
+<p class="lang-es footer-title">Índice</p>
+<p class="lang-ru footer-title">Содержание</p><p><a href="../research/"><span class="lang-zh">研究报告</span><span class="lang-en">Research</span><span class="lang-ja">リサーチ</span><span class="lang-ko">리서치</span><span class="lang-fr">Recherche</span><span class="lang-es">Investigación</span><span class="lang-ru">Исследования</span></a> · <a href="../about.html"><span class="lang-zh">关于</span><span class="lang-en">About</span><span class="lang-ja">概要</span><span class="lang-ko">소개</span><span class="lang-fr">À propos</span><span class="lang-es">Acerca de</span><span class="lang-ru">О нас</span></a> · <a href="../rss.xml">RSS</a></p>
+</div>
+<div>
+<p class="lang-zh footer-title">联系</p>
+<p class="lang-en footer-title">Contact</p>
+<p class="lang-ja footer-title">連絡</p>
+<p class="lang-ko footer-title">연락</p>
+<p class="lang-fr footer-title">Contact</p>
+<p class="lang-es footer-title">Contacto</p>
+<p class="lang-ru footer-title">Контакты</p><p><a href="https://github.com/DRLabs-code" rel="noreferrer">DRLabs-code</a> · <a href="../about.html#disclaimer"><span class="lang-zh">免责声明</span><span class="lang-en">Disclaimer</span><span class="lang-ja">免責</span><span class="lang-ko">면책</span><span class="lang-fr">Avertissement</span><span class="lang-es">Aviso</span><span class="lang-ru">Отказ</span></a></p><p class="lang-zh muted">内容仅供研究参考，不构成投资建议。加密资产风险极高，投资请理性。</p>
+<p class="lang-en muted">For research only. Not investment advice. Crypto can result in partial or total loss.</p>
+<p class="lang-ja muted">研究目的のみ。投資助言ではありません。暗号資産は元本の一部または全部を失う可能性があります。</p>
+<p class="lang-ko muted">연구 참고용이며 투자 자문이 아닙니다. 암호화폐는 원금 일부 또는 전액 손실이 날 수 있습니다.</p>
+<p class="lang-fr muted">Recherche uniquement. Pas un conseil d’investissement. Les cryptoactifs peuvent entraîner une perte partielle ou totale.</p>
+<p class="lang-es muted">Solo investigación. No es consejo de inversión. Los criptoactivos pueden causar pérdida parcial o total.</p>
+<p class="lang-ru muted">Только для исследования, не инвестиционная рекомендация. Криптоактивы могут привести к частичной или полной потере средств.</p></div>
+</div>
 </footer>
 </div>
 <script src="../assets/site.js"></script>
