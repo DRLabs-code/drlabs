@@ -27,7 +27,11 @@ var l=localStorage.getItem(k);var n=((navigator.language||'zh')+'').toLowerCase(
 if(allow.indexOf(l)<0){l=n.indexOf('zh')===0?'zh':n.indexOf('ja')===0?'ja':n.indexOf('ko')===0?'ko':n.indexOf('fr')===0?'fr':n.indexOf('es')===0?'es':n.indexOf('ru')===0?'ru':'en';}
 var map={zh:'zh-CN',en:'en',ja:'ja',ko:'ko',fr:'fr',es:'es',ru:'ru'};
 document.documentElement.setAttribute('data-lang',l);
-document.documentElement.setAttribute('lang',map[l]||'en');}catch(e){}})();
+document.documentElement.setAttribute('lang',map[l]||'en');
+var th=localStorage.getItem('drlabs-theme');
+var h=new Date().getHours();
+document.documentElement.setAttribute('data-theme',(th==='light'||th==='dark')?th:(h>=6&&h<18?'light':'dark'));
+}catch(e){}})();
 </script>"""
 
 
@@ -349,7 +353,10 @@ def nav(prefix: str) -> str:
   <a href="{about}">{spans({"zh": "关于", "en": "About", "ja": "概要", "ko": "소개", "fr": "À propos", "es": "Acerca de", "ru": "О нас"})}</a>
   <span class="spacer"></span>
   {lang_menu()}
-  <a class="theme-btn" href="#" onclick="cycleTheme();return false;" id="themeLabel">皮肤:自动</a>
+  <button type="button" class="theme-btn" id="themeToggle" onclick="cycleTheme();return false;" aria-label="Toggle theme">
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 3v1.7M12 19.3V21M4.93 4.93l1.2 1.2M17.87 17.87l1.2 1.2M3 12h1.7M19.3 12H21M4.93 19.07l1.2-1.2M17.87 6.13l1.2-1.2"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.2 14.3A8.2 8.2 0 0 1 9.7 3.8 7.2 7.2 0 1 0 20.2 14.3z"/></svg>
+  </button>
   <span id="authSlot" data-login="{login}"></span>
 </header>"""
 

@@ -23,9 +23,8 @@
       "nav.about": "关于",
       "nav.login": "登录/注册",
       "nav.logout": "退出",
-      "theme.auto": "皮肤:自动",
-      "theme.light": "皮肤:白天",
-      "theme.dark": "皮肤:黑夜",
+      "theme.toLight": "切换到浅色",
+      "theme.toDark": "切换到深色",
       "auth.invalidPhone": "请输入有效手机号",
       "auth.shortPassword": "密码至少 6 位",
       "auth.exists": "该手机号已注册",
@@ -41,9 +40,8 @@
       "nav.about": "About",
       "nav.login": "Log in / Sign up",
       "nav.logout": "Log out",
-      "theme.auto": "Theme: Auto",
-      "theme.light": "Theme: Light",
-      "theme.dark": "Theme: Dark",
+      "theme.toLight": "Switch to light",
+      "theme.toDark": "Switch to dark",
       "auth.invalidPhone": "Enter a valid phone number",
       "auth.shortPassword": "Password must be at least 6 characters",
       "auth.exists": "This phone number is already registered",
@@ -59,9 +57,8 @@
       "nav.about": "概要",
       "nav.login": "ログイン / 登録",
       "nav.logout": "ログアウト",
-      "theme.auto": "テーマ:自動",
-      "theme.light": "テーマ:ライト",
-      "theme.dark": "テーマ:ダーク",
+      "theme.toLight": "ライトに切り替え",
+      "theme.toDark": "ダークに切り替え",
       "auth.invalidPhone": "有効な電話番号を入力してください",
       "auth.shortPassword": "パスワードは6文字以上",
       "auth.exists": "この電話番号は登録済みです",
@@ -77,9 +74,8 @@
       "nav.about": "소개",
       "nav.login": "로그인 / 가입",
       "nav.logout": "로그아웃",
-      "theme.auto": "테마:자동",
-      "theme.light": "테마:라이트",
-      "theme.dark": "테마:다크",
+      "theme.toLight": "라이트로 전환",
+      "theme.toDark": "다크로 전환",
       "auth.invalidPhone": "유효한 전화번호를 입력하세요",
       "auth.shortPassword": "비밀번호는 6자 이상",
       "auth.exists": "이미 등록된 번호입니다",
@@ -95,9 +91,8 @@
       "nav.about": "À propos",
       "nav.login": "Connexion / Inscription",
       "nav.logout": "Déconnexion",
-      "theme.auto": "Thème : Auto",
-      "theme.light": "Thème : Clair",
-      "theme.dark": "Thème : Sombre",
+      "theme.toLight": "Passer au clair",
+      "theme.toDark": "Passer au sombre",
       "auth.invalidPhone": "Entrez un numéro valide",
       "auth.shortPassword": "Mot de passe : 6 caractères min.",
       "auth.exists": "Ce numéro est déjà inscrit",
@@ -113,9 +108,8 @@
       "nav.about": "Acerca de",
       "nav.login": "Entrar / Registrarse",
       "nav.logout": "Salir",
-      "theme.auto": "Tema: Auto",
-      "theme.light": "Tema: Claro",
-      "theme.dark": "Tema: Oscuro",
+      "theme.toLight": "Cambiar a claro",
+      "theme.toDark": "Cambiar a oscuro",
       "auth.invalidPhone": "Introduce un teléfono válido",
       "auth.shortPassword": "La contraseña debe tener 6+ caracteres",
       "auth.exists": "Este teléfono ya está registrado",
@@ -131,9 +125,8 @@
       "nav.about": "О нас",
       "nav.login": "Вход / Регистрация",
       "nav.logout": "Выйти",
-      "theme.auto": "Тема: авто",
-      "theme.light": "Тема: день",
-      "theme.dark": "Тема: ночь",
+      "theme.toLight": "Включить светлую",
+      "theme.toDark": "Включить тёмную",
       "auth.invalidPhone": "Введите корректный телефон",
       "auth.shortPassword": "Пароль не короче 6 символов",
       "auth.exists": "Этот номер уже зарегистрирован",
@@ -174,18 +167,17 @@
   }
 
   function applyTheme() {
-    const mode = localStorage.getItem(THEME_KEY) || "auto";
-    document.documentElement.setAttribute("data-theme", resolveTheme(mode));
-    const el = document.getElementById("themeLabel");
+    const resolved = resolveTheme(localStorage.getItem(THEME_KEY) || "auto");
+    document.documentElement.setAttribute("data-theme", resolved);
+    const el = document.getElementById("themeToggle");
     if (el) {
-      el.textContent =
-        mode === "auto" ? t("theme.auto") : mode === "light" ? t("theme.light") : t("theme.dark");
+      el.setAttribute("aria-label", resolved === "dark" ? t("theme.toLight") : t("theme.toDark"));
+      el.setAttribute("title", resolved === "dark" ? t("theme.toLight") : t("theme.toDark"));
     }
   }
   window.cycleTheme = function () {
-    const order = ["auto", "light", "dark"];
-    const cur = localStorage.getItem(THEME_KEY) || "auto";
-    localStorage.setItem(THEME_KEY, order[(order.indexOf(cur) + 1) % order.length]);
+    const resolved = resolveTheme(localStorage.getItem(THEME_KEY) || "auto");
+    localStorage.setItem(THEME_KEY, resolved === "dark" ? "light" : "dark");
     applyTheme();
   };
 
