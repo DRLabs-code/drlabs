@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -48,6 +49,11 @@ class Snap:
     fees_30d: float | None = None
     rev_30d: float | None = None
     sources: list[str] = field(default_factory=list)
+    peers: list[dict] = field(default_factory=list)
+    chains: list[dict] = field(default_factory=list)
+    dexs: list[dict] = field(default_factory=list)
+    stables: float | None = None
+    x_mentions: dict | None = None
 
 
 def utc_now() -> datetime:
@@ -252,6 +258,123 @@ def fetch_llama_fees(slug: str, data_type: str) -> float | None:
     return num(data.get("total30d"))
 
 
+def get_text(url: str) -> str:
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return resp.read().decode("utf-8", errors="replace")
+
+
+def fetch_altindex(ticker: str) -> dict | None:
+    url = f"https://altindex.com/ticker/{ticker.lower()}/x-mentions"
+    try:
+        html = get_text(url)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] altindex {ticker}: {exc}", file=sys.stderr)
+        return None
+    if "No company found" in html or "404" in html[:80]:
+        return None
+    mentions = None
+    m = re.search(r">\s*([0-9]{2,5})\s*<.*?Est\.\s*daily mentions", html, re.I | re.S)
+    if m:
+        mentions = int(m.group(1))
+    updated = None
+    u = re.search(r"Updated ([A-Za-z]{3} \d{1,2}, \d{4})", html)
+    if u:
+        updated = u.group(1)
+    sent = None
+    s = re.search(r"sentiment for \w+:\s*(\d+)\s*/\s*100", html, re.I)
+    if s:
+        sent = int(s.group(1))
+    if mentions is None:
+        return None
+    return {"ticker": ticker.upper(), "mentions": mentions, "updated": updated, "sentiment": sent, "url": url}
+
+
+def fetch_peers(exclude: str, lane: str) -> list[dict]:
+    ids = {
+        "major": "bitcoin,ethereum,solana,binancecoin",
+        "DeFi": "uniswap,aave,lido-dao,maker",
+        "GameFi": "immutable-x,axie-infinity,the-sandbox,decentraland",
+        "Meme": "dogecoin,shiba-inu,pepe,bonk",
+    }.get(lane, "bitcoin,ethereum,solana")
+    url = (
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
+        f"&ids={ids}&price_change_percentage=7d,30d"
+    )
+    try:
+        data = get_json(url)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] peers: {exc}", file=sys.stderr)
+        return []
+    out = []
+    if not isinstance(data, list):
+        return out
+    for row in data:
+        ticker = str(row.get("symbol") or "").upper()
+        if ticker == exclude:
+            continue
+        out.append(
+            {
+                "ticker": ticker,
+                "mcap": num(row.get("market_cap")),
+                "volume": num(row.get("total_volume")),
+                "rank": row.get("market_cap_rank"),
+                "chg_30d": num(row.get("price_change_percentage_30d_in_currency")),
+            }
+        )
+    return out
+
+
+def fetch_top_chains(limit: int = 6) -> list[dict]:
+    try:
+        data = get_json("https://api.llama.fi/v2/chains")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] chains: {exc}", file=sys.stderr)
+        return []
+    if not isinstance(data, list):
+        return []
+    rows = [c for c in data if isinstance(c, dict) and c.get("tvl")]
+    rows.sort(key=lambda c: float(c.get("tvl") or 0), reverse=True)
+    return [{"name": c.get("name"), "tvl": num(c.get("tvl"))} for c in rows[:limit]]
+
+
+def fetch_dex_chains() -> list[dict]:
+    out = []
+    for chain in ("Ethereum", "Solana", "BSC", "Base"):
+        try:
+            data = get_json(
+                f"https://api.llama.fi/overview/dexs/{chain}?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
+            )
+        except Exception as exc:  # noqa: BLE001
+            print(f"[warn] dex {chain}: {exc}", file=sys.stderr)
+            continue
+        if isinstance(data, dict):
+            out.append({"name": chain, "vol_24h": num(data.get("total24h")), "vol_30d": num(data.get("total30d"))})
+        time.sleep(0.3)
+    return out
+
+
+def fetch_chain_stables(chain: str | None) -> float | None:
+    if not chain:
+        return None
+    try:
+        data = get_json("https://stablecoins.llama.fi/stablecoinchains")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] stables: {exc}", file=sys.stderr)
+        return None
+    if not isinstance(data, list):
+        return None
+    target = chain.lower()
+    for row in data:
+        if str(row.get("name") or "").lower() != target:
+            continue
+        usd = row.get("totalCirculatingUSD")
+        if isinstance(usd, dict):
+            return num(usd.get("peggedUSD"))
+        return num(usd)
+    return None
+
+
 def fetch_chain_tvl(chain: str) -> float | None:
     data = get_json("https://api.llama.fi/v2/chains")
     if not isinstance(data, list):
@@ -320,6 +443,26 @@ def fetch_snap(item: dict, lane: str, as_of: str) -> Snap:
     snap.sources = list(dict.fromkeys(snap.sources))
     if snap.price is None or snap.mcap is None:
         raise RuntimeError(f"{snap.ticker}: CoinGecko missing price or market cap")
+    time.sleep(0.4)
+    snap.peers = fetch_peers(snap.ticker, lane)
+    if snap.peers:
+        snap.sources.append("CoinGecko peers")
+    if lane == "major" or "L1" in snap.tags:
+        snap.chains = fetch_top_chains()
+        snap.dexs = fetch_dex_chains()
+        snap.stables = fetch_chain_stables(item.get("chain"))
+        if snap.chains:
+            snap.sources.append("DefiLlama chains")
+        if snap.dexs:
+            snap.sources.append("DefiLlama dexs")
+        if snap.stables is not None:
+            snap.sources.append("DefiLlama stablecoins")
+    x = fetch_altindex(snap.ticker)
+    btc_x = fetch_altindex("BTC") if snap.ticker != "BTC" else x
+    if x:
+        snap.x_mentions = {"self": x, "btc": btc_x}
+        snap.sources.append("AltIndex X mentions")
+    snap.sources = list(dict.fromkeys(snap.sources))
     return snap
 
 
@@ -415,16 +558,27 @@ def verdict(score: float) -> tuple[str, str]:
 
 
 def title_take(snap: Snap, score: float) -> tuple[str, str]:
-    v_zh, v_en = verdict(score)
-    if snap.lane == "Meme":
-        return "流动性在，基本面进不了跟踪带", "liquidity is real, fundamentals stay below the watch band"
-    if snap.tvl and snap.mcap and snap.mcap > 5 * snap.tvl:
+    if snap.lane == "Meme" and snap.peers:
+        hotter = [p for p in snap.peers if p.get("volume") and snap.volume and p["volume"] > snap.volume]
+        if hotter:
+            names = "、".join(p["ticker"] for p in hotter[:2])
+            return f"市值还在，成交已经被 {names} 抢走", f"the cap remains; {hotter[0]['ticker']} already took the tape"
+        return "讨论和换手都对不上市值", "talk and turnover do not match the cap"
+    if snap.dexs:
+        ordered = sorted(snap.dexs, key=lambda r: r.get("vol_30d") or 0, reverse=True)
+        if ordered and ordered[0]["name"] != "Ethereum" and snap.ticker in {"ETH", "ETHW"}:
+            return "结算层还在，成交层已经分给别人", "settlement remains; execution already left"
+        if ordered and snap.tvl and ordered[0]["name"].lower() not in (snap.tvl_label or "").lower():
+            return f"锁仓在，30 日成交龙头是 {ordered[0]['name']}", f"TVL is here; 30-day DEX lead is {ordered[0]['name']}"
+    if snap.tvl and snap.mcap and snap.mcap > 8 * snap.tvl:
         return "定价厚，链上锁仓只解释一部分", "the price tag is thick; on-chain TVL only explains a slice"
     if snap.fees_30d and snap.rev_30d and snap.rev_30d < 0.2 * snap.fees_30d:
         return "费用池在，代币只分到一薄层", "the fee pool is real; the token still takes a thin slice"
+    if snap.x_mentions and snap.x_mentions.get("btc") and snap.x_mentions["self"]["mentions"] < snap.x_mentions["btc"]["mentions"] * 0.7:
+        return "链上数字要对照，X 上热度更低", "on-chain prints need a ledger; X heat is even thinner"
     if snap.rank and snap.rank <= 15:
-        return f"市值第 {snap.rank}，基本面要单独核算", f"#{snap.rank} by cap; fundamentals still need their own ledger"
-    return f"公开数据能核的部分写在下面（{v_zh}）", f"what public data can support is below ({v_en})"
+        return f"市值第 {snap.rank}，要把成交和费用单独拆开", f"#{snap.rank} by cap; volume and fees need their own ledger"
+    return "对照同行之后，结论写在下面", "after the peer tape, the take is below"
 
 
 def yaml_escape(text: str) -> str:
@@ -483,31 +637,40 @@ def headings(key: str, snap: Snap, score: float, day: str) -> dict[str, str]:
             "ru": f"Снимок ({day})",
         },
         "pos": {
-            "zh": "市场位置：能核的规模",
-            "en": "Market position: scale we can check",
-            "ja": "市場位置：検証できる規模",
-            "ko": "시장 위치: 확인할 수 있는 규모",
-            "fr": "Position de marché : l’échelle vérifiable",
-            "es": "Posición de mercado: la escala comprobable",
-            "ru": "Позиция: проверяемый масштаб",
+            "zh": "对照同行：市值和成交放在一张桌上",
+            "en": "Versus peers: cap and tape on one table",
+            "ja": "同業比較：時価総額と出来高を一枚に",
+            "ko": "同行 대조: 시총과 체결을 한 테이블에",
+            "fr": "Pairs : capi et carnet sur une table",
+            "es": "Pares: capitalización y cinta en una mesa",
+            "ru": "Сверстники: капитализация и лента на одном столе",
         },
         "token": {
-            "zh": "代币：供给比口号重要",
-            "en": "Token: supply over slogans",
-            "ja": "トークン：供給がスローガンより大事",
-            "ko": "토큰: 구호보다 공급",
-            "fr": "Jeton : l’offre avant les slogans",
-            "es": "Token: la oferta importa más que el eslogan",
-            "ru": "Токен: предложение важнее лозунга",
+            "zh": "供给和估值：能对上的倍数",
+            "en": "Supply and valuation: multiples we can check",
+            "ja": "供給とバリュエーション：照合できる倍数",
+            "ko": "공급과 밸류에이션: 맞출 수 있는 배수",
+            "fr": "Offre et valorisation : multiples vérifiables",
+            "es": "Oferta y valoración: múltiplos comprobables",
+            "ru": "Предложение и оценка: проверяемые множители",
         },
         "biz": {
-            "zh": "链上业务：有数字才写",
-            "en": "On-chain business: only what the numbers show",
-            "ja": "オンチェーン：数字があるものだけ",
-            "ko": "온체인: 숫자 있는 것만",
-            "fr": "On-chain : uniquement les chiffres",
-            "es": "On-chain: solo lo que muestran los números",
-            "ru": "Ончейн: только то, что в цифрах",
+            "zh": "链上对照：锁仓、费用或成交落在谁手里",
+            "en": "On-chain: who holds TVL, fees or volume",
+            "ja": "オンチェーン：TVL・手数料・出来高は誰の手に",
+            "ko": "온체인: 락업·수수료·거래대금은 누구 손에",
+            "fr": "On-chain : qui détient TVL, frais ou volume",
+            "es": "On-chain: quién tiene TVL, comisiones o volumen",
+            "ru": "Ончейн: у кого TVL, комиссии или оборот",
+        },
+        "xheat": {
+            "zh": "X 与注意力：讨论量和价格是不是一回事",
+            "en": "X and attention: whether chatter matches the tape",
+            "ja": "Xと注目：議論量と価格は同じ話か",
+            "ko": "X와 관심: 논의량과 가격이 같은 이야기인가",
+            "fr": "X et attention : le bruit suit-il le carnet",
+            "es": "X y atención: si el ruido coincide con la cinta",
+            "ru": "X и внимание: совпадает ли шум с лентой",
         },
         "score": {
             "zh": f"买入评分 {score:.1f} / 10",
@@ -625,6 +788,7 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
     if snap.price and snap.ath and snap.ath > 0:
         from_ath = 100 * (snap.price / snap.ath - 1)
 
+    hotter = [p for p in snap.peers if p.get("volume") and snap.volume and p["volume"] > snap.volume]
     desc = {
         "zh": (
             f"截至 {snap.as_of}，{snap.ticker} 约 {fmt_usd(snap.price)}、流通市值 {fmt_usd(snap.mcap)}"
@@ -641,18 +805,18 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
     }
     conclusions = {
         "zh": (
-            f"{snap.name}（{snap.ticker}）在公开市值与成交里站得住："
-            f"价格 {fmt_usd(snap.price)}，流通市值 {fmt_usd(snap.mcap)}。"
-            + (f"{snap.tvl_label} 为 {fmt_usd(snap.tvl)}。" if snap.tvl else "没有可核的协议 TVL，就不把它写成基本面支柱。")
+            f"{snap.name}（{snap.ticker}）价格 {fmt_usd(snap.price)}，流通市值 {fmt_usd(snap.mcap)}。"
+            + (f"{snap.tvl_label} {fmt_usd(snap.tvl)}。" if snap.tvl else "")
             + (f"近 30 日费用 {fmt_usd(snap.fees_30d)}，协议收入 {fmt_usd(snap.rev_30d)}。" if snap.fees_30d or snap.rev_30d else "")
-            + f"综合买入评分 {score:.1f}/10，{v_zh}。本文不是买入建议。"
+            + (f"对照同行后，成交并不排在市值前面。" if hotter else "")
+            + f"买入评分 {score:.1f}/10，{v_zh}。"
         ),
         "en": (
-            f"{snap.name} ({snap.ticker}) clears the public-market screen: "
-            f"price {fmt_usd(snap.price)}, circulating mcap {fmt_usd(snap.mcap)}. "
-            + (f"{snap.tvl_label} is {fmt_usd(snap.tvl)}. " if snap.tvl else "There is no sourced protocol TVL, so it is not treated as a fundamental pillar. ")
+            f"{snap.name} ({snap.ticker}) is {fmt_usd(snap.price)} with circulating mcap {fmt_usd(snap.mcap)}. "
+            + (f"{snap.tvl_label} {fmt_usd(snap.tvl)}. " if snap.tvl else "")
             + (f"30-day fees {fmt_usd(snap.fees_30d)}, protocol revenue {fmt_usd(snap.rev_30d)}. " if snap.fees_30d or snap.rev_30d else "")
-            + f"Buy score {score:.1f}/10, {v_en}. This is not a buy recommendation."
+            + ("After peers, the tape does not rank with the cap. " if hotter else "")
+            + f"Buy score {score:.1f}/10, {v_en}."
         ),
     }
 
@@ -703,65 +867,103 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
     score_zh.append(f"| **合计** | **100%** | | **{weighted_sum:.2f}** | **{v_zh}** |")
     score_en.append(f"| **Total** | **100%** | | **{weighted_sum:.2f}** | **{v_en}** |")
 
+    turn = (snap.volume / snap.mcap) if snap.mcap and snap.volume else None
+    peer_lines_zh = []
+    peer_lines_en = []
+    for p in snap.peers[:4]:
+        pturn = (p["volume"] / p["mcap"]) if p.get("volume") and p.get("mcap") else None
+        peer_lines_zh.append(
+            f"{p['ticker']} 市值 {fmt_usd(p.get('mcap'))}，24h 成交 {fmt_usd(p.get('volume'))}"
+            + (f"，换手约 {pturn*100:.1f}%" if pturn else "")
+        )
+        peer_lines_en.append(
+            f"{p['ticker']} cap {fmt_usd(p.get('mcap'))}, 24h volume {fmt_usd(p.get('volume'))}"
+            + (f", turnover about {pturn*100:.1f}%" if pturn else "")
+        )
     if snap.lane == "Meme":
         pos_zh = (
-            f"{snap.name} 的公开市场位置清楚：流通市值 {fmt_usd(snap.mcap)}"
+            f"{snap.name} 流通市值 {fmt_usd(snap.mcap)}"
             + (f"，排名 {rank_zh}" if snap.rank else "")
-            + f"，24 小时成交 {fmt_usd(snap.volume)}。这只说明它能被交易，不说明它有协议收入或货币纪律。"
+            + f"，24 小时成交 {fmt_usd(snap.volume)}"
+            + (f"，换手约 {turn*100:.1f}%。" if turn else "。")
+            + ("对照：" + "；".join(peer_lines_zh) + "。" if peer_lines_zh else "")
+            + (f"成交已经被 {hotter[0]['ticker']} 抢走，市值排序和磁带排序不是同一件事。" if hotter else "迷因组里它还不是最冷的，但也不是现金池。")
         )
         pos_en = (
-            f"{snap.name} has a clear public-market slot: circulating mcap {fmt_usd(snap.mcap)}"
+            f"{snap.name} circulating mcap {fmt_usd(snap.mcap)}"
             + (f", rank {rank_en}" if snap.rank else "")
-            + f", 24h volume {fmt_usd(snap.volume)}. That is tradability, not protocol income or monetary discipline."
-        )
-        biz_zh = "迷因资产的业务就是注意力和流动性。本文不把社交媒体热度写成基本面，也不编用户数或游戏流水。"
-        biz_en = "A meme asset’s ‘business’ is attention plus liquidity. This note does not treat social heat as fundamentals, and it does not invent user counts or game revenue."
-    elif snap.lane == "GameFi":
-        pos_zh = (
-            f"{snap.name} 按市值 {fmt_usd(snap.mcap)}、24 小时成交 {fmt_usd(snap.volume)} 进入本次样本。"
-            "链游代币要先分清：交易的是治理/积分票，还是已经能核的游戏流水。"
-        )
-        pos_en = (
-            f"{snap.name} enters this sample on mcap {fmt_usd(snap.mcap)} and 24h volume {fmt_usd(snap.volume)}. "
-            "For game tokens, separate the traded ticket from sourced game cash flow."
+            + f", 24h volume {fmt_usd(snap.volume)}"
+            + (f", turnover about {turn*100:.1f}%." if turn else ".")
+            + (" Peers: " + "; ".join(peer_lines_en) + "." if peer_lines_en else "")
+            + (f" {hotter[0]['ticker']} already prints more tape — cap rank is not tape rank." if hotter else " Not the coldest meme, and not the cash pool either.")
         )
         biz_zh = (
-            (f"DefiLlama 能核的锁仓是 {fmt_usd(snap.tvl)}（{snap.tvl_label}）。" if snap.tvl else "本次快照没有可核的协议 TVL。")
-            + "在看到稳定的链上费用或工作室披露之前，不把 GameFi 写成已经产品化的现金牛。"
+            (f"{snap.tvl_label} 为 {fmt_usd(snap.tvl)}。" if snap.tvl else "没有可核的协议 TVL。")
+            + "迷因的链上部分只承认锁仓和费用；销毁地址转账如果不变流通、不成费用，就只是话题。"
         )
         biz_en = (
-            (f"Sourced lockup is {fmt_usd(snap.tvl)} ({snap.tvl_label}). " if snap.tvl else "This snapshot has no sourced protocol TVL. ")
-            + "Until fees or studio disclosure are stable, GameFi is not written up as a cash cow."
+            (f"{snap.tvl_label} is {fmt_usd(snap.tvl)}. " if snap.tvl else "No sourced protocol TVL. ")
+            + "On-chain, only TVL and fees count. Burns that do not cut float or create fees are talk."
+        )
+    elif snap.lane == "GameFi":
+        pos_zh = (
+            f"{snap.name} 市值 {fmt_usd(snap.mcap)}，24 小时成交 {fmt_usd(snap.volume)}。"
+            + ("对照：" + "；".join(peer_lines_zh) + "。" if peer_lines_zh else "")
+            + "链游代币要先分清：交易的是票，还是已经能核的锁仓/费用。"
+        )
+        pos_en = (
+            f"{snap.name} cap {fmt_usd(snap.mcap)}, 24h volume {fmt_usd(snap.volume)}. "
+            + ("Peers: " + "; ".join(peer_lines_en) + ". " if peer_lines_en else "")
+            + "Separate the traded ticket from sourced TVL or fees."
+        )
+        biz_zh = (
+            (f"能核的锁仓是 {fmt_usd(snap.tvl)}（{snap.tvl_label}）。" if snap.tvl else "本次没有可核协议 TVL。")
+            + (f"近 30 日费用 {fmt_usd(snap.fees_30d)}。" if snap.fees_30d is not None else "没有费用口径，就不写成已经产品化的现金牛。")
+        )
+        biz_en = (
+            (f"Sourced lockup is {fmt_usd(snap.tvl)} ({snap.tvl_label}). " if snap.tvl else "No sourced protocol TVL. ")
+            + (f"30-day fees {fmt_usd(snap.fees_30d)}." if snap.fees_30d is not None else "No fee print, so this is not a cash-cow write-up.")
         )
     else:
         pos_zh = (
             f"{snap.name} 流通市值 {fmt_usd(snap.mcap)}"
             + (f"，排名 {rank_zh}" if snap.rank else "")
-            + f"。24 小时成交 {fmt_usd(snap.volume)}。"
-            + ("近 30 日和 7 日涨跌只当风险偏好，不当基本面台阶。" if snap.chg_30d is not None else "")
+            + f"，24 小时成交 {fmt_usd(snap.volume)}"
+            + (f"，换手约 {turn*100:.1f}%。" if turn else "。")
+            + ("对照：" + "；".join(peer_lines_zh) + "。" if peer_lines_zh else "")
+            + ("30 日涨跌只当风险偏好，要拆开成交和费用再下结论。" if snap.chg_30d is not None else "")
         )
         pos_en = (
-            f"{snap.name} circulating mcap is {fmt_usd(snap.mcap)}"
+            f"{snap.name} circulating mcap {fmt_usd(snap.mcap)}"
             + (f", rank {rank_en}" if snap.rank else "")
-            + f". 24h volume {fmt_usd(snap.volume)}. "
-            + ("7-day and 30-day moves are risk appetite, not a step-change in fundamentals." if snap.chg_30d is not None else "")
+            + f", 24h volume {fmt_usd(snap.volume)}"
+            + (f", turnover about {turn*100:.1f}%." if turn else ".")
+            + (" Peers: " + "; ".join(peer_lines_en) + "." if peer_lines_en else "")
+            + (" 30-day price is risk appetite; split volume and fees before a take." if snap.chg_30d is not None else "")
         )
-        if snap.tvl or snap.fees_30d or snap.rev_30d:
-            biz_zh = (
-                (f"{snap.tvl_label} 为 {fmt_usd(snap.tvl)}。" if snap.tvl else "")
-                + (f"近 30 日费用 {fmt_usd(snap.fees_30d)}。" if snap.fees_30d is not None else "")
-                + (f"近 30 日协议收入 {fmt_usd(snap.rev_30d)}。" if snap.rev_30d is not None else "")
-                + ("费用不等于持有人分红；捕获率单独算。" if snap.fees_30d is not None else "没有费用口径时，锁仓只说明资金停在那里，不说明代币能收租。")
-            )
-            biz_en = (
-                (f"{snap.tvl_label} is {fmt_usd(snap.tvl)}. " if snap.tvl else "")
-                + (f"30-day fees {fmt_usd(snap.fees_30d)}. " if snap.fees_30d is not None else "")
-                + (f"30-day protocol revenue {fmt_usd(snap.rev_30d)}. " if snap.rev_30d is not None else "")
-                + ("Fees are not holder dividends; capture is scored separately." if snap.fees_30d is not None else "With no fee print, TVL only shows capital parked, not rent collected by the token.")
-            )
+        bits_zh, bits_en = [], []
+        if snap.tvl:
+            bits_zh.append(f"{snap.tvl_label} 为 {fmt_usd(snap.tvl)}")
+            bits_en.append(f"{snap.tvl_label} is {fmt_usd(snap.tvl)}")
+        if snap.stables is not None:
+            bits_zh.append(f"该链稳定币约 {fmt_usd(snap.stables)}")
+            bits_en.append(f"stablecoins on the chain about {fmt_usd(snap.stables)}")
+        if snap.fees_30d is not None:
+            bits_zh.append(f"近 30 日费用 {fmt_usd(snap.fees_30d)}")
+            bits_en.append(f"30-day fees {fmt_usd(snap.fees_30d)}")
+        if snap.rev_30d is not None:
+            bits_zh.append(f"近 30 日协议收入 {fmt_usd(snap.rev_30d)}")
+            bits_en.append(f"30-day protocol revenue {fmt_usd(snap.rev_30d)}")
+        if snap.dexs:
+            lead = max(snap.dexs, key=lambda r: r.get("vol_30d") or 0)
+            bits_zh.append(f"近 30 日 DEX 成交龙头是 {lead['name']}（{fmt_usd(lead.get('vol_30d'))}）")
+            bits_en.append(f"30-day DEX lead is {lead['name']} ({fmt_usd(lead.get('vol_30d'))})")
+        if bits_zh:
+            biz_zh = "。".join(bits_zh) + "。费用不是持有人分红；成交龙头也不是自动等于代币低估。"
+            biz_en = ". ".join(bits_en) + ". Fees are not holder dividends; the DEX lead is not automatic undervaluation."
         else:
-            biz_zh = f"这次快照没有可核的协议 TVL 或费用。{snap.ticker} 的定价先按流动性和供给来看，不编链上收入。"
-            biz_en = f"This snapshot has no sourced protocol TVL or fees. {snap.ticker} is priced off liquidity and supply, not invented on-chain income."
+            biz_zh = f"这次没有可核的协议 TVL 或费用。{snap.ticker} 先按流动性和供给定价。"
+            biz_en = f"No sourced protocol TVL or fees. {snap.ticker} is priced off liquidity and supply."
 
     if snap.max_supply:
         float_pct = (100 * snap.circ / snap.max_supply) if snap.circ else None
@@ -835,10 +1037,34 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
         "Full terms: [About DRLabs](../../about.html#disclaimer)."
     )
 
-    closer_zh = f"**买入评分 {score:.1f} / 10（{v_zh}）。** 只对上面能核的数字负责。本文不是买入建议。"
-    closer_en = f"**Buy score {score:.1f} / 10 ({v_en}).** Only the sourced figures above are in play. This is not a buy recommendation."
-    score_note_zh = f"{score:.1f} 是加权四舍五入。缺数据的维度按保守分，不因为叙事补分。"
-    score_note_en = f"{score:.1f} is the rounded weighted total. Missing data is scored conservatively; narrative does not add points."
+    closer_zh = f"**买入评分 {score:.1f} / 10（{v_zh}）。** 评分跟的是对照之后的位置，不是明天的方向。本文不是买卖指令。"
+    closer_en = f"**Buy score {score:.1f} / 10 ({v_en}).** The score is the position after the peer tape, not tomorrow’s direction. Not a trade order."
+    score_note_zh = f"{score:.1f} 是加权四舍五入。同行成交、费用和 X 讨论量会拉单项；叙事不加分。"
+    score_note_en = f"{score:.1f} is the rounded weighted total. Peer tape, fees and X chatter move the line items; narrative adds nothing."
+    if snap.x_mentions and snap.x_mentions.get("self"):
+        xm = snap.x_mentions["self"]
+        btc = snap.x_mentions.get("btc")
+        x_zh = (
+            f"AltIndex 口径 ${snap.ticker} 日均 cashtag 约 {xm['mentions']} 次"
+            + (f"（更新 {xm['updated']}）" if xm.get("updated") else "")
+            + (f"，情绪 {xm['sentiment']}/100" if xm.get("sentiment") is not None else "")
+            + "。"
+        )
+        x_en = (
+            f"AltIndex daily ${snap.ticker} cashtag mentions about {xm['mentions']}"
+            + (f" (updated {xm['updated']})" if xm.get("updated") else "")
+            + (f", sentiment {xm['sentiment']}/100" if xm.get("sentiment") is not None else "")
+            + "."
+        )
+        if btc and btc.get("mentions") and snap.ticker != "BTC":
+            x_zh += f"$BTC 同期约 {btc['mentions']} 次。讨论量对不上，就不能把短线涨幅写成独立热度。"
+            x_en += f" $BTC is about {btc['mentions']} in the same series. If chatter trails, a bounce is not a standalone trend."
+        else:
+            x_zh += "讨论量只作对照，不折成估值。"
+            x_en += " Mentions are a cross-check, not a valuation input."
+    else:
+        x_zh = f"公开页没有 ${snap.ticker} 的当日 X cashtag 序列（AltIndex 无页或抓取失败）。社交面按「未披露」处理，不编热度。"
+        x_en = f"No same-day X cashtag series for ${snap.ticker} on the public AltIndex page. Socials stay undisclosed; heat is not invented."
 
     bodies: dict[str, str] = {}
     para = {
@@ -851,6 +1077,7 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
         "pos": {"zh": pos_zh, "en": pos_en},
         "token": {"zh": token_zh, "en": token_en},
         "biz": {"zh": biz_zh, "en": biz_en},
+        "xheat": {"zh": x_zh, "en": x_en},
         "score_note": {"zh": score_note_zh, "en": score_note_en},
         "src": {"zh": src_zh, "en": src_en},
         "disc": {"zh": disc_zh, "en": disc_en},
@@ -875,6 +1102,7 @@ def draft_note(snap: Snap, score: float, dims, day: str) -> dict[str, str]:
             f"## {h('pos')}\n\n{p('pos')}\n\n"
             f"## {h('token')}\n\n{p('token')}\n\n"
             f"## {h('biz')}\n\n{p('biz')}\n\n"
+            f"## {h('xheat')}\n\n{p('xheat')}\n\n"
             f"## {h('score')}\n\n{score_tbl}\n\n{p('score_note')}\n\n"
             f"## {h('risk')}\n\n{risk_md}\n\n"
             f"## {h('watch')}\n\n{watch_md}\n\n"
