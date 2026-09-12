@@ -1,81 +1,113 @@
 ---
-title: "Note IMX : the price tag is thick; on-chain TVL only explains a slice"
-description: "As of 2026-09-10 00:03 UTC, IMX is about ≈ $0.1263 with circulating mcap ≈ $111.06M, rank 254; Immutable zkEVM DeFi TVL ≈ $11.02M. Buy score 5.1/10, hold / wait."
+title: "Note IMX : la chaîne est encore là ; frais et tape sont déjà partis chez les pairs"
+description: "As of 2026-09-10 00:03 UTC, IMX is about $0.1263 with ~$111M circulating mcap, rank 254. Immutable zkEVM TVL is about $11.02M; 30-day chain fees about $433. SAND and GALA sit in the same cap band with more than 2× the 24h volume. Buy score 5.0/10, hold / wait."
 date: 2026-09-10
+asOf: "2026-09-10 00:03 UTC"
 ticker: IMX
-score: 5.1
+score: 5.0
 tags:
   - GameFi
-conclusion: "Immutable (IMX) clears the public-market screen: price ≈ $0.1263, circulating mcap ≈ $111.06M. Immutable zkEVM DeFi TVL is ≈ $11.02M. Buy score 5.1/10, hold / wait. This is not a buy recommendation."
+  - IMX
+conclusion: "Immutable still has a checkable zkEVM, but the chain prints almost no fees. IMX cap about $111M, lockup about $11.0M, 30-day chain fees about $433. Same-day SAND and GALA sit in the same cap band with more than 2.5× the tape; AXS cap about $162M and a thicker book. Only about 44% is circulating. Buy score 5.0/10, hold / wait: the chain is real; the token is still a GameFi ticket."
 ---
-
 ## Conclusion
 
-Immutable (IMX) clears the public-market screen: price ≈ $0.1263, circulating mcap ≈ $111.06M. Immutable zkEVM DeFi TVL is ≈ $11.02M. Buy score 5.1/10, hold / wait. This is not a buy recommendation.
+IMX is not a meme ticket, and it is not yet a fee-priced protocol token. As of 10 Sep 2026 00:03 UTC, price about **$0.1263**, circulating cap about **$111.1M**, rank **254**; circulating about **879.5M**, cap **2.00B**, float about **44%**, unlocked-not-yet notionally about **$142M**. Immutable zkEVM DeFi TVL about **$11.02M**, cap/TVL about **10.1×**. Thirty-day chain fees about **$433** — not a typo; the pool is that thin.
 
-**Buy score 5.1 / 10 (hold / wait).** Only the sourced figures above are in play. This is not a buy recommendation.
+Same-day GameFi: AXS cap about **$161.9M**, 24h volume about **$18.28M**; SAND about **$109.2M / $28.25M**; GALA about **$88.56M / $29.46M**. IMX volume about **$11.22M**, turnover about **10.1%**. Same cap band as SAND; the tape already left. Price is about **99%** below the 25 Nov 2021 ATH of **$9.52**. Thirty days **+13.4%**; seven days **+2.2%**.
+
+**Buy score 5.0 / 10 (hold / wait).** The chain and the brand set a thin floor. Fees, unlocks and a lagging tape cap the upside. Not a sell order.
 
 ## Instantané (2026-09-10)
 
 | Metric | Value | Source |
 | --- | --- | --- |
 | IMX price | ≈ $0.1263 | CoinGecko |
-| Circulating mcap / FDV | ≈ $111.06M / ≈ $252.56M | CoinGecko |
-| Circ / total / max | ≈ 879.47M / ≈ 2.00B / ≈ 2.00B | CoinGecko |
+| Circulating mcap / FDV | ≈ $111.1M / $252.6M | 44% float / 2.00B cap |
+| Circulating / total / cap | ≈ 879.5M / 2.00B / 2.00B | CoinGecko |
 | Market-cap rank | 254 | CoinGecko |
-| Vs ATH | ≈ $9.52 (2021-11-25), -99% | CoinGecko |
+| Vs ATH | ATH $9.52 (2021-11-25), about −99% | CoinGecko |
 | 7d / 30d | +2.2% / +13.4% | CoinGecko |
-| 24h volume | ≈ $11.22M | CoinGecko |
-| Immutable zkEVM DeFi TVL | ≈ $11.02M | DefiLlama |
-| Mcap / TVL | ≈ 10.08× | calculated |
+| 24h volume / turnover | ≈ $11.22M / ≈ 10.1% | CoinGecko |
+| Immutable zkEVM TVL | ≈ $11.02M | DefiLlama chains |
+| Cap / TVL | ≈ 10.1× | Calculated |
+| 30-day chain fees | ≈ $433 | DefiLlama fees (as-of 12 Sep) |
+| Ronin TVL / 30d fees | ≈ $10.8M / $1,629 | DefiLlama |
 
-Timezone is the snapshot UTC stamp (2026-09-10 00:03 UTC). Empty cells stay empty.
+As-of **2026-09-10 00:03 UTC**. Fees are chain-level.
 
-## Position de marché : l’échelle vérifiable
+## Tape : cap près de SAND, volume déjà derrière
 
-Immutable enters this sample on mcap ≈ $111.06M and 24h volume ≈ $11.22M. For game tokens, separate the traded ticket from sourced game cash flow.
+Four GameFi tickets on 10 Sep: AXS about **$161.9M / $18.28M / 11.3%**; IMX **$111.1M / $11.22M / 10.1%**; SAND **$109.2M / $28.25M / 25.9%**; GALA **$88.56M / $29.46M / 33.3%**. SAND and GALA are not larger than IMX. Their tape is more than 2×. RON about **$40.3M / $0.72M** is thinner still — it cannot be used to lift IMX.
 
-## Jeton : l’offre avant les slogans
+The 30-day +13.4% does not match same-window AXS about +8.6% or SAND −6.6%. The bounce did not thicken the book. Treat it as risk appetite, not “games are back.”
 
-Total supply ≈ 2.00B, max ≈ 2.00B, float about 44%. A hard cap is not undervaluation; it only makes the dilution ceiling checkable.
+<figure>
+  <img src="../imx/gamefi-tape.png" alt="AXS, IMX, SAND and GALA cap versus 24h volume" />
+  <figcaption>Figure 1. GameFi, 10 Sep. IMX cap sits next to SAND; 24h volume is about 40% of SAND and GALA.</figcaption>
+</figure>
 
-## On-chain : uniquement les chiffres
+Take: checkable liquidity exists, and it is already the weak tape in the band. Anyone adding “GameFi leader” onto IMX needs volume back above SAND first.
 
-Sourced lockup is ≈ $11.02M (Immutable zkEVM DeFi TVL). Until fees or studio disclosure are stable, GameFi is not written up as a cash cow.
+## On-chain : lockup dans la bande Ronin, frais négligeables
 
-## Score d’achat 5.1 / 10
+Immutable zkEVM TVL about **$11.02M**, Ronin about **$10.8M**. Both game sidechains sit in the ten-million-dollar band — not “the product has grown” against an $111M cap. Thirty-day Immutable zkEVM chain fees about **$433**, Ronin about **$1,629**. Against Bitcoin’s ~**$6.74M** and Ethereum’s ~**$11.38M** in the same window, there is almost no fee line.
+
+Stables on Immutable zkEVM about **$11.32M**, the same order as TVL: a large piece of the lockup is parked stables, not a game economy that grew deposits. Float 44%, about 1.12B still outside, about **$142M** at the print — thicker than today’s whole circulating cap. A hard cap is not the end of supply pressure.
+
+<figure>
+  <img src="../imx/tvl-vs-fees.png" alt="Immutable zkEVM versus Ronin TVL and 30-day fees" />
+  <figcaption>Figure 2. Both game sidechains sit near $11M TVL; Immutable’s 30-day chain fees are about $433.</figcaption>
+</figure>
+
+Take: the chain is still there. Writing $11M of lockup and $433 of fees as a productized cash cow fights the print.
+
+## X : 258 posts, dominance 0,1%
+
+LunarCrush (12 Sep): $IMX social dominance **0.1%**, sentiment **83%**, about **258** posts and **410k** engagements in 24h. A small room, constructive mood — in-circle density, not a global tape. AltIndex has **no $IMX page**; no cashtag is invented. Against same-window $BTC about 356/day and LunarCrush dominance 27.8%, IMX attention is a rounding error.
+
+No checkable studio take, MAU or royalty print. The games story stops at “there is a chain.” It cannot be filled in as fees.
+
+Take: X adds no points. 83% sentiment is a small sample. 0.1% dominance is the position.
+
+## Score d’achat 5.0 / 10
 
 | Factor | Weight | Score | Weighted | Note |
 | --- | ---: | ---: | ---: | --- |
-| Market position & liquidity | 20% | 4.7 | 0.94 | Rank and 24h volume |
-| Fees and capture | 15% | 3.6 | 0.54 | Revenue or fees; cut if absent |
-| Token and valuation | 15% | 5.4 | 0.81 | Hard cap and float |
-| Product | 15% | 5.2 | 0.78 | Lane floor; no invented roadmap |
-| Competition | 15% | 5.4 | 0.81 | Weaker rank, weaker score |
-| Risk | 10% | 5.8 | 0.58 | Extra cut for memes |
-| Optionality | 10% | 6.0 | 0.60 | TVL only if sourced |
-| **Total** | **100%** | | **5.06** | **hold / wait** |
+| Market position & liquidity | 20% | 5.2 | 1.04 | Rank 254; tape trails SAND/GALA |
+| Fees and capture | 15% | 3.2 | 0.48 | 30-day chain fees about $433 |
+| Token and valuation | 15% | 5.0 | 0.75 | Hard cap, only 44% float; +13% in 30 days |
+| Product | 15% | 6.0 | 0.90 | zkEVM is still there, not a pure story ticket |
+| Competition | 15% | 5.0 | 0.75 | AXS is larger; SAND/GALA tape is thicker |
+| Risk | 10% | 5.0 | 0.50 | ~$142M of notional unlock left |
+| Optionality | 10% | 5.6 | 0.56 | Games/L2 option exists; fees have not grown |
+| **Total** | **100%** | | **4.98** | **Hold / wait** |
 
-5.1 is the rounded weighted total. Missing data is scored conservatively; narrative does not add points.
+5.0 sits above SHIB’s 4.4 because a checkable chain exists; below UNI / AAVE because the token keeps almost no fees. Revisit toward 5.5 if volume reclaims SAND and 30-day fees leave “ignorable”; open lower if TVL loses $10M or unlocks become a persistent outflow.
 
-## Risques principaux
+## Principaux risques
 
-- **Volatility:** 24h volume ≈ $11.22M; a tape can move more than any score.
-- **Definitions:** Market cap, TVL, fees and revenue are not interchangeable. Empty cells stay undisclosed.
-- **Stale prints:** Figures are only good as of 2026-09-10 00:03 UTC.
-- **Mcap dwarfs TVL:** A large slice of the price tag is not explained by on-chain books.
+- **Fee line near zero:** $433 over 30 days is not capitalizable cash flow.
+- **Unlock thickness:** 44% circulating; leftover notional about $142M.
+- **Tape lags:** SAND and GALA print more than 2× the volume in the same band.
+- **ATH is a 2021 extreme:** −99% is not “cheap”; the cycle already passed.
+- **No cashtag series:** AltIndex has no page; attention is the 0.1% dominance print.
 
-## Liste de suivi
+## À suivre
 
-1. Whether CoinGecko rank and 24h volume still support the liquidity assumption.
-2. Whether circulating, total and max supply (if any) jump without explanation.
-3. Whether Immutable zkEVM DeFi TVL is rising, flat or bleeding.
-4. Comparable prints in later notes, not social heat.
+1. Whether Immutable zkEVM TVL holds $10M, or shrinks with Ronin.
+2. Whether 30-day chain fees leave the hundreds-of-dollars band.
+3. Whether 24h volume versus SAND / GALA moves back toward 1.
+4. Whether circulating share stays near 44%, or unlocks jump.
+5. Whether LunarCrush dominance stays near 0.1%, or a checkable heat appears.
 
 ## Sources
 
-- CoinGecko; DefiLlama chains (as-of 2026-09-10 00:03 UTC)
+- CoinGecko: IMX / AXS / SAND / GALA / RON (2026-09-10 history and 00:03 UTC snapshot)
+- DefiLlama: Immutable zkEVM and Ronin TVL; chain-level fees
+- LunarCrush: $IMX social dominance, sentiment and posts (2026-09-12)
+- AltIndex: no $IMX page; not used as a cashtag print
 
 ## Avertissement
 
-Written by DRLabs for research and discussion. **Not investment, financial or legal advice, and not an offer.** Crypto can cause partial or total loss. The 5.1/10 buy score is a subjective reading of public data, not an agency rating. Full terms: [About DRLabs](../../about.html#disclaimer).
+This note is by DRLabs for research and information only. **It is not investment, financial or legal advice, and not an offer or invitation to buy any security or cryptoasset.** Crypto is volatile and can cause partial or total loss of principal. The 5.0/10 buy score is a subjective read of public data, not a rating-agency conclusion. Full terms are on [About DRLabs](../../about.html#disclaimer).
