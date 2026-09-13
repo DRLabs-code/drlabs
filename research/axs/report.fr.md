@@ -1,101 +1,103 @@
 ---
-title: "Note AXS : the chain is still there; fees and tape already left for peers"
-description: "As of 2026-09-13 00:03 UTC, AXS is about ≈ $0.9322 with circulating mcap ≈ $162.60M, rank 200; Ronin DeFi TVL ≈ $10.89M. Buy score 4.9/10, avoid."
+title: "Note AXS : la marque est encore au tableau ; le lock Ronin et la chaleur sociale ont quitté le cadre"
+description: "As of 2026-09-13 00:03 UTC, AXS is about $0.9322 with ~$162.60M circulating mcap, rank 200. Ronin DeFi TVL is about $10.89M; 30-day Ronin chain fees about $1,629. Buy score 4.8/10, avoid."
 date: 2026-09-13
+asOf: "2026-09-13 00:03 UTC"
 ticker: AXS
-score: 4.9
+score: 4.8
 tags:
   - GameFi
-conclusion: "Axie Infinity still has a checkable chain/lockup ≈ $10.89M, but 30-day fees ≈ $1,629.00. SAND already took the tape in-band. Cap ≈ $162.60M is still a GameFi ticket, not a cash cow. Buy score 4.9 / 10 (avoid). The score is this ticket’s seat after tape, lockup, fees and internet heat are split. Not a trade order."
+  - AXS
+conclusion: "The Axie brand is still here. Cap about $162.60M still sits above IMX, SAND and GALA, but 24h volume about $9.01M already trails SAND and GALA. Ronin DeFi TVL about $10.89M; 30-day chain fees about $1,629 are a chain-level line, not an AXS dividend. Social dominance 0.00%. About −99% from ATH. Buy score 4.8/10, avoid."
 ---
-
 ## Conclusion
 
-Axie Infinity still has a checkable chain/lockup ≈ $10.89M, but 30-day fees ≈ $1,629.00. SAND already took the tape in-band. Cap ≈ $162.60M is still a GameFi ticket, not a cash cow.
+Axie Infinity is still on CoinGecko’s GameFi board. On-chain and social heat are not. Circulating mcap about **$162.60M** still sits above IMX about **$107.06M**, SAND about **$105.60M** and GALA about **$83.73M** — the most expensive ticket at the table. 24h volume is only about **$9.01M**, turnover about **5.5%**, behind SAND about **$14.00M** (about **13.3%**) and GALA about **$10.12M** (about **12.1%**). Largest cap, not the thickest tape.
 
-Price ≈ $0.9322, about -99% vs ATH ≈ $164.90 (2021-11-06). 7d -1.9%, 30d +7.6%. LunarCrush social dominance **0.00%**, sentiment **93%**. Heat is a pricing dimension. It does not discount into cash flow, but ignoring it misreads the short tape.
+Price about **$0.9322**, roughly **99%** below the 6 Nov 2021 ATH of **$164.90**. Thirty days only **+7.6%**, seven days **−1.9%** — no independent tape. Ronin DeFi TVL about **$10.89M**, mcap / TVL about **14.94×**. 30-day Ronin chain fees about **$1,629** — a chain-level line, **not** an AXS protocol dividend or holder capture. LunarCrush social dominance **0.00%**, sentiment **93%**: the mood looks hot; dominance is the seat, and the seat is zero.
 
-**Buy score 4.9 / 10 (avoid).** The score is this ticket’s seat after tape, lockup, fees and internet heat are split. Not a trade order.
+**Buy score 4.8 / 10 (avoid).** The brand is still here. Lockup, fees and heat are not. Tradable; not a value book.
 
-## Instantané
+## Instantané (2026-09-13)
 
 | Metric | Value | Source |
 | --- | --- | --- |
 | AXS price | ≈ $0.9322 | CoinGecko |
 | Circulating mcap / FDV | ≈ $162.60M / ≈ $251.70M | CoinGecko |
-| Circ / total / max | ≈ 174.43M / ≈ 270.00M / ≈ 270.00M | CoinGecko |
+| Circulating / total / max | ≈ 174.43M / ≈ 270.00M / ≈ 270.00M | CoinGecko |
 | Market-cap rank | 200 | CoinGecko |
-| Vs ATH | ≈ $164.90 (2021-11-06), -99% | CoinGecko |
-| 7d / 30d | -1.9% / +7.6% | CoinGecko |
+| Vs ATH | ATH $164.90 (2021-11-06), about −99% | CoinGecko |
+| 7d / 30d | −1.9% / +7.6% | CoinGecko |
 | 24h volume / turnover | ≈ $9.01M / ≈ 5.5% | CoinGecko |
 | Ronin DeFi TVL | ≈ $10.89M | DefiLlama |
-| Mcap / TVL | ≈ 14.94× | calculated |
-| 30-day fees | ≈ $1,629.00 | DefiLlama fees |
-| 30-day protocol revenue | ≈ $1,629.00 | DefiLlama revenue |
-| Fee capture | ≈ 100.0% | revenue / fees |
-| LunarCrush social dominance | 0.00% | LunarCrush |
+| Market cap / TVL | ≈ 14.94× | 162.60 / 10.89 |
+| 30-day Ronin chain fees | ≈ $1,629 (chain-level, not an AXS dividend) | DefiLlama fees |
+| LunarCrush social dominance | 0.00% (sentiment 93%) | LunarCrush |
 
-As-of 2026-09-13 00:03 UTC. Empty cells stay empty.
+As-of **2026-09-13 00:03 UTC**. Fees are Ronin chain-level. DefiLlama also prints revenue as $1,629 — that means there is no separate protocol-take cell, not that AXS holders received the fees.
 
-## Tape: who in the band is still traded
+## Tape : plus grosse cap, le turnover est déjà parti chez SAND et GALA
 
-AXS cap ≈ $162.60M, 24h volume ≈ $9.01M, turnover about 5.5%. Peers: IMX ≈ $107.06M / ≈ $4.23M (turnover ~4.0%); SAND ≈ $105.60M / ≈ $14.00M (turnover ~13.3%); GALA ≈ $83.73M / ≈ $10.12M (turnover ~12.1%). SAND already took the tape — cap rank is not tape rank.
+AXS cap about **$162.60M**, 24h volume about **$9.01M**, turnover about **5.5%**. Same table: IMX about **$107.06M / $4.23M** (about 4.0%), SAND about **$105.60M / $14.00M** (about 13.3%), GALA about **$83.73M / $10.12M** (about 12.1%). The name is still the dearest; what gets traded is SAND and GALA. A 30-day +7.6% does not refill the **99%** drop from $164.90, and it does not refill a tape that already left.
 
-The 30-day +7.6% is risk appetite. Anyone adding it straight onto fundamentals needs the tape or the fees to thicken with it.
+<figure>
+  <img src="../axs/gamefi-tape.png" alt="Circulating mcap versus 24h volume for AXS, IMX, SAND and GALA" />
+  <figcaption>Figure 1. GameFi mcap vs 24h volume. AXS is the largest cap; its tape trails SAND about $14.00M and GALA about $10.12M.</figcaption>
+</figure>
 
-## On-chain: whether lockup and fees have grown
+Take: anyone still paying an “Axie is the GameFi leader” premium needs volume to thicken past SAND again, not just the name still on the board.
 
-Sourced lockup is ≈ $10.89M (Ronin DeFi TVL). 30-day fees ≈ $1,629.00. Peers: IMX ≈ $107.06M / ≈ $4.23M (turnover ~4.0%); SAND ≈ $105.60M / ≈ $14.00M (turnover ~13.3%); GALA ≈ $83.73M / ≈ $10.12M (turnover ~12.1%).
+## Ronin : lock en dizaines de millions, frais en milliers
 
-Take: supply and fees answer dilution and split, not the story.
+The checkable lockup is Ronin DeFi TVL about **$10.89M**. A $162.60M cap on $10.89M of lockup is about **15×**. 30-day fees about **$1,629**. That scale says the game chain is still producing blocks. It does not say AXS holders are collecting rent.
 
-## X: whether the games story is checkable chatter
+Do not write “revenue $1,629, capture 100%” as a fundamental. DefiLlama filling chain fees and chain revenue with the same number only means the print has no separate protocol take. It does not mean the token received every dollar. AXS has a hard cap of **270M**, circulating about **174.43M** (about 65%), FDV about **$251.70M** — the supply book is clear; it does not explain why a brand premium still sits at $163M.
 
-LunarCrush social dominance **0.00%**, sentiment **93%**. Heat is a pricing dimension. It does not discount into cash flow, but ignoring it misreads the short tape.
+Take: Ronin is alive, but it is now a tens-of-millions lockup and a thousands-of-dollars fee chain. Pricing AXS as a 2021 game kingdom is the opposite of this book.
 
-Take: heat is a real pricing dimension. Missing series stay undisclosed; a live series must sit next to volume.
+## X : dominance nulle ; un sentiment à 93% est illisible
 
-## Score d’achat
+This snapshot has no checkable AltIndex $AXS cashtag, so it is left blank. LunarCrush social dominance **0.00%**, sentiment **93%**. A small-cap ticket can print hot sentiment off a handful of posts; dominance that cannot enter 0.01% means the wider board is not talking about it. The 30-day +7.6% is residual noise, not an attention tape.
+
+Take: internet voice matters for coin prints. AXS no longer has one. Sentiment at 93% is not heat; dominance is the seat.
+
+## Score d’achat 4.8 / 10
 
 | Factor | Weight | Score | Weighted | Note |
 | --- | ---: | ---: | ---: | --- |
-| Market position & liquidity | 20% | 4.7 | 0.94 | rank 200, turnover  5.5%, tape trails  SAND |
-| Fees and capture | 15% | 3.4 | 0.51 | 30d fees ≈ $1,629.00, capture ~100.0% |
-| Token and valuation | 15% | 5.0 | 0.75 | Hard cap, float ~65%; 30d +7.6% |
-| Product | 15% | 5.6 | 0.84 | Chain is there; fee line is near zero |
-| Competition | 15% | 5.2 | 0.78 | peers IMX, SAND, GALA; tape at  SAND |
-| Risk | 10% | 5.8 | 0.58 | Cycle and policy risk, not a template cut |
-| Optionality | 10% | 5.2 | 0.52 | Heat can lift the tape; it does not replace fees |
-| **Total** | **100%** | | **4.92** | **avoid** |
+| Market position & liquidity | 20% | 5.4 | 1.08 | Largest cap; tape trails SAND / GALA |
+| Fees and capture | 15% | 3.2 | 0.48 | Ronin 30-day chain fees about $1,629 |
+| Token and valuation | 15% | 5.0 | 0.75 | Hard cap; about −99% from ATH |
+| Product | 15% | 5.4 | 0.81 | Brand remains; lockup only about $10.89M |
+| Competition | 15% | 5.0 | 0.75 | Cap above IMX; tape thinner than SAND |
+| Risk | 10% | 5.0 | 0.50 | Social dominance 0.00% |
+| Optionality | 10% | 4.4 | 0.44 | 93% sentiment is a tiny sample |
+| **Total** | **100%** | | **4.81** | **Avoid** |
 
-4.9 follows this note’s ledger, not a lane floor. Tape, fees and internet heat move the line items.
+4.8 is the brand, the ATH stub and zero heat — not IMX’s sentences with a new ticker. Revisit the hold / wait band only if volume thickens past SAND and dominance leaves zero; if Ronin TVL slips again and fees stay in the thousands, there is no case to lift the score.
 
-## Principaux risques
+## Risques principaux
 
-- **Volatility:** 24h volume ≈ $9.01M; a tape can move more than any score.
-- **Stale prints:** Figures are only good as of 2026-09-13 00:03 UTC.
-- **Do not mix ledgers:** cap, TVL, fees, revenue and heat each get their own column.
-- **Do not mix ledgers:** cap, TVL, fees, revenue and heat each get their own column.
-- **Do not mix ledgers:** cap, TVL, fees, revenue and heat each get their own column.
+- **Brand premium:** cap still sits above IMX, SAND and GALA. The name is dearer than the book.
+- **Lockup bleeding:** if Ronin TVL stays in the tens of millions, 15× looks even more expensive.
+- **Misread fees:** writing $1,629 of chain fees as an AXS dividend misstates holder rights.
+- **ATH stub:** about −99% from the high. A 7.6% bounce does not refill a cycle loss.
+- **Zero heat:** dominance 0.00%. There is no attention floor.
 
-## À suivre
+## Liste de suivi
 
-1. Whether 24h volume and turnover still support the liquidity seat.
-2. Whether circulating, total and max supply (if any) jump.
-3. Whether Ronin DeFi TVL is rising, flat or bleeding.
-4. Whether 30-day fees and capture leave this snapshot.
-5. Whether LunarCrush dominance or AltIndex cashtags are still live, stale, or move with the tape.
+1. Whether 24h volume thickens past SAND and GALA again.
+2. Whether Ronin DeFi TVL leaves the $10M zone.
+3. Whether Ronin 30-day chain fees leave the thousands (still read as a chain line, not an AXS dividend).
+4. Whether LunarCrush social dominance leaves 0.00%.
+5. Whether circulating supply moves toward the 270M cap on unlocks.
 
 ## Sources
 
-- CoinGecko
-- DefiLlama chains
-- CoinGecko peers
-- DefiLlama chain fees
-- DefiLlama chain revenue
-- LunarCrush
-- as-of 2026-09-13 00:03 UTC
+- CoinGecko: price, cap, volume, ATH, peer tape (2026-09-13 00:03 UTC)
+- DefiLlama: Ronin DeFi TVL, chain-level fees (same snapshot)
+- LunarCrush: $AXS social dominance and sentiment (2026-09-13)
 
 ## Avertissement
 
-Written by DRLabs for research and discussion. **Not investment, financial or legal advice, and not an offer.** Crypto can cause partial or total loss. The 4.9/10 buy score is a subjective reading of public data. Full terms: [About DRLabs](../../about.html#disclaimer).
+This note is by DRLabs for research and information only. **It is not investment, financial or legal advice, and not an offer or invitation to buy any security or cryptoasset.** Crypto is volatile and can cause partial or total loss of principal. The 4.8/10 buy score is a subjective read of public data, not a rating-agency conclusion. Full terms are on [About DRLabs](../../about.html#disclaimer).
