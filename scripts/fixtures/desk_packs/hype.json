@@ -1,0 +1,322 @@
+{
+ "ticker": "HYPE",
+ "name": "Hyperliquid",
+ "cg_id": "hyperliquid",
+ "lane": "major",
+ "as_of": "2026-10-08 11:34 UTC",
+ "day": "2026-10-08",
+ "cg": {
+  "price": 85.96,
+  "mcap": 19127099074.0,
+  "fdv": 82142527359.0,
+  "volume": 744942603.0,
+  "rank": 11,
+  "circ": 222445714.07414138,
+  "total": 955307079.4341414,
+  "max_supply": 1000000000.0,
+  "max_infinite": false,
+  "ath": 97.96,
+  "ath_date": "2026-09-23",
+  "ath_chg": -12.25206,
+  "atl": 3.81,
+  "atl_date": "2024-11-29",
+  "chg_7d": -4.1561,
+  "chg_30d": 2.68149,
+  "chg_60d": 57.69094,
+  "chg_200d": 126.26107,
+  "chg_1y": 84.84058,
+  "categories": [
+   "Decentralized Exchange (DEX)",
+   "Smart Contract Platform",
+   "Exchange-based Tokens",
+   "Decentralized Finance (DeFi)",
+   "Derivatives",
+   "Perpetuals",
+   "Layer 1 (L1)",
+   "Proof of Stake (PoS)",
+   "Hyperliquid Ecosystem",
+   "Governance"
+  ],
+  "votes_up": 52.38,
+  "watchlist": 202214.0,
+  "genesis": null,
+  "platform": "hyperliquid",
+  "hashing": null
+ },
+ "sources": [
+  "CoinGecko coin + 365d chart",
+  "CoinGecko sector list (peers)",
+  "DefiLlama chain TVL / fees / DEX / stablecoins",
+  "alternative.me Fear & Greed",
+  "CoinGecko trending search",
+  "LunarCrush",
+  "Headlines: CoinDesk / Cointelegraph / The Block / Decrypt / CryptoSlate RSS + Google News search",
+  "DefiLlama unlock schedule (emissions dataset)",
+  "DefiLlama hacks database"
+ ],
+ "tags": [
+  "DeFi",
+  "L1",
+  "Exchange"
+ ],
+ "hist": {
+  "days": 365,
+  "vol30": 69.70390250892102,
+  "vol90": 73.41505583196741,
+  "ma50": 85.18242715195949,
+  "ma200": 61.456977593884275,
+  "hi90": 97.19050715676083,
+  "lo90": 52.15632485410943,
+  "mdd90": -22.6718553592149,
+  "ret90": 28.138548587445733,
+  "ret180": 106.64800027921726,
+  "vol7_avg": 816479115.2879456,
+  "vol30_avg": 1068939802.4707361,
+  "circ_chg_90d": 0.008151393342026303,
+  "circ_chg_365d": -17.511467403628522
+ },
+ "btc": {
+  "cg": "bitcoin",
+  "ticker": "BTC",
+  "name": "Bitcoin",
+  "price": 82473.0,
+  "mcap": 1657858473156.0,
+  "fdv": 1657858473156.0,
+  "volume": 34022434109.0,
+  "rank": 1,
+  "chg_7d": -1.2771,
+  "chg_30d": 5.023,
+  "chg_200d": 20.1855,
+  "chg_1y": -32.5011,
+  "ath_chg": -34.58683
+ },
+ "eth": {
+  "cg": "ethereum",
+  "ticker": "ETH",
+  "name": "Ethereum",
+  "price": 2536.43,
+  "mcap": 309822362398.0,
+  "fdv": 309822362398.0,
+  "volume": 14538502103.0,
+  "rank": 2,
+  "chg_7d": -5.1946,
+  "chg_30d": 2.3802,
+  "chg_200d": 21.6149,
+  "chg_1y": -43.137,
+  "ath_chg": -48.71812
+ },
+ "peers": [
+  {
+   "cg": "uniswap",
+   "ticker": "UNI",
+   "name": "Uniswap",
+   "price": 7.73,
+   "mcap": 4828916331.0,
+   "fdv": 6854735351.0,
+   "volume": 620546005.0,
+   "rank": 25,
+   "chg_7d": -14.0884,
+   "chg_30d": 8.8033,
+   "chg_200d": 122.8889,
+   "chg_1y": -0.5219,
+   "ath_chg": -82.79722,
+   "core": false,
+   "meme": false,
+   "tvl": 3957431459.0251336,
+   "fees30": 150264011.19,
+   "rev30": 11923233.0
+  },
+  {
+   "cg": "aster-2",
+   "ticker": "ASTER",
+   "name": "Aster",
+   "price": 0.708478,
+   "mcap": 1922632562.0,
+   "fdv": 5521222390.0,
+   "volume": 109031333.0,
+   "rank": 52,
+   "chg_7d": -4.077,
+   "chg_30d": -7.6614,
+   "chg_200d": 5.5731,
+   "chg_1y": -64.9229,
+   "ath_chg": -70.58715,
+   "core": false,
+   "meme": false,
+   "tvl": 788557324.0750062,
+   "fees30": 5358266.0,
+   "rev30": null
+  },
+  {
+   "cg": "jupiter-exchange-solana",
+   "ticker": "JUP",
+   "name": "Jupiter",
+   "price": 0.370901,
+   "mcap": 1231658971.0,
+   "fdv": 2545969054.0,
+   "volume": 177393485.0,
+   "rank": 71,
+   "chg_7d": 17.4872,
+   "chg_30d": 54.1,
+   "chg_200d": 104.3535,
+   "chg_1y": -14.2615,
+   "ath_chg": -81.45509,
+   "core": false,
+   "meme": false,
+   "tvl": 2662424950.333787,
+   "fees30": 18051109.42,
+   "rev30": 6130023.36
+  },
+  {
+   "cg": "lighter",
+   "ticker": "LIT",
+   "name": "Lighter",
+   "price": 3.55,
+   "mcap": 888092490.0,
+   "fdv": 3552369960.0,
+   "volume": 85003961.0,
+   "rank": 84,
+   "chg_7d": -9.7996,
+   "chg_30d": -25.4429,
+   "chg_200d": 253.5614,
+   "chg_1y": null,
+   "ath_chg": -54.808,
+   "core": false,
+   "meme": false,
+   "tvl": 762787265.9011698,
+   "fees30": 5489862.0,
+   "rev30": 4594967.0
+  }
+ ],
+ "sector": {
+  "median_30d": 2.8632,
+  "median_1y": -58.5878,
+  "wavg_ex_30d": 17.18282774892554,
+  "n": 99,
+  "cat_id": "decentralized-exchange",
+  "cat_name": "Decentralized Exchange (DEX)",
+  "dropped": 1,
+  "dropped_ids": [
+   "pump-fun"
+  ],
+  "pos": 1
+ },
+ "protocol": null,
+ "chain": {
+  "name": "Hyperliquid L1",
+  "tvl": 1103359243.4200168,
+  "rank": 8,
+  "n": 328,
+  "tvl_chg_30d": -26.22871127399503,
+  "tvl_chg_90d": -22.95558231621876,
+  "tvl_chg_365d": -51.91464870047797,
+  "fees30": 593034.0,
+  "fees_prev30": 1713361.0,
+  "fees7": 87973.0,
+  "rev30": 593034.0,
+  "rev_prev30": 1713361.0,
+  "rev7": 87973.0,
+  "dex30": 9825386919.240002,
+  "dex_prev30": 10822795469.169992,
+  "dex7": 1827747368.469999,
+  "stables": 7313708803.814544
+ },
+ "social": {
+  "fng": {
+   "now": 64.0,
+   "label": "Greed",
+   "avg30": 67.3
+  },
+  "trending_pos": null,
+  "trending_n": 15,
+  "lunar": {
+   "dominance": 2.1,
+   "sentiment": 81.0,
+   "url": "https://lunarcrush.com/coins/hype/hyperliquid"
+  }
+ },
+ "profile": {
+  "about": "Hyperliquid is a layer one (L1) blockchain best known for perpetual futures and spot trading.",
+  "homepage": "https://app.hyperliquid.xyz/trade",
+  "whitepaper": "https://hyperliquid.gitbook.io/hyperliquid-docs",
+  "x": "HyperliquidX",
+  "github": null,
+  "genesis": null
+ },
+ "news": [
+  {
+   "title": "Wall Street wealth creation model is unsustainable for most participants: Hyperliquid CEO",
+   "url": "https://cointelegraph.com/news/wall-street-wealth-creation-unsustainable-hyperliquid-ceo?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+   "outlet": "Cointelegraph",
+   "date": "2026-10-07",
+   "tags": []
+  },
+  {
+   "title": "Hyperliquid Labs Is Registered in Singapore, but the Blockchain Is a Different Story",
+   "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeUpJaHhEREM0bXJXMEhmMUpKVzl6QTNWS0FGWWh6QU9uTzdkc1pXQzNkOGdybWhtamRfSG9NZnBjU0JvUW8xRmFDcmttV05lZnBzb3A3VjBMR3RhY1JuRW55OUJKTmhIdVYyemZvRXNySU5vbndSUVNJUXV4NG9KQ05LbFBUdklIWGZZMWthb21vdXQ0WDZSU29NWk9ScUF6TkNlV0JHNkc?oc=5",
+   "outlet": "Yahoo Finance",
+   "date": "2026-10-07",
+   "tags": []
+  },
+  {
+   "title": "‘Every single exchange’ will have to adopt public blockchain infrastructure to compete, Hyperliquid Policy Center CEO says",
+   "url": "https://www.theblock.co/news/regulation/2026-10-07-hyperliquid-policy-center-jake-chervinsky-interview-417896",
+   "outlet": "The Block",
+   "date": "2026-10-07",
+   "tags": [
+    "opinion"
+   ]
+  },
+  {
+   "title": "Hyperliquid Calls Singapore Home — But Does It Have a License?",
+   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPV2RpYU4za0RJR09pTUFoUU5TNk5OVzVqT1RibUk1WWozY1BTc1pYcEhBUXR5MGhyVFFXSjFxam9Da0o5TTNVLXZHOTB2bXVfbW9wQVBGcGRCOVRKdDE0TEtIeWowOXJ2MUliblN5T19nY2Qyb1I2NTdBc0dEVWlYQ2htX1dNZUlIT3Q4cXRQalY5MEdabXFpcjgzWWhJcklXNk5zSA?oc=5",
+   "outlet": "Yahoo Finance",
+   "date": "2026-10-06",
+   "tags": []
+  },
+  {
+   "title": "How Hyperliquid defied crypto’s DAT death spiral—and built the industry’s only flourishing digital asset treasury",
+   "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQd3JQcVBfRmdkblplZkdTQkhYQ0hDMl9OWFkzZ2d3ay1GRDlRTWdlZjFwZGcyYVcwYkhpWjRYekFkcG9xa013amlpQVRKREIyc0ZzdzUydFUwcDQ1aXNpU0l5QXk2V3NuVEJaZ2hwVWxlVUhzZXdxVjdPal84cTlDRXNOZFNfOWdxcHRJejZmd0VSLW8xTDlET3l6aHdZZWYwUFVZ?oc=5",
+   "outlet": "Fortune",
+   "date": "2026-10-05",
+   "tags": [
+    "institutional"
+   ]
+  },
+  {
+   "title": "Hyperliquid price outlook: Can HYPE break resistance as HPC seeks EU clarity?",
+   "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBYTE1RUXdnMXQ4QmtablJhOTE5OG9sc2hnOUswQjVBVUxSNHJzLW5yNHVMaFFPeVhVdnZmaWhBa2kyQmhMeE1XM1Z5eE1xeGY2MzdnUmhqS1VJNU9uMGlHQlNVczRQb09FOTF6UDlOVFlhbWhQb3hSZjBB?oc=5",
+   "outlet": "crypto.news",
+   "date": "2026-10-01",
+   "tags": [
+    "opinion"
+   ]
+  }
+ ],
+ "news_checked": true,
+ "unlocks": {
+  "slug": "hyperliquid",
+  "url": "https://defillama.com/unlocks/hyperliquid",
+  "unlocked_now": 390867246.98746365,
+  "next30": 25558.224620532244,
+  "next90": 25558.224620532244,
+  "schedule_ends": "2026-10-09",
+  "top_label90": "Validator Rewards",
+  "next_cliff": null,
+  "next30_pct_circ": 0.011489645789270484,
+  "next90_pct_circ": 0.011489645789270484,
+  "schedule_vs_circ": 1.7571354369056857,
+  "next30_usd": 2196984.9883809513,
+  "next90_usd": 2196984.9883809513
+ },
+ "hacks": [
+  {
+   "date": "2023-06-15",
+   "name": "Hyperliquid",
+   "amount": 37000,
+   "technique": "Risk Parameter Abuse",
+   "classification": "Market Manipulation",
+   "returned": null
+  }
+ ],
+ "slug": "hype"
+}

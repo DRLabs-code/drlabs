@@ -1,104 +1,120 @@
 ---
-title: "ILV research note: protocol fees are too small to matter, but outrunning Bitcoin over 30 days"
-description: "As of 2026-10-08 11:10 UTC, ILV is about $3.830 with mcap $31.71M, rank 654. Buy score 5.5/10, hold / wait."
+title: "ILV research note: ILV is earning protocol fees too small to matter, while outrunning Bitcoin over 30 days"
+description: "As of 2026-10-08 11:47 UTC, ILV is about $3.850 with mcap $31.93M, rank 652. Buy score 5.5/10, hold / wait."
 date: 2026-10-08
 ticker: ILV
 score: 5.5
 tags:
   - GameFi
-conclusion: "Bottom line on Illuvium (ILV): protocol fees are too small to matter (30d fees only $3.09K), yet outrunning Bitcoin over 30 days (+10.6% vs BTC over 30d). Buy score 5.5 / 10 (hold / wait). Bull and bear evidence roughly cancel; it belongs on a watchlist until the key numbers pick a side."
+conclusion: "Illuvium (ILV) needs to be taken apart: earning protocol fees too small to matter (30d fees only $3.09K), but outrunning Bitcoin over 30 days (+11.4% vs BTC over 30d). Buy score 5.5 / 10 (hold / wait): No bet on ILV yet; we watch the triggers listed below first."
 ---
 
-## The call
+## Research take
 
-Published 8 Oct 2026 (Perth time) | data as of 2026-10-08 11:10 UTC
+Published 8 Oct 2026 (Perth time) | data as of 2026-10-08 11:47 UTC
 
-Bottom line on Illuvium (ILV): protocol fees are too small to matter (30d fees only $3.09K), yet outrunning Bitcoin over 30 days (+10.6% vs BTC over 30d).
+Illuvium (ILV) needs to be taken apart: earning protocol fees too small to matter (30d fees only $3.09K), but outrunning Bitcoin over 30 days (+11.4% vs BTC over 30d).
 
-On valuation, worth about 12% of sector leader FLOKI (leader is 8.3× its size). On supply, an unlock tail remains (~86% float).
+Elsewhere, on supply ILV is left with an unlock tail (~86% float), and on the tape it is still far below its all-time high (-99.8% from ATH).
 
-**Buy score 5.5 / 10 (hold / wait).** Bull and bear evidence roughly cancel; it belongs on a watchlist until the key numbers pick a side.
+**Buy score 5.5 / 10 (hold / wait):** No bet on ILV yet; we watch the triggers listed below first.
 
 ## Snapshot (2026-10-08)
 
 | Metric | Value | Source |
 | --- | --- | --- |
-| Price | $3.830 | CoinGecko |
-| Mcap / FDV | $31.71M / $36.72M | CoinGecko |
-| Rank | #654 | CoinGecko |
-| 24h volume / turnover | $2.87M / 9.0% | CoinGecko |
-| 7d / 30d / 1y | +0.5% / +15.7% / -73.8% | CoinGecko |
-| 30d vs BTC | +10.6% | 计算 / calc |
+| Price | $3.850 | CoinGecko |
+| Mcap / FDV | $31.93M / $36.98M | CoinGecko |
+| Rank | #652 | CoinGecko |
+| 24h volume / turnover | $2.88M / 9.0% | CoinGecko |
+| 7d / 30d / 1y | +1.1% / +16.4% / -73.7% | CoinGecko |
+| 30d vs BTC | +11.4% | 计算 / calc |
 | From ATH | -99.8% ($1,911, 2021-11-30) | CoinGecko |
 | vs 200-day average | +3% | CoinGecko 365d |
 | 30d vol / 90d max drawdown | 100% / -14% | CoinGecko 365d |
 | Circ / total / max | 8.29M / 9.60M / — | CoinGecko |
 | 30d fees / revenue | $3.09K / $3.09K | DefiLlama |
-| P/F · P/S (annualised) | 843× · 843× | 计算 / calc |
+| P/F · P/S (annualised) | 849× · 849× | 计算 / calc |
+| Headlines naming it, 30d | 3 | RSS / Google News |
 | Fear & Greed | 64 (Greed) | alternative.me |
 
-Snapshot taken 2026-10-08 11:10 UTC. Only data actually fetched is listed; missing metrics are left out.
+Snapshot taken 2026-10-08 11:47 UTC. Only data actually fetched is listed; missing metrics are left out.
+
+## On-chain usage: earning protocol fees too small to matter
+
+Illuvium's 30-day fees on DefiLlama are $3.09K, about $37.62K annualised, close to nothing next to a $31.93M cap (mcap / annualised fees 849×). ILV is clearly not priced on on-chain revenue.
+
+For positioning: On-chain usage cannot carry ILV's valuation; price runs on narrative, expectations and flows, which can only be tracked on the tape.
+
+## News flow: 3 public headlines in 30 days, 1 on product/partnerships
+
+Over the last 30 days we found 3 headlines naming ILV in public outlets such as CoinDesk, Cointelegraph, The Block and Decrypt, including 1 on product/partnerships. ILV headlines are listed verbatim with their sources, without paraphrase.
+
+- 2026-10-07 · eGamers.io · [Illuvium: Arena v1.18.8 is live with the Abyssal Chasm Event Pass, running 19 days](https://news.google.com/rss/articles/CBMiogFBVV95cUxPRHVUTVVYNFVTaXUtd3NkRzhSaUJDRm82d1ZKTFFYUjh1VWtnVUdoN0JudlJPcVNxQS00alQ1WUk4M2Q3Sk01Y3RwVC1wWUUzSVQyMHMzclZDQVJMbmlMTHRLeWxLS2FvOFdKeURtVDFfQ1lrdFk5VWY0RGVCbjZ5UUpLOXF6S0piektBb0lOOERWbHp1b0R5RGhGOWhoVzhBTGc?oc=5)
+- 2026-09-27 · CryptoTicker · [Web3 Gaming 2026: Illuvium, Axie and Sandbox Reviewed](https://news.google.com/rss/articles/CBMifkFVX3lxTFB5dHB6Ui0taWxiT2NKekxPQko4VjlYTXRmN3c5b3BuSzJlOVhIOEoxcWtuTDJyTm5BNlZmQUNaQURGYUdKcThHVlZ1NnVYRmJXS0JNS3pHelpEb2ZsdlliRi1paldXcDdaOGJnS3MwLVR3MGZzbDNLMzFkdWVfdw?oc=5)
+- 2026-09-17 · Kalkine Media · [How Kieran Warwick Set Out to Build Blockchain Games With Illuvium](https://news.google.com/rss/articles/CBMiqwFBVV95cUxPUXFKQXJNNV9EOERsV2dIZ2c1OHREMWhldm1EVFV6UFI4TzBCRF84TVdGN0YyUEpIV2YyTlBQY0NBeXpZLV9WOE9OdVI4VmhSd1dOS0FDcDI4YVRvbVo0VFI2RGhSTGtET0VReUQtTEo0S3dXTURpbGlzUTNxUkZIaThSeURaOURrbUVhZnBELVlZc0NHUHRTUkVCazlrYWNJSGMxd21HTUgzU2c?oc=5)
+
+For positioning: The news flow has no directional effect on ILV.
+
+## KOL angle: attention coming back
+
+- **Mood:** market mood behind ILV: Fear & Greed 64 (Greed), 30-day average 67; CoinGecko's top-15 trending list does not include ILV; about 108K users have ILV on a watchlist.
+- **The crowd:** +16% in 30 days puts ILV back on some traders' watchlists; chatter is warming, but far from a consensus long.
+- **Contrarian:** as the chatter warms up, the most ignored data point on ILV is that it is earning protocol fees too small to matter (30d fees only $3.09K). How far ILV's move runs depends on when the market notices.
+- **Levels traders watch:** 200-day average $3.728, 50-day $3.482, 90-day range $2.743–$4.139; for ILV, the 200-day is the bulls' last line.
 
 ## Market structure: outrunning Bitcoin over 30 days
 
-Over 30 days ILV is +15.7% vs Bitcoin +5.0%, relative strength +10.6%. Money is choosing it, not just riding beta. ATH $1,911 (2021-11-30); price is 99.8% below it. A drawdown this deep means the last cycle's story has been repriced; a new one needs new data.
+Benchmarked to Bitcoin, ILV gained an extra +11.4% over 30 days (+16.4% vs +5.0%). Bitcoin beta does not explain that excess on ILV.
 
-Over a year ILV is -73.8% vs Bitcoin -32.5%. A year behind Bitcoin means the opportunity cost of holding it is already high; a bounce has to prove it is not a dead-cat.
+From its $1,911 ATH on 2021-11-30, ILV is down 99.8%. ILV's last-cycle story has been repriced; a new one needs new data.
 
-Our read: The tape is a headwind; patience beats courage here.
+Over twelve months ILV is -73.7% against Bitcoin's -32.5%, clearly behind by 41%. Most long-term ILV holders are under water, so rallies meet dense break-even selling.
 
-## On-chain usage: protocol fees are too small to matter
+For positioning: ILV's tape mixes "outrunning Bitcoin over 30 days" with "still far below its all-time high": the near-term signal is strong while the long-term baggage remains, so size below a clean trend name.
 
-DefiLlama records only $3.09K of 30-day fees for Illuvium, about $37.62K annualised, against a $31.71M cap: mcap / annualised fees of 843×. Price rests on expectations, not on the current business; the capture ratio is irrelevant at this base.
+## Token and supply: left with an unlock tail
 
-Our read: On-chain usage cannot carry today's valuation; price runs on narrative, expectations and flows, which can only be tracked on the tape.
+ILV's FDV is $36.98M vs circulating $31.93M; about $5.05M is not yet circulating (86% float). ILV's unlock pressure exists but is not decisive; pace matters more than size.
 
-## KOL angle: which side the mood is on
+For positioning: Supply is not ILV's main issue, but the release pace needs tracking.
 
-**Mood:** market Fear & Greed 64 (Greed, 30-day average 67); ILV is not in CoinGecko's top-15 trending; about 108K users have it on a watchlist.
+## Valuation vs peers: worth about 15% of sector leader SAND
 
-**The crowd:** ILV is in a no-argument zone, +16% over 30 days, neither FOMO nor panic; most of the voice comes from long-term holders.
-
-**Contrarian:** the market is focused on it being outrunning Bitcoin over 30 days; we care more that it is protocol fees are too small to matter (30d fees only $3.09K), which decides how far this move can run.
-
-**Levels traders watch:** 200-day average $3.728; 90-day range $2.743–$4.139. Hold the 200-day and trend followers stay on; lose it and sentiment flips fast.
-
-## Token and supply: an unlock tail remains
-
-FDV $36.72M vs circulating $31.71M; about $5.02M is not yet circulating. Unlock pressure exists but is not decisive; pace matters more than size.
-
-Our read: Supply is not the main issue, but the release pace needs tracking.
-
-## Valuation vs peers: worth about 12% of sector leader FLOKI
-
-Sector leader FLOKI is worth $261.81M, 8.3× ILV; ILV ranks #29 in the CoinGecko sector list. A follower's upside comes from share gains; its downside is the leader soaking up liquidity.
+Sector leader SAND is worth $215.06M, 6.7× ILV; ILV ranks #16 by cap among 57 filtered sector tokens. As a follower, ILV's upside comes from share gains; its downside is the leader soaking up liquidity.
 
 | Token | Mcap | 30d | Turnover |
 | --- | --- | --- | --- |
-| **ILV** | $31.71M | +15.7% | 9.0% |
-| FLOKI | $261.81M | +2.5% | 6.8% |
-| BEAT | $31.42M | -30.6% | 10.3% |
-| BORA | $31.17M | +11.3% | 0.6% |
-| CARV | $29.22M | +17.4% | 10.9% |
+| SAND | $215.06M | +77.3% | 98.7% |
+| **ILV** | $31.93M | +16.4% | 9.0% |
+| BORA | $31.22M | +11.3% | 0.5% |
+| DEP | $28.72M | +0.4% | 1.2% |
+| WAXP | $27.33M | +26.9% | 2.8% |
 
-Our read: Relative valuation is not a reason to buy or sell by itself.
+ILV's peers come from CoinGecko's "Gaming (GameFi)" list with 43 memecoins or off-sector tokens removed; core sector projects come first, the rest are filled by market-cap distance, and the leader is the largest after filtering.
 
-## Narrative and seat: seated in Gaming (GameFi)
+For positioning: ILV lacks comparable cash-flow multiples, so valuation falls back on market structure.
 
-CoinGecko files ILV under Gaming (GameFi), NFT, Metaverse, Play To Earn, ecosystems Ethereum Ecosystem, Energi Ecosystem. Backer tags include Animoca Brands, Delphi Ventures; their cost basis and exit pace matter. The sector's 30-day median is +9.1% vs Bitcoin +5.0%: the story moves with the market.
+## Narrative and seat: riding a hot narrative
 
-Our read: The narrative is neutral; the coin's own data drives price.
+CoinGecko files ILV under GameFi, NFT, Metaverse, Play To Earn, ecosystems Ethereum Ecosystem, Energi Ecosystem. ILV describes itself (CoinGecko, verbatim): “Illuvium is a decentralized franchise of interconnected, high-quality games built on the Ethereum network.” A self-description says what it wants to be; the data says how far it got. ILV's backer tags include Animoca Brands, Delphi Ventures; their cost basis and exit pace matter. The sector helps too: ILV's peers show a 30-day median / cap-weighted ex-self change of +10.7% / +39.3%, ahead of Bitcoin's +5.0%.
+
+For positioning: ILV's sector is in favour with money.
 
 ## Catalysts and risks
 
+### Possible catalysts
+
+- Event thread: eGamers.io on 2026-10-07: "Illuvium: Arena v1.18.8 is live with the Abyssal Chasm Event Pass, running 19 days"; worth tracking for ILV.
+
 ### Main risks
 
-- Volatility: about 100% annualised; 10%+ daily moves are not rare.
-- Liquidity: a thin tape means real slippage for size.
-- Valuation anchor: on-chain fees are negligible next to the market cap, so price rests on monetary role, narrative and flows, all of which can turn quickly.
-- Macro and policy: crypto trades with global liquidity and regulation; single-coin work cannot hedge that.
+- High volatility: ILV runs about 100% annualised (~5.2% a day); stops and size must be set for that range.
+- ILV's absolute volume is about $2.88M a day; institutional size cannot move without moving price.
+- ILV has no cash-flow anchor; if narrative or flows turn, there is no business underneath.
+- Macro and policy: tighter liquidity or a regulatory turn hits all crypto at once, ILV included.
 
-**What would change our view:** price losing the 200-day ($3.728), 30-day fee momentum flipping, 30-day relative strength vs Bitcoin flipping.
+**Triggers that would flip our ILV view:** ILV losing the 200-day ($3.728), 30-day strength vs Bitcoin (now +11%) flipping, follow-through on the eGamers.io story.
 
 ## Buy score 5.5 / 10
 
@@ -106,9 +122,9 @@ Our read: The narrative is neutral; the coin's own data drives price.
 | --- | ---: | ---: | --- |
 | Market structure & trend | 30% | 7.3 | +3% vs 200d; +11% vs BTC 30d; turnover 9.0% |
 | Tokenomics & supply | 20% | 6.0 | float 86% |
-| Relative valuation | 15% | 4.0 | tiny fees, P/F 843× |
-| Sentiment & KOL | 15% | 4.4 | F&G 64; data diverges from mood |
-| Risk (higher = safer) | 20% | 4.2 | vol 100%; thin volume |
+| Relative valuation | 15% | 4.0 | tiny fees, P/F 849× |
+| Sentiment, news & KOL | 15% | 4.7 | F&G 64; 1 constructive headlines; data diverges from mood |
+| Risk (higher = safer) | 20% | 4.2 | vol 100%; only $2.88M daily volume |
 | **Total** | **100%** | **5.5** | **hold / wait** |
 
 Scale: each factor 1–10, weighted; 6.5+ cautious watch, 5.0–6.4 hold / wait, below 5.0 avoid. This coin is lacking checkable on-chain cash-flow data, so the score rests on market structure, supply and sentiment.
@@ -120,7 +136,13 @@ Scale: each factor 1–10, weighted; 6.5+ cautious watch, 5.0–6.4 hold / wait,
 - DefiLlama protocol TVL / fees / revenue
 - alternative.me Fear & Greed
 - CoinGecko trending search
-- as of 2026-10-08 11:10 UTC
+- Headlines: CoinDesk / Cointelegraph / The Block / Decrypt / CryptoSlate RSS + Google News search
+- DefiLlama hacks database
+- [Project site](https://illuvium.io/)
+- eGamers.io, 2026-10-07: [Illuvium: Arena v1.18.8 is live with the Abyssal Chasm Event Pass, running 19 days](https://news.google.com/rss/articles/CBMiogFBVV95cUxPRHVUTVVYNFVTaXUtd3NkRzhSaUJDRm82d1ZKTFFYUjh1VWtnVUdoN0JudlJPcVNxQS00alQ1WUk4M2Q3Sk01Y3RwVC1wWUUzSVQyMHMzclZDQVJMbmlMTHRLeWxLS2FvOFdKeURtVDFfQ1lrdFk5VWY0RGVCbjZ5UUpLOXF6S0piektBb0lOOERWbHp1b0R5RGhGOWhoVzhBTGc?oc=5)
+- CryptoTicker, 2026-09-27: [Web3 Gaming 2026: Illuvium, Axie and Sandbox Reviewed](https://news.google.com/rss/articles/CBMifkFVX3lxTFB5dHB6Ui0taWxiT2NKekxPQko4VjlYTXRmN3c5b3BuSzJlOVhIOEoxcWtuTDJyTm5BNlZmQUNaQURGYUdKcThHVlZ1NnVYRmJXS0JNS3pHelpEb2ZsdlliRi1paldXcDdaOGJnS3MwLVR3MGZzbDNLMzFkdWVfdw?oc=5)
+- Kalkine Media, 2026-09-17: [How Kieran Warwick Set Out to Build Blockchain Games With Illuvium](https://news.google.com/rss/articles/CBMiqwFBVV95cUxPUXFKQXJNNV9EOERsV2dIZ2c1OHREMWhldm1EVFV6UFI4TzBCRF84TVdGN0YyUEpIV2YyTlBQY0NBeXpZLV9WOE9OdVI4VmhSd1dOS0FDcDI4YVRvbVo0VFI2RGhSTGtET0VReUQtTEo0S3dXTURpbGlzUTNxUkZIaThSeURaOURrbUVhZnBELVlZc0NHUHRTUkVCazlrYWNJSGMxd21HTUgzU2c?oc=5)
+- as of 2026-10-08 11:47 UTC
 
 ## Disclaimer
 

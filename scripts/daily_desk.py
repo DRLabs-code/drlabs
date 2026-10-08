@@ -31,6 +31,7 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 from desk_analyst import compose_note, verdict  # noqa: E402
+import desk_sources as ds  # noqa: E402
 
 ROOT = Path(os.environ.get("DRLABS_ROOT", "/tmp/drlabs-live"))
 UNIVERSE_PATH = Path(os.environ.get("DESK_UNIVERSE", HERE / "desk_universe.json"))
@@ -59,16 +60,17 @@ SECTOR_FROM_LABEL = (
     ("Play To Earn", "GameFi", "gaming"),
     ("Layer 2 (L2)", "L2", "layer-2"),
     ("Privacy Coins", "L1", "privacy-coins"),
+    ("Oracle", "Infra", "oracle"),
     ("Decentralized Exchange (DEX)", "DeFi", "decentralized-exchange"),
     ("Lending/Borrowing Protocols", "DeFi", "lending-borrowing"),
     ("Derivatives", "DeFi", "derivatives"),
     ("Liquid Staking", "DeFi", "liquid-staking"),
     ("Artificial Intelligence (AI)", "AI", "artificial-intelligence"),
     ("Real World Assets (RWA)", "RWA", "real-world-assets-rwa"),
+    ("Smart Contract Platform", "L1", "smart-contract-platform"),
     ("Layer 1 (L1)", "L1", "layer-1"),
     ("Decentralized Finance (DeFi)", "DeFi", "decentralized-finance-defi"),
     ("Exchange-based Tokens", "Exchange", "exchange-based-tokens"),
-    ("Smart Contract Platform", "L1", "smart-contract-platform"),
 )
 EXCLUDE_CAT_WORDS = (
     "stablecoin", "wrapped", "liquid staking tokens", "liquid staked", "liquid restaking tokens",
@@ -149,7 +151,7 @@ def soft(fn, *args, default=None, label: str = ""):
 
 
 def get_text(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/rss+xml, application/xml;q=0.9, text/html;q=0.8, */*;q=0.5"})
     with urllib.request.urlopen(req, timeout=20) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
@@ -248,9 +250,9 @@ def cg_top(pages: int = 1) -> list[dict]:
     return rows
 
 
-def cg_category(cat_id: str) -> list[dict]:
+def cg_category(cat_id: str, per_page: int = 100) -> list[dict]:
     data = get_json(
-        f"{CG}/coins/markets?vs_currency=usd&category={cat_id}&order=market_cap_desc&per_page=100&page=1"
+        f"{CG}/coins/markets?vs_currency=usd&category={cat_id}&order=market_cap_desc&per_page={per_page}&page=1"
         "&price_change_percentage=7d,30d,200d,1y"
     )
     return [r for r in (data or []) if isinstance(r, dict)]
@@ -289,7 +291,7 @@ def looks_excluded(row: dict) -> bool:
 def context() -> dict:
     if "ctx" in _CACHE:
         return _CACHE["ctx"]  # type: ignore[return-value]
-    ctx: dict = {"top": [], "btc": None, "eth": None, "trending": [], "fng": None}
+    ctx: dict = {"top": [], "btc": None, "eth": None, "trending": [], "fng": None, "meme_ids": set()}
     top = soft(cg_top, default=[], label="cg top") or []
     ctx["top"] = top
     for row in top:
@@ -303,6 +305,8 @@ def context() -> dict:
         for i, c in enumerate(trend.get("coins") or [])
         if isinstance(c, dict) and isinstance(c.get("item"), dict)
     ]
+    memes = soft(cg_category, "meme-token", 250, default=[], label="meme list") or []
+    ctx["meme_ids"] = {r.get("id") for r in memes if r.get("id")}
     fng = soft(get_json, "https://api.alternative.me/fng/?limit=30", default={}, label="fng") or {}
     vals = [num(x.get("value")) for x in (fng.get("data") or []) if isinstance(x, dict)]
     vals = [v for v in vals if v is not None]
@@ -522,14 +526,22 @@ def pick_sector(categories: list[str], lane: str) -> tuple[list[str], str | None
             cat_id = cat_id or cid
     if lane in LANES and lane not in tags:
         tags.insert(0, lane)
-    if lane in LANE_CATEGORY and lane != "major":
-        cat_id = LANE_CATEGORY[lane]
+    specific = {"decentralized-exchange", "lending-borrowing", "derivatives", "liquid-staking"}
+    if lane in LANE_CATEGORY and lane != "major" and not (lane == "DeFi" and cat_id in specific):
+        cat_id = LANE_CATEGORY[lane]  # a DeFi coin keeps its narrower sub-sector (DEX, lending...) for peers
     if "L2" in tags and "L1" in tags:
         tags.remove("L1")
     return tags[:3] or ["Other"], cat_id
 
 
-def build_peers(cg_id: str, cat_id: str | None, mcap: float) -> tuple[list[dict], dict]:
+CAT_NAME = {cid: label for label, _tag, cid in SECTOR_FROM_LABEL}
+CAT_NAME.update({"gaming": "Gaming (GameFi)", "meme-token": "Meme", "layer-2": "Layer 2 (L2)",
+                 "decentralized-finance-defi": "Decentralized Finance (DeFi)"})
+
+
+def build_peers(cg_id: str, cat_id: str | None, mcap: float, lane: str | None = None, target_is_meme: bool = False) -> tuple[list[dict], dict]:
+    """Peers by sector fit: CoinGecko category list minus memecoins / off-sector tokens
+    (desk_sectors.json + name heuristics), curated sector core preferred, leader = largest fitted peer."""
     sector: dict = {}
     rows: list[dict] = []
     if cat_id:
@@ -538,33 +550,31 @@ def build_peers(cg_id: str, cat_id: str | None, mcap: float) -> tuple[list[dict]
         rows = context()["top"]
         cat_id = None
     rows = [market_row(r) for r in rows if not looks_excluded(r) and num(r.get("market_cap"))]
-    rows.sort(key=lambda r: -(r["mcap"] or 0))
-    chg = [r["chg_30d"] for r in rows if r["chg_30d"] is not None]
+    meme_ids = context().get("meme_ids") or set()
+    kept, dropped = ds.sector_fit(rows, cat_id, cg_id, meme_ids, target_is_meme)
+    kept.sort(key=lambda r: -(r["mcap"] or 0))
+    chg = [r["chg_30d"] for r in kept if r["chg_30d"] is not None]
     if chg:
         sector["median_30d"] = statistics.median(chg)
-    chg1y = [r["chg_1y"] for r in rows if r["chg_1y"] is not None]
+    chg1y = [r["chg_1y"] for r in kept if r["chg_1y"] is not None]
     if chg1y:
         sector["median_1y"] = statistics.median(chg1y)
-    sector["n"] = len(rows)
+    ex = [r for r in kept if r["cg"] != cg_id and r["chg_30d"] is not None and r["mcap"]]
+    if ex:
+        sector["wavg_ex_30d"] = sum(r["mcap"] * r["chg_30d"] for r in ex) / sum(r["mcap"] for r in ex)
+    sector["n"] = len(kept)
     sector["cat_id"] = cat_id
-    ids = [r["cg"] for r in rows]
+    sector["cat_name"] = CAT_NAME.get(cat_id or "", cat_id) if cat_id else "Top 250 by market cap"
+    sector["dropped"] = len(dropped)
+    sector["dropped_ids"] = dropped[:25]
+    ids = [r["cg"] for r in kept]
     if cg_id in ids:
         sector["pos"] = ids.index(cg_id) + 1
-    others = [r for r in rows if r["cg"] != cg_id]
-    if not others:
-        return [], sector
-    leader = others[0] if rows and rows[0]["cg"] != cg_id else None
-    near = sorted(others, key=lambda r: abs(math.log((r["mcap"] or 1) / (mcap or 1))))
-    chosen: list[dict] = []
-    for r in ([leader] if leader else []) + near:
-        if r and r["cg"] not in {c["cg"] for c in chosen}:
-            chosen.append(r)
-        if len(chosen) >= 4:
-            break
-    if leader:
-        leader["leader"] = True
+    core = ds.sector_core(cat_id, soft(load_universe, default={}, label="universe") or {}, lane)
+    chosen, _leader = ds.choose_peers(kept, cg_id, mcap, core)
     maps = llama_maps()
     for p in chosen:
+        p["meme"] = p["cg"] in meme_ids
         pid = maps["gecko"].get(p["cg"])
         if pid:
             ent = protocol_entity(pid)
@@ -599,7 +609,8 @@ def build_pack(item: dict, lane: str, as_of: str, day: str) -> dict:
     if not isinstance(coin, dict) or not coin.get("market_data"):
         raise Skip("no market data")
     cats = [c for c in (coin.get("categories") or []) if c]
-    low = " | ".join(cats).lower()
+    # "Stablecoin Issuer" / "Stablecoin Protocol" are governance tokens (ENA, SKY...), not stablecoins
+    low = " | ".join(c for c in cats if not re.search(r"stablecoin (issuer|protocol)", c, re.I)).lower()
     if any(w in low for w in EXCLUDE_CAT_WORDS):
         raise Skip("stable / wrapped / tokenized asset")
     md = coin["market_data"]
@@ -660,7 +671,8 @@ def build_pack(item: dict, lane: str, as_of: str, day: str) -> dict:
     pack["hist"] = soft(chart_stats, cg_id, default={}, label="chart") or {}
     ctx = context()
     pack["btc"], pack["eth"] = ctx.get("btc"), ctx.get("eth")
-    pack["peers"], pack["sector"] = build_peers(cg_id, cat_id, c["mcap"])
+    is_meme = "Meme" in cats or cg_id in (ctx.get("meme_ids") or set())
+    pack["peers"], pack["sector"] = build_peers(cg_id, cat_id, c["mcap"], lane, is_meme)
     if pack["peers"]:
         pack["sources"].append("CoinGecko sector list (peers)")
     maps = llama_maps()
@@ -697,7 +709,44 @@ def build_pack(item: dict, lane: str, as_of: str, day: str) -> dict:
         pack["sources"].append("CoinGecko trending search")
     if pack["social"]["lunar"]:
         pack["sources"].append("LunarCrush")
+    add_extras(pack, coin, pid, maps)
     return pack
+
+
+def add_extras(pack: dict, coin: dict, pid: str | None, maps: dict) -> None:
+    """Zero-cost extras: headlines, unlock schedule, hack history, project self-description.
+    Each one fails soft; a missing source just drops that part of the note."""
+    c = pack["cg"]
+    now = utc_now()
+    pack["profile"] = soft(ds.project_profile, coin, default={}, label="profile") or {}
+    c["categories"] = ds.drop_categories(pack["cg_id"], c["categories"], (pack.get("chain") or {}).get("tvl"))
+    answered = [0]
+
+    def fetch_text(url: str) -> str:
+        text = get_text(url)
+        answered[0] += 1
+        return text
+
+    news = soft(ds.collect_news, fetch_text, pack["name"], pack["ticker"], now, default=None, label="news")
+    pack["news"] = news or []
+    pack["news_checked"] = answered[0] > 0
+    if answered[0]:
+        pack["sources"].append("Headlines: CoinDesk / Cointelegraph / The Block / Decrypt / CryptoSlate RSS + Google News search")
+
+    def quiet_json(url: str, timeout: int = 40):
+        return soft(lambda: get_json(url, 2, timeout), default=None, label="unlocks")
+
+    llama_slug = ((maps.get("meta") or {}).get(pid) or {}).get("slug") if pid else None
+    pack["unlocks"] = soft(ds.fetch_unlocks, quiet_json, pack["cg_id"], pack["name"], pack["ticker"], llama_slug, now,
+                           c.get("price"), c.get("circ"), default=None, label="unlocks")
+    if pack["unlocks"]:
+        pack["sources"].append("DefiLlama unlock schedule (emissions dataset)")
+    hacks_rows = soft(get_json, f"{LLAMA}/hacks", default=[], label="hacks") or []
+    names = [pack["name"], (pack.get("protocol") or {}).get("name")]
+    ids = [str(pid).split("#")[-1]] + list((maps.get("children") or {}).get(pid, [])) if pid else []
+    pack["hacks"] = ds.find_hacks(hacks_rows, [n for n in names if n], ids) if hacks_rows else []
+    if hacks_rows:
+        pack["sources"].append("DefiLlama hacks database")
 
 
 # ---------------------------------------------------------------- selection
@@ -789,6 +838,32 @@ def write_note(pack: dict, drafted: dict) -> Path:
     return folder
 
 
+def slugify(ticker: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", ticker.lower()).strip("-")
+
+
+def same_day_bodies(day: str, exclude: set[str] | None = None) -> list[dict]:
+    """zh/en bodies of notes already published for `day`: the phrase picker avoids their sentence patterns."""
+    out = []
+    for n in list_notes():
+        if n["date"] != day or n["slug"] in (exclude or set()):
+            continue
+        folder = ROOT / "research" / n["slug"]
+        en = folder / "report.en.md"
+        out.append({"zh": (folder / "report.md").read_text(encoding="utf-8"),
+                    "en": en.read_text(encoding="utf-8") if en.exists() else ""})
+    return out
+
+
+def dump_note(pack: dict, drafted: dict | None, dump: str) -> None:
+    out = Path(dump)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / f"{pack['slug']}.json").write_text(json.dumps(pack, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    if drafted:
+        for lang in ("zh", "en"):
+            (out / f"{pack['slug']}.{lang}.md").write_text(drafted["bodies"][lang], encoding="utf-8")
+
+
 def run(dry_run: bool, force: bool, dump: str | None) -> int:
     day = perth_today()
     existing = [n for n in list_notes() if n["date"] == day]
@@ -802,14 +877,19 @@ def run(dry_run: bool, force: bool, dump: str | None) -> int:
         print("::warning::Daily desk: nothing writable today (pools empty or APIs refusing). Skipped quietly.")
         print("nothing writable today; skipped quietly, no files written")
         return 0
+    avoid = same_day_bodies(day, {p["slug"] for p in packs})
     for pack in packs:
-        drafted = compose_note(pack)
+        try:
+            drafted = compose_note(pack, avoid=avoid)
+        except Exception as exc:  # noqa: BLE001 — an audit failure skips the note, never publishes it
+            print(f"::warning::Daily desk: {pack['ticker']} not published ({exc})")
+            if dump:
+                dump_note(pack, None, dump)
+            continue
+        avoid.append(drafted["bodies"])
         print(f"{pack['ticker']} [{pack['lane']}] {drafted['score']:.1f} {verdict(drafted['score'])[1]} as-of {as_of} -> {pack['slug']}")
         if dump:
-            Path(dump).mkdir(parents=True, exist_ok=True)
-            (Path(dump) / f"{pack['slug']}.json").write_text(json.dumps(pack, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
-            for lang in ("zh", "en"):
-                (Path(dump) / f"{pack['slug']}.{lang}.md").write_text(drafted["bodies"][lang], encoding="utf-8")
+            dump_note(pack, drafted, dump)
         if dry_run:
             continue
         write_note(pack, drafted)
@@ -820,16 +900,49 @@ def run(dry_run: bool, force: bool, dump: str | None) -> int:
     return 0
 
 
+def run_one(cg_id: str | None, lane: str, ticker: str | None, slug: str | None, from_pack: str | None,
+            dry_run: bool, dump: str | None) -> int:
+    """Write (or rewrite) one coin's note, bypassing the daily cap; same slug is overwritten."""
+    if from_pack:
+        pack = json.loads(Path(from_pack).read_text(encoding="utf-8"))
+        if slug:
+            pack["slug"] = slug
+    else:
+        as_of = utc_now().strftime("%Y-%m-%d %H:%M UTC")
+        item = {"cg": cg_id}
+        if ticker:
+            item["ticker"] = ticker
+        pack = build_pack(item, lane, as_of, perth_today())
+        pack["slug"] = slug or slugify(pack["ticker"])
+    drafted = compose_note(pack, avoid=same_day_bodies(pack["day"], {pack["slug"]}))
+    print(f"{pack['ticker']} [{pack['lane']}] {drafted['score']:.1f} {verdict(drafted['score'])[1]} as-of {pack['as_of']} -> {pack['slug']}")
+    if dump:
+        dump_note(pack, drafted, dump)
+    if dry_run:
+        print("dry-run: no site files written")
+        return 0
+    write_note(pack, drafted)
+    print(f"wrote {ROOT / 'research' / pack['slug']}")
+    return 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Publish DRLabs desk notes from free public data.")
     parser.add_argument("--dry-run", action="store_true", help="pick coins, fetch data, compose, do not write")
     parser.add_argument("--force", action="store_true", help="ignore the two-notes-per-day stop")
     parser.add_argument("--status", action="store_true", help="print public URLs for today's notes")
-    parser.add_argument("--dump", help="also write the data pack + zh/en drafts to this folder")
+    parser.add_argument("--dump", help="also write <slug>.json (full data pack) + <slug>.zh.md / .en.md to this folder")
+    parser.add_argument("--coin", help="CoinGecko id: write just this coin (bypasses the daily cap, overwrites its slug)")
+    parser.add_argument("--lane", default="major", help="lane for --coin (major, DeFi, GameFi, Meme, L2, ...)")
+    parser.add_argument("--ticker", help="ticker override for --coin")
+    parser.add_argument("--slug", help="slug override for --coin / --from-pack")
+    parser.add_argument("--from-pack", help="recompose from a dumped <slug>.json without fetching anything")
     args = parser.parse_args()
     if args.status:
         print_status(perth_today())
         return
+    if args.coin or args.from_pack:
+        raise SystemExit(run_one(args.coin, args.lane, args.ticker, args.slug, args.from_pack, args.dry_run, args.dump))
     raise SystemExit(run(dry_run=args.dry_run, force=args.force, dump=args.dump))
 
 

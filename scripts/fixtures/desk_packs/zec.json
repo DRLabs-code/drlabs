@@ -1,0 +1,288 @@
+{
+ "ticker": "ZEC",
+ "name": "Zcash",
+ "cg_id": "zcash",
+ "lane": "major",
+ "as_of": "2026-10-08 11:34 UTC",
+ "day": "2026-10-08",
+ "cg": {
+  "price": 1203.83,
+  "mcap": 20438004811.0,
+  "fdv": 20438014218.0,
+  "volume": 909841423.0,
+  "rank": 10,
+  "circ": 16974782.9780448,
+  "total": 16974790.7905448,
+  "max_supply": 21000000.0,
+  "max_infinite": false,
+  "ath": 3191.93,
+  "ath_date": "2016-10-28",
+  "ath_chg": -62.28507,
+  "atl": 16.08,
+  "atl_date": "2024-07-04",
+  "chg_7d": -13.64413,
+  "chg_30d": 4.91178,
+  "chg_60d": 129.5118,
+  "chg_200d": 455.22936,
+  "chg_1y": 768.33619,
+  "categories": [
+   "Privacy Coins",
+   "Layer 1 (L1)",
+   "Zero Knowledge (ZK)",
+   "Proof of Work (PoW)",
+   "Pantera Capital Portfolio",
+   "Made in USA",
+   "Coinbase 50 Index",
+   "Quantum-Resistant",
+   "Privacy"
+  ],
+  "votes_up": 58.33,
+  "watchlist": 164128.0,
+  "genesis": "2016-10-28",
+  "platform": null,
+  "hashing": "Equihash"
+ },
+ "sources": [
+  "CoinGecko coin + 365d chart",
+  "CoinGecko sector list (peers)",
+  "DefiLlama chain TVL / fees / DEX / stablecoins",
+  "alternative.me Fear & Greed",
+  "CoinGecko trending search",
+  "LunarCrush",
+  "Headlines: CoinDesk / Cointelegraph / The Block / Decrypt / CryptoSlate RSS + Google News search",
+  "DefiLlama hacks database"
+ ],
+ "tags": [
+  "L1"
+ ],
+ "hist": {
+  "days": 365,
+  "vol30": 135.3972304606229,
+  "vol90": 122.289432452931,
+  "ma50": 1160.6667059027877,
+  "ma200": 624.3952063492469,
+  "hi90": 1653.1168422981227,
+  "lo90": 457.2306328508523,
+  "mdd90": -27.161134131725497,
+  "ret90": 150.23877414210932,
+  "ret180": 220.97696565407142,
+  "vol7_avg": 779993219.0281965,
+  "vol30_avg": 1313869401.2095706,
+  "circ_chg_90d": 1.1324484205363916,
+  "circ_chg_365d": 3.628173646259647
+ },
+ "btc": {
+  "cg": "bitcoin",
+  "ticker": "BTC",
+  "name": "Bitcoin",
+  "price": 82473.0,
+  "mcap": 1657858473156.0,
+  "fdv": 1657858473156.0,
+  "volume": 34022434109.0,
+  "rank": 1,
+  "chg_7d": -1.2771,
+  "chg_30d": 5.023,
+  "chg_200d": 20.1855,
+  "chg_1y": -32.5011,
+  "ath_chg": -34.58683
+ },
+ "eth": {
+  "cg": "ethereum",
+  "ticker": "ETH",
+  "name": "Ethereum",
+  "price": 2536.43,
+  "mcap": 309822362398.0,
+  "fdv": 309822362398.0,
+  "volume": 14538502103.0,
+  "rank": 2,
+  "chg_7d": -5.1946,
+  "chg_30d": 2.3802,
+  "chg_200d": 21.6149,
+  "chg_1y": -43.137,
+  "ath_chg": -48.71812
+ },
+ "peers": [
+  {
+   "cg": "monero",
+   "ticker": "XMR",
+   "name": "Monero",
+   "price": 552.66,
+   "mcap": 10401738871.0,
+   "fdv": 10401750812.0,
+   "volume": 106297277.0,
+   "rank": 13,
+   "chg_7d": 0.9781,
+   "chg_30d": 6.2266,
+   "chg_200d": 63.0305,
+   "chg_1y": 70.2302,
+   "ath_chg": -30.72085,
+   "core": true,
+   "meme": false
+  },
+  {
+   "cg": "nockchain",
+   "ticker": "NOCK",
+   "name": "Nockchain",
+   "price": 0.02162966,
+   "mcap": 50771358.0,
+   "fdv": 92901104.0,
+   "volume": 886824.0,
+   "rank": 468,
+   "chg_7d": 3.4694,
+   "chg_30d": -31.3665,
+   "chg_200d": 151.7855,
+   "chg_1y": 15.1687,
+   "ath_chg": -89.71093,
+   "core": false,
+   "meme": false
+  },
+  {
+   "cg": "zcoin",
+   "ticker": "FIRO",
+   "name": "Firo",
+   "price": 0.934163,
+   "mcap": 17850490.0,
+   "fdv": 17850618.0,
+   "volume": 117841.0,
+   "rank": 937,
+   "chg_7d": -12.9616,
+   "chg_30d": 8.185,
+   "chg_200d": 50.8132,
+   "chg_1y": 24.3172,
+   "ath_chg": -99.33162,
+   "core": false,
+   "meme": false
+  },
+  {
+   "cg": "minotari",
+   "ticker": "XTM",
+   "name": "MinoTari (Tari)",
+   "price": 0.00168404,
+   "mcap": 11608592.0,
+   "fdv": 11608506.0,
+   "volume": 37933.0,
+   "rank": 1159,
+   "chg_7d": -5.735,
+   "chg_30d": -11.2166,
+   "chg_200d": -32.0146,
+   "chg_1y": -49.7753,
+   "ath_chg": -97.83435,
+   "core": false,
+   "meme": false
+  }
+ ],
+ "sector": {
+  "median_30d": -1.2025,
+  "median_1y": -37.5875,
+  "wavg_ex_30d": 6.344861236885316,
+  "n": 48,
+  "cat_id": "privacy-coins",
+  "cat_name": "Privacy Coins",
+  "dropped": 0,
+  "dropped_ids": [],
+  "pos": 1
+ },
+ "protocol": null,
+ "chain": {
+  "name": "Zcash",
+  "tvl": 2689389.101013677,
+  "rank": 115,
+  "n": 328,
+  "tvl_chg_30d": -16.256786998855045,
+  "tvl_chg_90d": 39.130387548053555,
+  "fees30": 136571.0,
+  "fees_prev30": 56422.0,
+  "fees7": 19549.0,
+  "rev30": 0.0,
+  "rev_prev30": 0.0,
+  "rev7": 0.0,
+  "dex30": null,
+  "dex_prev30": null,
+  "dex7": null
+ },
+ "social": {
+  "fng": {
+   "now": 64.0,
+   "label": "Greed",
+   "avg30": 67.3
+  },
+  "trending_pos": 14,
+  "trending_n": 15,
+  "lunar": {
+   "dominance": 1.8,
+   "sentiment": 81.0,
+   "url": "https://lunarcrush.com/coins/zec/zcash"
+  }
+ },
+ "profile": {
+  "about": "Zcash is a privacy-focused cryptocurrency that uses trustless zero-knowledge proofs to enable fully encrypted transactions while maintaining blockchain transparency and security.",
+  "homepage": "https://z.cash/",
+  "whitepaper": "https://zips.z.cash/protocol/protocol.pdf",
+  "x": "zcash",
+  "github": "https://github.com/zcash/zcash",
+  "genesis": "2016-10-28"
+ },
+ "news": [
+  {
+   "title": "Grayscale says crypto ETF market is entering new phase as Zcash ETF tops $1 billion",
+   "url": "https://www.theblock.co/news/markets/2026-10-07-grayscale-crypto-etf-market-beyond-bitcoin-ether-417953",
+   "outlet": "The Block",
+   "date": "2026-10-07",
+   "tags": [
+    "institutional",
+    "opinion"
+   ]
+  },
+  {
+   "title": "Crypto Long & Short: Zcash and the case for privacy in the age of AI",
+   "url": "https://www.coindesk.com/coindesk-indices/2026/10/07/crypto-long-and-short-zcash-and-the-case-for-privacy-in-the-age-of-ai",
+   "outlet": "CoinDesk",
+   "date": "2026-10-07",
+   "tags": [
+    "opinion"
+   ]
+  },
+  {
+   "title": "Winklevoss Twins To Launch New Zcash ETF",
+   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNYm43OVNSMEJ5MGU4S0NUNWFWZ2NBSFAydnBXT2h5Y05ZWktfeHBuWUxzUXRDQmIzN2hzaFJHUWhpa0EyRDRFeWExVVk5aE9xUUZBZDA1aHMyazlXc0pjVW5mMk1JRExVMlh5bnhVM3Vod2RKU1puZTZLTlZISkxvdmlzdGRnTUlna3JLODN0TVZtQVRCY08zMnJVczlyMlE?oc=5",
+   "outlet": "Yahoo Finance",
+   "date": "2026-10-07",
+   "tags": [
+    "institutional",
+    "product"
+   ]
+  },
+  {
+   "title": "Winklevoss Twins Prep Zcash ETFs as Privacy-Coin Trade Surges",
+   "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNYTNIR0tYNmxFQTA5NW9ZcFBNYnNEYUhqOG82QVpHd1RjUVV3VlA4MmJVNkQ2TGdwOVJIdWFhOXRpT3dhVmhqR2QxRkE3Zl9YRGhoUVZvNUZkZU9wS1FKdjRJQ3hFUWJMa2E0VTVGdGJYUzU5NlRUNktqWnlFalp1bUZ5bF9jUnpLbHh2VkJFSkJUZDJBdXdmNGQ3cFVIR0ZIVkdQc29oLTgyOVJSZ0gzRlZzMA?oc=5",
+   "outlet": "Bloomberg",
+   "date": "2026-10-07",
+   "tags": [
+    "price"
+   ]
+  },
+  {
+   "title": "Winklevoss files for spot Zcash ETF as ZEC price climbs above $1,376",
+   "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5HM0RDUDRpUE9FLWVtWmZvZjJ0ZFg4VVBpb3VhNC1Fd2dEaC1PQzhFUlFoM3dxQ2pHc21FY2EwV1VIZWZQUnBkdVNlc0ozNE1SalJ3RHJBMlB2MHdhZUhqLUI5RlNiaWhFbzNUMXV4SVFFODA3WWdBelFFVHJXQQ?oc=5",
+   "outlet": "crypto.news",
+   "date": "2026-10-06",
+   "tags": [
+    "institutional",
+    "price"
+   ]
+  },
+  {
+   "title": "Another Zcash ETF Is Coming: Winklevoss Twins File for 'WINK'",
+   "url": "https://decrypt.co/380210/another-zcash-etf-coming-winklevoss-twins-wink",
+   "outlet": "Decrypt",
+   "date": "2026-10-06",
+   "tags": [
+    "institutional"
+   ]
+  }
+ ],
+ "news_checked": true,
+ "unlocks": null,
+ "hacks": [],
+ "slug": "zec"
+}
