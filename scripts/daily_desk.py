@@ -1,106 +1,175 @@
 #!/usr/bin/env python3
-"""Publish one major note and one rotating DeFi/GameFi/Meme note from public data.
+"""Publish up to two DRLabs desk notes a day from free public data.
 
-Writing is per-asset (see desk_write.py). Do not reuse one paragraph for every ticker.
-Internet heat is a required dimension when a sourced print exists.
+Slot 1 (core): curated majors first, then the broader CoinGecko top list by market cap.
+Slot 2 (satellite): rotates DeFi -> GameFi -> Meme -> L2; curated names first, then the
+CoinGecko sector list. Coins already written are never rewritten.
+
+If nothing is writable (pools empty, every API refusing), exit 0 quietly so the
+workflow commits nothing and sends no failure email.
+
+Writing lives in desk_analyst.py: every note is composed from what the data shows for
+that one coin. No paid API, no invented numbers.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
+import statistics
 import sys
 import time
 import urllib.error
 import urllib.request
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
-from desk_write import draft_note, score_note, verdict, yaml_escape
+from desk_analyst import compose_note, verdict  # noqa: E402
 
 ROOT = Path(os.environ.get("DRLABS_ROOT", "/tmp/drlabs-live"))
-ASTRO_CONTENT = Path(os.environ.get("ASTRO_CONTENT", "/workspace/src/content/research"))
 UNIVERSE_PATH = Path(os.environ.get("DESK_UNIVERSE", HERE / "desk_universe.json"))
 SITE = os.environ.get("DRLABS_SITE", "https://drlabs-code.github.io/drlabs").rstrip("/")
-UA = "DRLabs-desk/1.0 (+https://github.com/DRLabs-code)"
-LANES = ("DeFi", "GameFi", "Meme")
+UA = "DRLabs-desk/2.0 (+https://github.com/DRLabs-code)"
+PERTH = ZoneInfo("Australia/Perth")
+LANES = ("DeFi", "GameFi", "Meme", "L2")
 LANGS = ("zh", "en", "ja", "ko", "fr", "es", "ru")
+CG = "https://api.coingecko.com/api/v3"
+LLAMA = "https://api.llama.fi"
 
+LANE_CATEGORY = {
+    "DeFi": "decentralized-finance-defi",
+    "GameFi": "gaming",
+    "Meme": "meme-token",
+    "L2": "layer-2",
+    "L1": "layer-1",
+    "AI": "artificial-intelligence",
+    "RWA": "real-world-assets-rwa",
+    "Exchange": "exchange-based-tokens",
+}
+# CoinGecko category label -> (lane tag, category id used for peers)
+SECTOR_FROM_LABEL = (
+    ("Meme", "Meme", "meme-token"),
+    ("Gaming (GameFi)", "GameFi", "gaming"),
+    ("Play To Earn", "GameFi", "gaming"),
+    ("Layer 2 (L2)", "L2", "layer-2"),
+    ("Privacy Coins", "L1", "privacy-coins"),
+    ("Decentralized Exchange (DEX)", "DeFi", "decentralized-exchange"),
+    ("Lending/Borrowing Protocols", "DeFi", "lending-borrowing"),
+    ("Derivatives", "DeFi", "derivatives"),
+    ("Liquid Staking", "DeFi", "liquid-staking"),
+    ("Artificial Intelligence (AI)", "AI", "artificial-intelligence"),
+    ("Real World Assets (RWA)", "RWA", "real-world-assets-rwa"),
+    ("Layer 1 (L1)", "L1", "layer-1"),
+    ("Decentralized Finance (DeFi)", "DeFi", "decentralized-finance-defi"),
+    ("Exchange-based Tokens", "Exchange", "exchange-based-tokens"),
+    ("Smart Contract Platform", "L1", "smart-contract-platform"),
+)
+EXCLUDE_CAT_WORDS = (
+    "stablecoin", "wrapped", "liquid staking tokens", "liquid staked", "liquid restaking tokens",
+    "bridged", "tokenized gold", "tokenized stock", "tokenized treasury", "tokenized commodit",
+    "rehypothecated", "yield-bearing stablecoin", "synthetic dollar",
+)
+EXCLUDE_NAME = re.compile(
+    r"(wrapped|bridged|staked|restaked|tokenized|xstock|\bgold\b|usd|binance-peg|\(wormhole\)|"
+    r"\beur\b|euro coin|treasury)",
+    re.I,
+)
+EXCLUDE_SYMBOL = re.compile(
+    r"^((w|st|wst|cb|r|ez|we|m|s|j|b|lb|bn|os|k|t|f|e|u|p|x|ts|lst)(btc|eth|sol|bnb|avax|hype)|[a-z]{0,3}usd[a-z0-9]*|[a-z]{0,2}eur[a-z]?)$",
+    re.I,
+)
 
-@dataclass
-class Snap:
-    ticker: str
-    name: str
-    cg_id: str
-    tags: list[str]
-    lane: str
-    as_of: str
-    price: float | None = None
-    mcap: float | None = None
-    fdv: float | None = None
-    volume: float | None = None
-    rank: int | None = None
-    circ: float | None = None
-    total: float | None = None
-    max_supply: float | None = None
-    ath: float | None = None
-    ath_date: str | None = None
-    chg_7d: float | None = None
-    chg_30d: float | None = None
-    tvl: float | None = None
-    tvl_label: str = ""
-    fees_30d: float | None = None
-    rev_30d: float | None = None
-    sources: list[str] = field(default_factory=list)
-    peers: list[dict] = field(default_factory=list)
-    chains: list[dict] = field(default_factory=list)
-    dexs: list[dict] = field(default_factory=list)
-    stables: float | None = None
-    x_mentions: dict | None = None
-    lunar: dict | None = None
+_CACHE: dict[str, object] = {}
+_LAST_CG = [0.0]
 
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def today_utc() -> str:
-    return utc_now().strftime("%Y-%m-%d")
+def perth_today() -> str:
+    return datetime.now(PERTH).strftime("%Y-%m-%d")
 
 
-def load_universe() -> dict:
-    return json.loads(UNIVERSE_PATH.read_text(encoding="utf-8"))
+def warn(msg: str) -> None:
+    print(f"[warn] {msg}", file=sys.stderr)
 
 
-def published_tickers() -> set[str]:
-    research = ROOT / "research"
-    out: set[str] = set()
-    if not research.exists():
-        return out
-    for folder in research.iterdir():
-        report = folder / "report.md"
-        if not folder.is_dir() or not report.exists():
-            continue
-        text = report.read_text(encoding="utf-8")
-        ticker = folder.name.upper()
-        if text.startswith("---"):
-            end = text.find("\n---\n", 4)
-            head = text[4:end] if end != -1 else ""
-            for line in head.split("\n"):
-                if line.startswith("ticker:"):
-                    ticker = line.split(":", 1)[1].strip().strip('"').upper()
-                    break
-        out.add(ticker)
+# ---------------------------------------------------------------- http
+
+def get_json(url: str, retries: int = 4, timeout: int = 40):
+    if url in _CACHE:
+        return _CACHE[url]
+    if url.startswith(CG):
+        gap = time.time() - _LAST_CG[0]
+        if gap < 2.6:  # free tier: stay well under the per-minute cap
+            time.sleep(2.6 - gap)
+    last: Exception | None = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            if url.startswith(CG):
+                _LAST_CG[0] = time.time()
+            _CACHE[url] = data
+            return data
+        except urllib.error.HTTPError as exc:
+            last = exc
+            if url.startswith(CG):
+                _LAST_CG[0] = time.time()
+            if exc.code == 429 and attempt < retries - 1:
+                time.sleep(20 * (attempt + 1))
+                continue
+            if exc.code in (500, 502, 503, 504) and attempt < min(retries, 2) - 1:
+                time.sleep(4)
+                continue
+            raise
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ConnectionError) as exc:
+            last = exc
+            if attempt < retries - 1:
+                time.sleep(5 * (attempt + 1))
+                continue
+            raise
+    raise RuntimeError(f"failed {url}: {last}")
+
+
+def soft(fn, *args, default=None, label: str = ""):
+    try:
+        return fn(*args)
+    except Exception as exc:  # noqa: BLE001 — one missing source never kills the note
+        warn(f"{label or fn.__name__} {args[:1]}: {exc}")
+        return default
+
+
+def get_text(url: str) -> str:
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return resp.read().decode("utf-8", errors="replace")
+
+
+def num(value) -> float | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        out = float(value)
+    except (TypeError, ValueError):
+        return None
+    if math.isnan(out) or math.isinf(out):
+        return None
     return out
 
 
-def notes_on(day: str) -> list[str]:
-    return [item["slug"] for item in list_notes() if item["date"] == day]
+# ---------------------------------------------------------------- site state
+
+def load_universe() -> dict:
+    return json.loads(UNIVERSE_PATH.read_text(encoding="utf-8"))
 
 
 def parse_head(text: str) -> dict[str, str]:
@@ -130,7 +199,8 @@ def list_notes() -> list[dict[str, str]]:
         notes.append(
             {
                 "slug": folder.name,
-                "ticker": head.get("ticker") or folder.name.upper(),
+                "ticker": (head.get("ticker") or folder.name).upper(),
+                "cg": head.get("cgId") or "",
                 "title": head.get("title") or folder.name.upper(),
                 "date": (head.get("date") or "")[:10],
                 "score": head.get("score") or "",
@@ -141,15 +211,23 @@ def list_notes() -> list[dict[str, str]]:
     return notes
 
 
+def taken_sets() -> tuple[set[str], set[str], set[str]]:
+    notes = list_notes()
+    tickers = {n["ticker"] for n in notes}
+    slugs = {n["slug"] for n in notes}
+    cg_ids = {n["cg"] for n in notes if n["cg"]}
+    return tickers, slugs, cg_ids
+
+
 def print_status(day: str | None = None) -> None:
     notes = list_notes()
     focus = [n for n in notes if n["date"] == day] if day else notes[:2]
     print(f"首页 {SITE}/")
     print(f"目录 {SITE}/research/")
     if day:
-        print(f"当日 {day}")
+        print(f"当日 {day}（珀斯）")
     if not focus:
-        print("当日还没有新研报。")
+        print("当日没有新研报。")
         return
     for note in focus:
         score = f"{note['score']} / 10" if note["score"] else ""
@@ -157,546 +235,602 @@ def print_status(day: str | None = None) -> None:
         print(f"  {note['url']}")
 
 
-def get_json(url: str, retries: int = 3) -> dict | list:
-    last: Exception | None = None
-    for attempt in range(retries):
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={"User-Agent": UA, "Accept": "application/json"},
-            )
-            with urllib.request.urlopen(req, timeout=25) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            last = exc
-            if exc.code in (429, 502, 503, 504) and attempt < retries - 1:
-                time.sleep(8 * (attempt + 1))
-                continue
-            raise
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-            last = exc
-            if attempt < retries - 1:
-                time.sleep(4 * (attempt + 1))
-                continue
-            raise
-    raise RuntimeError(f"failed {url}: {last}")
+# ---------------------------------------------------------------- shared market context
 
-
-def num(value) -> float | None:
-    if value is None:
-        return None
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def fmt_usd(value: float | None) -> str:
-    if value is None:
-        return "未披露 / not disclosed"
-    n = abs(value)
-    sign = "-" if value < 0 else ""
-    if n >= 1e12:
-        return f"{sign}≈ ${n / 1e12:.2f}T"
-    if n >= 1e9:
-        return f"{sign}≈ ${n / 1e9:.2f}B"
-    if n >= 1e6:
-        return f"{sign}≈ ${n / 1e6:.2f}M"
-    if n >= 1:
-        return f"{sign}≈ ${n:,.2f}"
-    if n >= 0.01:
-        return f"{sign}≈ ${n:.4f}"
-    return f"{sign}≈ ${n:.6f}"
-
-
-def fmt_qty(value: float | None) -> str:
-    if value is None:
-        return "未披露 / not disclosed"
-    n = abs(value)
-    if n >= 1e12:
-        return f"≈ {n / 1e12:.2f}T"
-    if n >= 1e9:
-        return f"≈ {n / 1e9:.2f}B"
-    if n >= 1e6:
-        return f"≈ {n / 1e6:.2f}M"
-    if n >= 1e3:
-        return f"≈ {n / 1e3:.2f}K"
-    return f"≈ {n:,.2f}"
-
-
-def fmt_pct(value: float | None) -> str:
-    if value is None:
-        return "未披露 / not disclosed"
-    return f"{value:+.1f}%"
-
-
-def fetch_coingecko(cg_id: str) -> dict:
-    url = (
-        f"https://api.coingecko.com/api/v3/coins/{cg_id}"
-        "?localization=false&tickers=false&community_data=false&developer_data=false"
-    )
-    data = get_json(url)
-    if not isinstance(data, dict):
-        raise RuntimeError(f"unexpected CoinGecko payload for {cg_id}")
-    return data
-
-
-def fetch_llama_protocol(slug: str) -> tuple[float | None, str]:
-    data = get_json(f"https://api.llama.fi/protocol/{slug}")
-    if not isinstance(data, dict):
-        return None, ""
-    tvl = num(data.get("tvl"))
-    if tvl is None:
-        series = data.get("tvl")
-        if isinstance(series, list) and series:
-            tvl = num(series[-1].get("totalLiquidityUSD"))
-    name = str(data.get("name") or slug)
-    return tvl, name
-
-
-def fetch_llama_fees(slug: str, data_type: str) -> float | None:
-    url = f"https://api.llama.fi/summary/fees/{slug}?dataType={data_type}"
-    try:
-        data = get_json(url)
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return None
-        raise
-    if not isinstance(data, dict):
-        return None
-    return num(data.get("total30d"))
-
-
-def get_text(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        return resp.read().decode("utf-8", errors="replace")
-
-
-def fetch_altindex(ticker: str) -> dict | None:
-    url = f"https://altindex.com/ticker/{ticker.lower()}/x-mentions"
-    try:
-        html = get_text(url)
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] altindex {ticker}: {exc}", file=sys.stderr)
-        return None
-    if "No company found" in html or "404" in html[:80]:
-        return None
-    mentions = None
-    m = re.search(r">\s*([0-9]{2,5})\s*<.*?Est\.\s*daily mentions", html, re.I | re.S)
-    if m:
-        mentions = int(m.group(1))
-    updated = None
-    u = re.search(r"Updated ([A-Za-z]{3} \d{1,2}, \d{4})", html)
-    if u:
-        updated = u.group(1)
-    sent = None
-    s = re.search(r"sentiment for \w+:\s*(\d+)\s*/\s*100", html, re.I)
-    if s:
-        sent = int(s.group(1))
-    if mentions is None:
-        return None
-    return {"ticker": ticker.upper(), "mentions": mentions, "updated": updated, "sentiment": sent, "url": url}
-
-
-def altindex_stale(updated: str | None, as_of: str) -> bool:
-    if not updated:
-        return False
-    try:
-        stamped = datetime.strptime(updated, "%b %d, %Y").replace(tzinfo=timezone.utc)
-        as_of_day = datetime.strptime(as_of[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
-    except ValueError:
-        return False
-    return (as_of_day - stamped).days > 21
-
-
-def fetch_lunarcrush(ticker: str, cg_id: str) -> dict | None:
-    paths = (
-        f"https://lunarcrush.com/coins/{ticker.lower()}/{cg_id}",
-        f"https://lunarcrush.com/coins/{ticker.lower()}",
-        f"https://lunarcrush.com/coins/{cg_id}",
-    )
-    html = ""
-    for url in paths:
-        try:
-            html = get_text(url)
-        except Exception as exc:  # noqa: BLE001
-            print(f"[warn] lunarcrush {url}: {exc}", file=sys.stderr)
-            continue
-        if "No company found" in html or len(html) < 200:
-            continue
-        dom = re.search(r"Social Dominance[^%]{0,80}?([0-9]+(?:\.[0-9]+)?)\s*%", html, re.I | re.S)
-        sent = re.search(r"Sentiment[^%]{0,80}?([0-9]+(?:\.[0-9]+)?)\s*%", html, re.I | re.S)
-        posts = re.search(r">\s*([0-9]+(?:\.[0-9]+)?[KM]?)\s*<[^>]*>\s*posts", html, re.I | re.S)
-        if not dom:
-            continue
-        out = {
-            "dominance": float(dom.group(1)),
-            "sentiment": float(sent.group(1)) if sent else None,
-            "posts": posts.group(1) if posts else None,
-            "url": url,
-        }
-        return out
-    return None
-
-
-_FEE_ROWS: list[dict] | None = None
-_REV_ROWS: list[dict] | None = None
-
-
-def _fee_table(data_type: str) -> list[dict]:
-    global _FEE_ROWS, _REV_ROWS
-    cache = _FEE_ROWS if data_type == "dailyFees" else _REV_ROWS
-    if cache is not None:
-        return cache
-    url = (
-        "https://api.llama.fi/overview/fees?excludeTotalDataChart=true"
-        f"&excludeTotalDataChartBreakdown=true&dataType={data_type}"
-    )
-    data = get_json(url)
-    rows = data.get("protocols") if isinstance(data, dict) else []
-    rows = [r for r in rows if isinstance(r, dict)]
-    if data_type == "dailyFees":
-        _FEE_ROWS = rows
-    else:
-        _REV_ROWS = rows
+def cg_top(pages: int = 1) -> list[dict]:
+    rows: list[dict] = []
+    for page in range(1, pages + 1):
+        data = get_json(
+            f"{CG}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page={page}"
+            "&price_change_percentage=7d,30d,200d,1y"
+        )
+        rows.extend(r for r in (data or []) if isinstance(r, dict))
     return rows
 
 
-def fetch_named_fees(name: str) -> tuple[float | None, float | None]:
-    fees = rev = None
-    try:
-        for row in _fee_table("dailyFees"):
-            if str(row.get("name") or "") == name:
-                fees = num(row.get("total30d"))
-                break
-        for row in _fee_table("dailyRevenue"):
-            if str(row.get("name") or "") == name:
-                rev = num(row.get("total30d"))
-                break
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] fees table {name}: {exc}", file=sys.stderr)
-    return fees, rev
-
-
-def fetch_peers(exclude: str, lane: str) -> list[dict]:
-    ids = {
-        "major": "bitcoin,ethereum,solana,binancecoin",
-        "DeFi": "uniswap,aave,lido-dao,curve-dao-token",
-        "GameFi": "immutable-x,axie-infinity,the-sandbox,gala",
-        "Meme": "dogecoin,shiba-inu,pepe,bonk",
-    }.get(lane, "bitcoin,ethereum,solana")
-    url = (
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
-        f"&ids={ids}&price_change_percentage=7d,30d"
+def cg_category(cat_id: str) -> list[dict]:
+    data = get_json(
+        f"{CG}/coins/markets?vs_currency=usd&category={cat_id}&order=market_cap_desc&per_page=100&page=1"
+        "&price_change_percentage=7d,30d,200d,1y"
     )
-    try:
-        data = get_json(url)
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] peers: {exc}", file=sys.stderr)
-        return []
-    out = []
-    if not isinstance(data, list):
-        return out
-    for row in data:
-        ticker = str(row.get("symbol") or "").upper()
-        if ticker == exclude:
-            continue
-        out.append(
-            {
-                "ticker": ticker,
-                "mcap": num(row.get("market_cap")),
-                "volume": num(row.get("total_volume")),
-                "rank": row.get("market_cap_rank"),
-                "chg_30d": num(row.get("price_change_percentage_30d_in_currency")),
-            }
-        )
-    return out
+    return [r for r in (data or []) if isinstance(r, dict)]
 
 
-def fetch_top_chains(limit: int = 6) -> list[dict]:
-    try:
-        data = get_json("https://api.llama.fi/v2/chains")
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] chains: {exc}", file=sys.stderr)
-        return []
-    if not isinstance(data, list):
-        return []
-    rows = [c for c in data if isinstance(c, dict) and c.get("tvl")]
-    rows.sort(key=lambda c: float(c.get("tvl") or 0), reverse=True)
-    return [{"name": c.get("name"), "tvl": num(c.get("tvl"))} for c in rows[:limit]]
+def market_row(row: dict) -> dict:
+    return {
+        "cg": row.get("id"),
+        "ticker": str(row.get("symbol") or "").upper(),
+        "name": row.get("name"),
+        "price": num(row.get("current_price")),
+        "mcap": num(row.get("market_cap")),
+        "fdv": num(row.get("fully_diluted_valuation")),
+        "volume": num(row.get("total_volume")),
+        "rank": row.get("market_cap_rank"),
+        "chg_7d": num(row.get("price_change_percentage_7d_in_currency")),
+        "chg_30d": num(row.get("price_change_percentage_30d_in_currency")),
+        "chg_200d": num(row.get("price_change_percentage_200d_in_currency")),
+        "chg_1y": num(row.get("price_change_percentage_1y_in_currency")),
+        "ath_chg": num(row.get("ath_change_percentage")),
+    }
 
 
-def fetch_dex_chains() -> list[dict]:
-    out = []
-    for chain in ("Ethereum", "Solana", "BSC", "Base"):
-        try:
-            data = get_json(
-                f"https://api.llama.fi/overview/dexs/{chain}?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
-            )
-        except Exception as exc:  # noqa: BLE001
-            print(f"[warn] dex {chain}: {exc}", file=sys.stderr)
-            continue
-        if isinstance(data, dict):
-            out.append({"name": chain, "vol_24h": num(data.get("total24h")), "vol_30d": num(data.get("total30d"))})
-        time.sleep(0.3)
-    return out
+def looks_excluded(row: dict) -> bool:
+    name = str(row.get("name") or "")
+    sym = str(row.get("symbol") or row.get("ticker") or "")
+    if EXCLUDE_NAME.search(name) or EXCLUDE_SYMBOL.match(sym):
+        return True
+    price = num(row.get("current_price") if "current_price" in row else row.get("price"))
+    chg = num(row.get("price_change_percentage_30d_in_currency") if "current_price" in row else row.get("chg_30d"))
+    if price is not None and 0.97 <= price <= 1.03 and (chg is None or abs(chg) < 2):
+        return True  # dollar-pegged
+    return False
 
 
-def fetch_chain_stables(chain: str | None) -> float | None:
-    if not chain:
-        return None
-    try:
-        data = get_json("https://stablecoins.llama.fi/stablecoinchains")
-    except Exception as exc:  # noqa: BLE001
-        print(f"[warn] stables: {exc}", file=sys.stderr)
-        return None
-    if not isinstance(data, list):
-        return None
-    target = chain.lower()
-    for row in data:
-        if str(row.get("name") or "").lower() != target:
-            continue
-        usd = row.get("totalCirculatingUSD")
-        if isinstance(usd, dict):
-            return num(usd.get("peggedUSD"))
-        return num(usd)
-    return None
+def context() -> dict:
+    if "ctx" in _CACHE:
+        return _CACHE["ctx"]  # type: ignore[return-value]
+    ctx: dict = {"top": [], "btc": None, "eth": None, "trending": [], "fng": None}
+    top = soft(cg_top, default=[], label="cg top") or []
+    ctx["top"] = top
+    for row in top:
+        if row.get("id") == "bitcoin":
+            ctx["btc"] = market_row(row)
+        if row.get("id") == "ethereum":
+            ctx["eth"] = market_row(row)
+    trend = soft(get_json, f"{CG}/search/trending", default={}, label="trending") or {}
+    ctx["trending"] = [
+        {"cg": c["item"].get("id"), "ticker": str(c["item"].get("symbol") or "").upper(), "pos": i + 1}
+        for i, c in enumerate(trend.get("coins") or [])
+        if isinstance(c, dict) and isinstance(c.get("item"), dict)
+    ]
+    fng = soft(get_json, "https://api.alternative.me/fng/?limit=30", default={}, label="fng") or {}
+    vals = [num(x.get("value")) for x in (fng.get("data") or []) if isinstance(x, dict)]
+    vals = [v for v in vals if v is not None]
+    if vals:
+        ctx["fng"] = {
+            "now": vals[0],
+            "label": (fng["data"][0].get("value_classification") or ""),
+            "avg30": sum(vals) / len(vals),
+        }
+    _CACHE["ctx"] = ctx
+    return ctx
 
 
-def fetch_chain_tvl(chain: str) -> float | None:
-    data = get_json("https://api.llama.fi/v2/chains")
-    if not isinstance(data, list):
-        return None
-    target = chain.lower()
-    for row in data:
+# ---------------------------------------------------------------- DefiLlama maps
+
+def llama_maps() -> dict:
+    if "llama" in _CACHE:
+        return _CACHE["llama"]  # type: ignore[return-value]
+    out: dict = {"gecko": {}, "children": {}, "tvl": {}, "tvl_prev": {}, "meta": {}, "chains": {}, "chain_gecko": {}}
+    protocols = soft(get_json, f"{LLAMA}/protocols", default=[], label="llama protocols") or []
+    lite = soft(get_json, f"{LLAMA}/lite/protocols2?b=2", default={}, label="llama lite") or {}
+    for row in lite.get("protocols") or []:
+        pid = str(row.get("defillamaId") or "")
+        out["tvl"][pid] = num(row.get("tvl"))
+        out["tvl_prev"][pid] = num(row.get("tvlPrevMonth"))
+    for row in protocols:
         if not isinstance(row, dict):
             continue
-        name = str(row.get("name") or row.get("gecko_id") or "").lower()
-        if name == target:
-            return num(row.get("tvl"))
+        pid = str(row.get("id") or "")
+        parent = row.get("parentProtocol")
+        out["meta"][pid] = {"name": row.get("name"), "slug": row.get("slug"), "category": row.get("category"),
+                            "chains": row.get("chains") or [], "parent": parent}
+        if out["tvl"].get(pid) is None:
+            out["tvl"][pid] = num(row.get("tvl"))
+        if parent:
+            out["children"].setdefault(parent, []).append(pid)
+        if row.get("gecko_id") and not parent:
+            out["gecko"].setdefault(row["gecko_id"], pid)
+    for row in lite.get("parentProtocols") or []:
+        if row.get("gecko_id"):
+            out["gecko"][row["gecko_id"]] = row["id"]
+            out["meta"][row["id"]] = {"name": row.get("name"), "slug": str(row["id"]).split("#", 1)[-1],
+                                      "category": None, "chains": row.get("chains") or [], "parent": None}
+    # children whose parent has no gecko id, last resort
+    for row in protocols:
+        if isinstance(row, dict) and row.get("gecko_id") and row.get("parentProtocol"):
+            out["gecko"].setdefault(row["gecko_id"], str(row.get("id")))
+    chains = soft(get_json, f"{LLAMA}/v2/chains", default=[], label="llama chains") or []
+    ranked = sorted([c for c in chains if isinstance(c, dict) and num(c.get("tvl"))], key=lambda c: -num(c["tvl"]))
+    for i, c in enumerate(ranked, 1):
+        out["chains"][c["name"]] = {"name": c["name"], "tvl": num(c.get("tvl")), "rank": i, "n": len(ranked)}
+        if c.get("gecko_id"):
+            out["chain_gecko"][c["gecko_id"]] = c["name"]
+    _CACHE["llama"] = out
+    return out
+
+
+def fee_table(data_type: str) -> list[dict]:
+    data = soft(
+        get_json,
+        f"{LLAMA}/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType={data_type}",
+        default={},
+        label=f"fees {data_type}",
+    ) or {}
+    return [r for r in (data.get("protocols") or []) if isinstance(r, dict)]
+
+
+def sum_rows(rows: list[dict], pid: str, field: str) -> float | None:
+    vals = [num(r.get(field)) for r in rows if str(r.get("defillamaId")) == pid or r.get("parentProtocol") == pid]
+    vals = [v for v in vals if v is not None]
+    return sum(vals) if vals else None
+
+
+def protocol_entity(pid: str) -> dict:
+    maps = llama_maps()
+    ids = maps["children"].get(pid) or [pid]
+    tvl_vals = [maps["tvl"].get(i) for i in ids if maps["tvl"].get(i) is not None]
+    prev_vals = [maps["tvl_prev"].get(i) for i in ids if maps["tvl_prev"].get(i) is not None]
+    meta = maps["meta"].get(pid) or {}
+    cats = [maps["meta"].get(i, {}).get("category") for i in ids]
+    cats = [c for c in cats if c]
+    out = {
+        "id": pid,
+        "name": meta.get("name"),
+        "slug": meta.get("slug"),
+        "category": meta.get("category") or (max(set(cats), key=cats.count) if cats else None),
+        "chains_n": len(meta.get("chains") or []),
+        "tvl": sum(tvl_vals) if tvl_vals else None,
+        "tvl_prev_month": sum(prev_vals) if prev_vals and len(prev_vals) == len(tvl_vals) else None,
+    }
+    for key, dtype in (("fees", "dailyFees"), ("rev", "dailyRevenue"), ("hrev", "dailyHoldersRevenue")):
+        rows = fee_table(dtype)
+        out[f"{key}30"] = sum_rows(rows, pid, "total30d")
+        out[f"{key}_prev30"] = sum_rows(rows, pid, "total60dto30d")
+        out[f"{key}7"] = sum_rows(rows, pid, "total7d")
+        out[f"{key}1y"] = sum_rows(rows, pid, "total1y")
+    return out
+
+
+def tvl_history_change(slug: str) -> dict:
+    data = get_json(f"{LLAMA}/protocol/{slug}", timeout=60)
+    series = data.get("tvl") if isinstance(data, dict) else None
+    out: dict = {}
+    if isinstance(series, list) and len(series) > 40:
+        pts = [(int(p.get("date") or 0), num(p.get("totalLiquidityUSD"))) for p in series if isinstance(p, dict)]
+        pts = [p for p in pts if p[1] is not None]
+        out = series_changes(pts)
+    return out
+
+
+def series_changes(pts: list[tuple[int, float]]) -> dict:
+    if not pts:
+        return {}
+    pts.sort()
+    last_t, last_v = pts[-1]
+    out = {"last": last_v}
+    for days in (30, 90, 365):
+        target = last_t - days * 86400
+        prior = [v for t, v in pts if t <= target]
+        if prior and prior[-1]:
+            out[f"chg_{days}d"] = 100 * (last_v / prior[-1] - 1)
+    return out
+
+
+def chain_entity(chain: str) -> dict:
+    maps = llama_maps()
+    base = dict(maps["chains"].get(chain) or {"name": chain})
+    hist = soft(get_json, f"{LLAMA}/v2/historicalChainTvl/{urllib.request.quote(chain)}", default=[], label="chain hist") or []
+    pts = [(int(p.get("date") or 0), num(p.get("tvl"))) for p in hist if isinstance(p, dict)]
+    pts = [p for p in pts if p[1] is not None]
+    base.update({f"tvl_{k}": v for k, v in series_changes(pts).items() if k.startswith("chg")})
+    for key, dtype in (("fees", "dailyFees"), ("rev", "dailyRevenue")):
+        rows = [r for r in fee_table(dtype) if r.get("protocolType") == "chain" and str(r.get("name") or "").lower() == chain.lower()]
+        if rows:
+            base[f"{key}30"] = num(rows[0].get("total30d"))
+            base[f"{key}_prev30"] = num(rows[0].get("total60dto30d"))
+            base[f"{key}7"] = num(rows[0].get("total7d"))
+    dex = soft(
+        get_json,
+        f"{LLAMA}/overview/dexs/{urllib.request.quote(chain)}?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true",
+        default={},
+        label="chain dex",
+    ) or {}
+    if isinstance(dex, dict):
+        base["dex30"] = num(dex.get("total30d"))
+        base["dex_prev30"] = num(dex.get("total60dto30d"))
+        base["dex7"] = num(dex.get("total7d"))
+    stables = soft(get_json, "https://stablecoins.llama.fi/stablecoinchains", default=[], label="stables") or []
+    for row in stables:
+        if str(row.get("name") or "").lower() == chain.lower():
+            usd = row.get("totalCirculatingUSD")
+            base["stables"] = num(usd.get("peggedUSD")) if isinstance(usd, dict) else num(usd)
+    return base
+
+
+# ---------------------------------------------------------------- per-coin pack
+
+class Skip(Exception):
+    pass
+
+
+def chart_stats(cg_id: str) -> dict:
+    data = get_json(f"{CG}/coins/{cg_id}/market_chart?vs_currency=usd&days=365&interval=daily")
+    prices = [num(p[1]) for p in (data.get("prices") or []) if isinstance(p, list)]
+    caps = [num(p[1]) for p in (data.get("market_caps") or []) if isinstance(p, list)]
+    vols = [num(p[1]) for p in (data.get("total_volumes") or []) if isinstance(p, list)]
+    prices = [p for p in prices if p]
+    out: dict = {"days": len(prices)}
+    if len(prices) < 35:
+        return out
+
+    def rets(seq):
+        return [math.log(b / a) for a, b in zip(seq, seq[1:]) if a and b]
+
+    r30 = rets(prices[-31:])
+    r90 = rets(prices[-91:])
+    if len(r30) > 20:
+        out["vol30"] = statistics.pstdev(r30) * math.sqrt(365) * 100
+    if len(r90) > 60:
+        out["vol90"] = statistics.pstdev(r90) * math.sqrt(365) * 100
+    last = prices[-1]
+    if len(prices) >= 50:
+        out["ma50"] = sum(prices[-50:]) / 50
+    if len(prices) >= 200:
+        out["ma200"] = sum(prices[-200:]) / 200
+    window = prices[-90:]
+    out["hi90"], out["lo90"] = max(window), min(window)
+    peak, mdd = window[0], 0.0
+    for p in window:
+        peak = max(peak, p)
+        mdd = min(mdd, p / peak - 1)
+    out["mdd90"] = 100 * mdd
+    if len(prices) > 91:
+        out["ret90"] = 100 * (last / prices[-91] - 1)
+    if len(prices) > 181:
+        out["ret180"] = 100 * (last / prices[-181] - 1)
+    vols = [v for v in vols if v]
+    if len(vols) >= 37:
+        out["vol7_avg"] = sum(vols[-7:]) / 7
+        out["vol30_avg"] = sum(vols[-37:-7]) / 30
+    pairs = [(c, p) for c, p in zip(caps, [num(x[1]) for x in data.get("prices") or []]) if c and p]
+    circ = [c / p for c, p in pairs]
+    if len(circ) > 95:
+        out["circ_chg_90d"] = 100 * (circ[-1] / circ[-91] - 1)
+    if len(circ) > 360:
+        out["circ_chg_365d"] = 100 * (circ[-1] / circ[0] - 1)
+    return out
+
+
+def pick_sector(categories: list[str], lane: str) -> tuple[list[str], str | None]:
+    tags: list[str] = []
+    cat_id = None
+    for label, tag, cid in SECTOR_FROM_LABEL:
+        if label in categories:
+            if tag not in tags:
+                tags.append(tag)
+            cat_id = cat_id or cid
+    if lane in LANES and lane not in tags:
+        tags.insert(0, lane)
+    if lane in LANE_CATEGORY and lane != "major":
+        cat_id = LANE_CATEGORY[lane]
+    if "L2" in tags and "L1" in tags:
+        tags.remove("L1")
+    return tags[:3] or ["Other"], cat_id
+
+
+def build_peers(cg_id: str, cat_id: str | None, mcap: float) -> tuple[list[dict], dict]:
+    sector: dict = {}
+    rows: list[dict] = []
+    if cat_id:
+        rows = soft(cg_category, cat_id, default=[], label="cg category") or []
+    if not rows:
+        rows = context()["top"]
+        cat_id = None
+    rows = [market_row(r) for r in rows if not looks_excluded(r) and num(r.get("market_cap"))]
+    rows.sort(key=lambda r: -(r["mcap"] or 0))
+    chg = [r["chg_30d"] for r in rows if r["chg_30d"] is not None]
+    if chg:
+        sector["median_30d"] = statistics.median(chg)
+    chg1y = [r["chg_1y"] for r in rows if r["chg_1y"] is not None]
+    if chg1y:
+        sector["median_1y"] = statistics.median(chg1y)
+    sector["n"] = len(rows)
+    sector["cat_id"] = cat_id
+    ids = [r["cg"] for r in rows]
+    if cg_id in ids:
+        sector["pos"] = ids.index(cg_id) + 1
+    others = [r for r in rows if r["cg"] != cg_id]
+    if not others:
+        return [], sector
+    leader = others[0] if rows and rows[0]["cg"] != cg_id else None
+    near = sorted(others, key=lambda r: abs(math.log((r["mcap"] or 1) / (mcap or 1))))
+    chosen: list[dict] = []
+    for r in ([leader] if leader else []) + near:
+        if r and r["cg"] not in {c["cg"] for c in chosen}:
+            chosen.append(r)
+        if len(chosen) >= 4:
+            break
+    if leader:
+        leader["leader"] = True
+    maps = llama_maps()
+    for p in chosen:
+        pid = maps["gecko"].get(p["cg"])
+        if pid:
+            ent = protocol_entity(pid)
+            p.update({k: ent.get(k) for k in ("tvl", "fees30", "rev30")})
+        chain = maps["chain_gecko"].get(p["cg"])
+        if chain:
+            c = maps["chains"].get(chain) or {}
+            p["chain_tvl"] = c.get("tvl")
+            rows_f = [r for r in fee_table("dailyFees") if r.get("protocolType") == "chain" and str(r.get("name") or "").lower() == chain.lower()]
+            if rows_f and p.get("fees30") is None:
+                p["fees30"] = num(rows_f[0].get("total30d"))
+    return chosen, sector
+
+
+def fetch_lunarcrush(ticker: str, cg_id: str) -> dict | None:
+    for url in (f"https://lunarcrush.com/coins/{ticker.lower()}/{cg_id}", f"https://lunarcrush.com/coins/{ticker.lower()}"):
+        try:
+            html = get_text(url)
+        except Exception:  # noqa: BLE001
+            continue
+        dom = re.search(r"Social Dominance[^%]{0,80}?([0-9]+(?:\.[0-9]+)?)\s*%", html, re.I | re.S)
+        if not dom:
+            continue
+        sent = re.search(r"Sentiment[^%]{0,80}?([0-9]+(?:\.[0-9]+)?)\s*%", html, re.I | re.S)
+        return {"dominance": float(dom.group(1)), "sentiment": float(sent.group(1)) if sent else None, "url": url}
     return None
 
 
-def fetch_snap(item: dict, lane: str, as_of: str) -> Snap:
-    cg = fetch_coingecko(item["cg"])
-    md = cg.get("market_data") or {}
-    snap = Snap(
-        ticker=item["ticker"].upper(),
-        name=str(cg.get("name") or item["ticker"]),
-        cg_id=item["cg"],
-        tags=list(item.get("tags") or []),
-        lane=lane,
-        as_of=as_of,
-        price=num((md.get("current_price") or {}).get("usd")),
-        mcap=num((md.get("market_cap") or {}).get("usd")),
-        fdv=num((md.get("fully_diluted_valuation") or {}).get("usd")),
-        volume=num((md.get("total_volume") or {}).get("usd")),
-        rank=int(cg["market_cap_rank"]) if cg.get("market_cap_rank") is not None else None,
-        circ=num(md.get("circulating_supply")),
-        total=num(md.get("total_supply")),
-        max_supply=num(md.get("max_supply")),
-        ath=num((md.get("ath") or {}).get("usd")),
-        ath_date=str(((md.get("ath_date") or {}).get("usd") or ""))[:10] or None,
-        chg_7d=num(md.get("price_change_percentage_7d")),
-        chg_30d=num(md.get("price_change_percentage_30d")),
-        sources=["CoinGecko"],
-    )
-    llama = item.get("llama")
-    if llama:
-        try:
-            tvl, label = fetch_llama_protocol(llama)
-            if tvl is not None:
-                snap.tvl = tvl
-                snap.tvl_label = f"{label} TVL"
-                snap.sources.append("DefiLlama protocol")
-            fees = fetch_llama_fees(llama, "dailyFees")
-            rev = fetch_llama_fees(llama, "dailyRevenue")
-            if fees is not None:
-                snap.fees_30d = fees
-                snap.sources.append("DefiLlama fees")
-            if rev is not None:
-                snap.rev_30d = rev
-                snap.sources.append("DefiLlama revenue")
-        except Exception as exc:  # noqa: BLE001 — keep the note if only Llama fails
-            print(f"[warn] llama {llama}: {exc}", file=sys.stderr)
-    elif item.get("chain"):
-        try:
-            tvl = fetch_chain_tvl(item["chain"])
-            if tvl is not None:
-                snap.tvl = tvl
-                snap.tvl_label = f"{item['chain']} DeFi TVL"
-                snap.sources.append("DefiLlama chains")
-        except Exception as exc:  # noqa: BLE001
-            print(f"[warn] chain {item['chain']}: {exc}", file=sys.stderr)
-    snap.sources = list(dict.fromkeys(snap.sources))
-    if snap.price is None or snap.mcap is None:
-        raise RuntimeError(f"{snap.ticker}: CoinGecko missing price or market cap")
-    time.sleep(0.4)
-    snap.peers = fetch_peers(snap.ticker, lane)
-    if snap.peers:
-        snap.sources.append("CoinGecko peers")
-    if lane == "major" or "L1" in snap.tags:
-        snap.chains = fetch_top_chains()
-        snap.dexs = fetch_dex_chains()
-        snap.stables = fetch_chain_stables(item.get("chain"))
-        if snap.chains:
-            snap.sources.append("DefiLlama chains")
-        if snap.dexs:
-            snap.sources.append("DefiLlama dexs")
-        if snap.stables is not None:
-            snap.sources.append("DefiLlama stablecoins")
-    if snap.fees_30d is None and item.get("chain"):
-        fees, rev = fetch_named_fees(item["chain"] if item["chain"] != "BSC" else "BSC")
-        # DefiLlama chain rows use Ethereum / Solana / Bitcoin / BSC
-        if fees is None:
-            fees, rev = fetch_named_fees(str(item.get("chain")))
-        if fees is not None:
-            snap.fees_30d = fees
-            snap.sources.append("DefiLlama chain fees")
-        if rev is not None:
-            snap.rev_30d = rev
-            snap.sources.append("DefiLlama chain revenue")
-    x = fetch_altindex(snap.ticker)
-    btc_x = fetch_altindex("BTC") if snap.ticker != "BTC" else x
-    stale = altindex_stale((x or {}).get("updated"), as_of) if x else False
-    if x:
-        snap.x_mentions = {"self": x, "btc": None if stale else btc_x, "stale": stale}
-        snap.sources.append("AltIndex X mentions")
-        if stale:
-            print(f"[warn] altindex {snap.ticker} print is stale: {x.get('updated')}", file=sys.stderr)
-    lunar = fetch_lunarcrush(snap.ticker, snap.cg_id)
-    if lunar:
-        snap.lunar = lunar
-        snap.sources.append("LunarCrush")
-    snap.sources = list(dict.fromkeys(snap.sources))
-    return snap
+def build_pack(item: dict, lane: str, as_of: str, day: str) -> dict:
+    cg_id = item["cg"]
+    coin = get_json(f"{CG}/coins/{cg_id}?localization=false&tickers=false&community_data=false&developer_data=false")
+    if not isinstance(coin, dict) or not coin.get("market_data"):
+        raise Skip("no market data")
+    cats = [c for c in (coin.get("categories") or []) if c]
+    low = " | ".join(cats).lower()
+    if any(w in low for w in EXCLUDE_CAT_WORDS):
+        raise Skip("stable / wrapped / tokenized asset")
+    md = coin["market_data"]
+
+    def usd(key):
+        val = md.get(key)
+        return num(val.get("usd")) if isinstance(val, dict) else num(val)
+
+    ticker = str(item.get("ticker") or coin.get("symbol") or "").upper()
+    pack: dict = {
+        "ticker": ticker,
+        "name": coin.get("name") or ticker,
+        "cg_id": cg_id,
+        "lane": lane,
+        "as_of": as_of,
+        "day": day,
+        "cg": {
+            "price": usd("current_price"),
+            "mcap": usd("market_cap"),
+            "fdv": usd("fully_diluted_valuation"),
+            "volume": usd("total_volume"),
+            "rank": coin.get("market_cap_rank"),
+            "circ": num(md.get("circulating_supply")),
+            "total": num(md.get("total_supply")),
+            "max_supply": num(md.get("max_supply")),
+            "max_infinite": bool(md.get("max_supply_infinite")),
+            "ath": usd("ath"),
+            "ath_date": str((md.get("ath_date") or {}).get("usd") or "")[:10] or None,
+            "ath_chg": usd("ath_change_percentage"),
+            "atl": usd("atl"),
+            "atl_date": str((md.get("atl_date") or {}).get("usd") or "")[:10] or None,
+            "chg_7d": num(md.get("price_change_percentage_7d")),
+            "chg_30d": num(md.get("price_change_percentage_30d")),
+            "chg_60d": num(md.get("price_change_percentage_60d")),
+            "chg_200d": num(md.get("price_change_percentage_200d")),
+            "chg_1y": num(md.get("price_change_percentage_1y")),
+            "categories": cats,
+            "votes_up": num(coin.get("sentiment_votes_up_percentage")),
+            "watchlist": num(coin.get("watchlist_portfolio_users")),
+            "genesis": coin.get("genesis_date"),
+            "platform": coin.get("asset_platform_id"),
+            "hashing": coin.get("hashing_algorithm"),
+        },
+        "sources": ["CoinGecko coin + 365d chart"],
+    }
+    c = pack["cg"]
+    if not c["price"] or not c["mcap"]:
+        raise Skip("CoinGecko has no price or market cap")
+    if looks_excluded({"name": pack["name"], "symbol": ticker, "price": c["price"], "chg_30d": c["chg_30d"]}):
+        raise Skip("looks like a pegged / wrapped asset")
+    if (c["volume"] or 0) < 300_000:
+        raise Skip("24h volume too thin to write responsibly")
+    pack["tags"], cat_id = pick_sector(cats, lane)
+    if item.get("tags"):
+        pack["tags"] = list(dict.fromkeys(list(item["tags"]) + pack["tags"]))[:3]
+        if "Other" in pack["tags"] and len(pack["tags"]) > 1:
+            pack["tags"].remove("Other")
+    pack["hist"] = soft(chart_stats, cg_id, default={}, label="chart") or {}
+    ctx = context()
+    pack["btc"], pack["eth"] = ctx.get("btc"), ctx.get("eth")
+    pack["peers"], pack["sector"] = build_peers(cg_id, cat_id, c["mcap"])
+    if pack["peers"]:
+        pack["sources"].append("CoinGecko sector list (peers)")
+    maps = llama_maps()
+    pid = maps["gecko"].get(cg_id) or (f"parent#{item['llama']}" if item.get("llama") and f"parent#{item['llama']}" in maps["meta"] else None)
+    if not pid and item.get("llama"):
+        pid = next((k for k, m in maps["meta"].items() if m.get("slug") == item["llama"]), None)
+    pack["protocol"] = None
+    chain_hint = maps["chain_gecko"].get(cg_id)
+    if pid and chain_hint and (maps["meta"].get(pid) or {}).get("category") in ("Canonical Bridge", "Bridge", "CEX", "Chain", None):
+        pid = None  # a chain's own token: read the chain, not its foundation / bridge wallet
+    if pid:
+        ent = protocol_entity(pid)
+        if ent.get("slug"):
+            hist = soft(tvl_history_change, ent["slug"], default={}, label="tvl history") or {}
+            ent.update({f"tvl_{k}": v for k, v in hist.items() if k.startswith("chg")})
+        if any(ent.get(k) for k in ("tvl", "fees30", "rev30")):
+            pack["protocol"] = ent
+            pack["sources"].append("DefiLlama protocol TVL / fees / revenue")
+    chain_name = maps["chain_gecko"].get(cg_id) or item.get("chain")
+    pack["chain"] = None
+    if chain_name and chain_name in maps["chains"]:
+        pack["chain"] = chain_entity(chain_name)
+        pack["sources"].append("DefiLlama chain TVL / fees / DEX / stablecoins")
+    trending = {t["cg"]: t["pos"] for t in ctx.get("trending") or []}
+    pack["social"] = {
+        "fng": ctx.get("fng"),
+        "trending_pos": trending.get(cg_id),
+        "trending_n": len(trending),
+        "lunar": soft(fetch_lunarcrush, ticker, cg_id, default=None, label="lunarcrush"),
+    }
+    if ctx.get("fng"):
+        pack["sources"].append("alternative.me Fear & Greed")
+    if trending:
+        pack["sources"].append("CoinGecko trending search")
+    if pack["social"]["lunar"]:
+        pack["sources"].append("LunarCrush")
+    return pack
 
 
-def pick_item(candidates: list[dict], taken: set[str], lane: str, as_of: str) -> tuple[dict, Snap] | None:
-    for item in candidates:
-        ticker = item["ticker"].upper()
-        if ticker in taken:
+# ---------------------------------------------------------------- selection
+
+def core_candidates(universe: dict) -> list[dict]:
+    out = [dict(x) for x in universe.get("majors") or []]
+    for row in context()["top"]:
+        rank = row.get("market_cap_rank") or 999
+        if rank > 200 or looks_excluded(row) or (num(row.get("market_cap")) or 0) < 1e8:
             continue
+        out.append({"ticker": str(row.get("symbol") or "").upper(), "cg": row["id"]})
+    return out
+
+
+def lane_candidates(universe: dict, lane: str) -> list[dict]:
+    out = [dict(x) for x in (universe.get("lanes") or {}).get(lane, [])]
+    cat = LANE_CATEGORY.get(lane)
+    if cat:
+        for row in soft(cg_category, cat, default=[], label=f"lane {lane}") or []:
+            if looks_excluded(row):
+                continue
+            if (num(row.get("market_cap")) or 0) < 2.5e7 or (num(row.get("total_volume")) or 0) < 5e5:
+                continue
+            out.append({"ticker": str(row.get("symbol") or "").upper(), "cg": row["id"]})
+    return out
+
+
+def pick(cands: list[dict], taken: tuple[set, set, set], lane: str, as_of: str, day: str, budget: int = 6) -> dict | None:
+    tickers, slugs, cg_ids = taken
+    seen: set[str] = set()
+    for item in cands:
+        ticker = str(item.get("ticker") or "").upper()
+        if not ticker or item["cg"] in seen:
+            continue
+        seen.add(item["cg"])
+        slug = re.sub(r"[^a-z0-9]+", "-", ticker.lower()).strip("-")
+        if ticker in tickers or slug in slugs or item["cg"] in cg_ids:
+            continue
+        if budget <= 0:
+            warn(f"{lane}: fetch budget spent, stopping")
+            return None
+        budget -= 1
         try:
-            snap = fetch_snap(item, lane, as_of)
+            pack = build_pack(item, lane, as_of, day)
+        except Skip as exc:
+            print(f"[skip] {ticker}: {exc}", file=sys.stderr)
+            continue
         except Exception as exc:  # noqa: BLE001
             print(f"[skip] {ticker}: {exc}", file=sys.stderr)
-            time.sleep(1.2)
             continue
-        return item, snap
+        pack["slug"] = slug
+        return pack
     return None
 
 
-def write_langs(folder: Path, bodies: dict[str, str]) -> None:
-    folder.mkdir(parents=True, exist_ok=True)
-    (folder / "report.md").write_text(bodies["zh"], encoding="utf-8")
-    for lang in LANGS:
-        if lang == "zh":
-            continue
-        (folder / f"report.{lang}.md").write_text(bodies[lang], encoding="utf-8")
-
-
-def astro_content_dir() -> Path | None:
-    raw = os.environ.get("ASTRO_CONTENT", str(ASTRO_CONTENT))
-    if not raw:
-        return None
-    path = Path(raw)
-    return path if path.parent.exists() else None
-
-
-def write_astro(snap: Snap, score: float, titles: dict[str, str], desc: dict[str, str], conclusions: dict[str, str], day: str, zh_body: str) -> None:
-    dest_dir = astro_content_dir()
-    if dest_dir is None:
-        return
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    tags = "\n".join(f"  - {tag}" for tag in snap.tags)
-    body = zh_body.split("\n---\n", 1)[-1].lstrip()
-    text = (
-        "---\n"
-        f"title: \"{yaml_escape(titles['zh'])}\"\n"
-        f"titleEn: \"{yaml_escape(titles['en'])}\"\n"
-        f"description: \"{yaml_escape(desc['zh'])}\"\n"
-        f"descriptionEn: \"{yaml_escape(desc['en'])}\"\n"
-        f"date: {day}\n"
-        f"asOf: \"{snap.as_of}\"\n"
-        f"ticker: {snap.ticker}\n"
-        f"score: {score:.1f}\n"
-        f"tags:\n{tags}\n"
-        f"conclusion: \"{yaml_escape(conclusions['zh'])}\"\n"
-        f"conclusionEn: \"{yaml_escape(conclusions['en'])}\"\n"
-        "---\n\n"
-        f"{body}"
-    )
-    (dest_dir / f"{snap.ticker.lower()}-{day}.md").write_text(text, encoding="utf-8")
-
-
-def select_pair(as_of: str) -> list[tuple[str, Snap]]:
+def select(as_of: str, day: str, want: int) -> list[dict]:
     universe = load_universe()
-    taken = published_tickers()
-    yday = utc_now().timetuple().tm_yday
-    lane = LANES[yday % 3]
-    picked: list[tuple[str, Snap]] = []
-
-    major = pick_item(universe["majors"], taken, "major", as_of)
-    if not major:
-        raise SystemExit("no unused major left that CoinGecko will serve")
-    picked.append(("major", major[1]))
-    taken.add(major[1].ticker)
-    time.sleep(1.2)
-
-    order = [lane] + [x for x in LANES if x != lane]
-    sat = None
-    for name in order:
-        sat = pick_item(universe["lanes"][name], taken, name, as_of)
+    taken = taken_sets()
+    picked: list[dict] = []
+    core = pick(core_candidates(universe), taken, "major", as_of, day)
+    if core:
+        picked.append(core)
+        taken[0].add(core["ticker"]); taken[1].add(core["slug"]); taken[2].add(core["cg_id"])
+    else:
+        warn("no writable core coin today")
+    if len(picked) >= want:
+        return picked
+    yday = datetime.now(PERTH).timetuple().tm_yday
+    first = LANES[yday % len(LANES)]
+    order = [first] + [x for x in LANES if x != first]
+    for lane in order:
+        sat = pick(lane_candidates(universe, lane), taken, lane, as_of, day, budget=4)
         if sat:
-            if name != lane:
-                print(f"[info] {lane} empty or failing, using {name}", file=sys.stderr)
-            picked.append((name, sat[1]))
+            if lane != first:
+                print(f"[info] {first} empty or failing, used {lane}", file=sys.stderr)
+            picked.append(sat)
             break
-        time.sleep(1.0)
-    if not sat:
-        raise SystemExit("no unused satellite left that CoinGecko will serve")
-    return picked
+    return picked[:want]
 
 
-def run(dry_run: bool, force: bool) -> int:
-    day = today_utc()
-    existing = notes_on(day)
+# ---------------------------------------------------------------- write
+
+def write_note(pack: dict, drafted: dict) -> Path:
+    folder = ROOT / "research" / pack["slug"]
+    folder.mkdir(parents=True, exist_ok=True)
+    for lang in LANGS:
+        name = "report.md" if lang == "zh" else f"report.{lang}.md"
+        (folder / name).write_text(drafted["bodies"][lang], encoding="utf-8")
+    return folder
+
+
+def run(dry_run: bool, force: bool, dump: str | None) -> int:
+    day = perth_today()
+    existing = [n for n in list_notes() if n["date"] == day]
     if len(existing) >= 2 and not force:
-        print(f"already have {len(existing)} notes on {day}: {', '.join(existing)}")
-        print_status(day)
+        print(f"already have {len(existing)} notes on {day}: {', '.join(n['slug'] for n in existing)}")
         return 0
     as_of = utc_now().strftime("%Y-%m-%d %H:%M UTC")
-    pair = select_pair(as_of)
-    for lane, snap in pair:
-        score, dims = score_note(snap)
-        drafted = draft_note(snap, score, dims, day)
-        print(f"{snap.ticker} [{lane}] {score:.1f} {verdict(score)[1]} as-of {snap.as_of}")
+    want = 2 if force else 2 - len(existing)
+    packs = select(as_of, day, want)
+    if not packs:
+        print("::warning::Daily desk: nothing writable today (pools empty or APIs refusing). Skipped quietly.")
+        print("nothing writable today; skipped quietly, no files written")
+        return 0
+    for pack in packs:
+        drafted = compose_note(pack)
+        print(f"{pack['ticker']} [{pack['lane']}] {drafted['score']:.1f} {verdict(drafted['score'])[1]} as-of {as_of} -> {pack['slug']}")
+        if dump:
+            Path(dump).mkdir(parents=True, exist_ok=True)
+            (Path(dump) / f"{pack['slug']}.json").write_text(json.dumps(pack, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+            for lang in ("zh", "en"):
+                (Path(dump) / f"{pack['slug']}.{lang}.md").write_text(drafted["bodies"][lang], encoding="utf-8")
         if dry_run:
             continue
-        folder = ROOT / "research" / snap.ticker.lower()
-        if folder.exists() and (folder / "report.md").exists() and not force:
-            raise SystemExit(f"{folder} already exists")
-        write_langs(folder, drafted["bodies"])
-        write_astro(snap, score, drafted["titles"], drafted["desc"], drafted["conclusions"], day, drafted["bodies"]["zh"])
+        write_note(pack, drafted)
     if dry_run:
-        print("dry-run: no files written")
+        print("dry-run: no site files written")
         return 0
     print_status(day)
     return 0
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Publish two DRLabs desk notes from public data.")
-    parser.add_argument("--dry-run", action="store_true", help="pick names and fetch prints, do not write")
+    parser = argparse.ArgumentParser(description="Publish DRLabs desk notes from free public data.")
+    parser.add_argument("--dry-run", action="store_true", help="pick coins, fetch data, compose, do not write")
     parser.add_argument("--force", action="store_true", help="ignore the two-notes-per-day stop")
     parser.add_argument("--status", action="store_true", help="print public URLs for today's notes")
+    parser.add_argument("--dump", help="also write the data pack + zh/en drafts to this folder")
     args = parser.parse_args()
     if args.status:
-        print_status(today_utc())
+        print_status(perth_today())
         return
-    raise SystemExit(run(dry_run=args.dry_run, force=args.force))
+    raise SystemExit(run(dry_run=args.dry_run, force=args.force, dump=args.dump))
 
 
 if __name__ == "__main__":

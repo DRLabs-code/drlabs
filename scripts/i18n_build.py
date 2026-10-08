@@ -451,8 +451,10 @@ def localize_date(value: str) -> dict[str, str]:
 def topic_attr(tags: list[str] | str) -> str:
     if isinstance(tags, str):
         tags = [t.strip() for t in tags.split(",") if t.strip()]
-    known = [t for t in ("DeFi", "GameFi", "Meme", "L1") if t in tags]
-    return " ".join(known) or "DeFi"
+    known = [t for t in ("DeFi", "GameFi", "Meme", "L1", "L2", "AI", "RWA") if t in tags]
+    if known:
+        return " ".join(known)
+    return " ".join(t for t in tags if t and " " not in t) or "DeFi"
 
 
 # Older notes (notably Aave) were written before YAML heads. Keep cards readable.
@@ -490,7 +492,7 @@ def discover_notes() -> list[dict]:
     if not research.exists():
         return []
     notes = []
-    for folder in research.iterdir():
+    for folder in sorted(research.iterdir()):
         report = folder / "report.md"
         if not folder.is_dir() or not report.exists():
             continue
@@ -572,6 +574,7 @@ def filter_bar() -> str:
   <button type="button" data-filter-topic="GameFi" aria-pressed="false">GameFi</button>
   <button type="button" data-filter-topic="Meme" aria-pressed="false">Meme</button>
   <button type="button" data-filter-topic="L1" aria-pressed="false">L1</button>
+  <button type="button" data-filter-topic="L2" aria-pressed="false">L2</button>
 </div>
 """
 
