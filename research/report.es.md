@@ -1,125 +1,121 @@
 ---
-title: "Nota 币安人生: 币安人生 is a one-year winner against Bitcoin, but still pinned under its 200-day average"
-description: "As of 2026-11-06 03:59 UTC, 币安人生 is about $0.482 with mcap $482.48M, rank 105. Buy score 5.0/10, hold / wait."
-date: 2026-11-06
+title: "Nota 币安人生: 币安人生 is a one-year winner against Bitcoin, yet still pinned under its 200-day average"
+description: "As of 2026-11-10 05:01 UTC, 币安人生 is about $0.492 with mcap $491.89M, rank 106. Buy score 4.9/10, avoid."
+date: 2026-11-10
 ticker: 币安人生
-score: 5.0
+score: 4.9
 tags:
   - Meme
-conclusion: "Bottom line on 币安人生 (BinanceLife) (币安人生): a one-year winner against Bitcoin (+182% vs BTC over 1y), while at the same time still pinned under its 200-day average (11% under the 200-day). Buy score 5.0 / 10 (hold / wait): No bet on 币安人生 yet; we watch the triggers listed below first."
+conclusion: "The tension in 币安人生 (BinanceLife) (币安人生) is clear: on one side a one-year winner against Bitcoin (+178% vs BTC over 1y), on the other still pinned under its 200-day average (10% under the 200-day). Buy score 4.9 / 10 (avoid): Negative evidence dominates on 币安人生; until the conditions below improve we would not initiate a position."
 ---
 
 ## Conclusión
 
-Published 6 Nov 2026 (Perth time) | data as of 2026-11-06 03:59 UTC
+Published 10 Nov 2026 (Perth time) | data as of 2026-11-10 05:01 UTC
 
-Bottom line on 币安人生 (BinanceLife) (币安人生): a one-year winner against Bitcoin (+182% vs BTC over 1y), while at the same time still pinned under its 200-day average (11% under the 200-day).
+The tension in 币安人生 (BinanceLife) (币安人生) is clear: on one side a one-year winner against Bitcoin (+178% vs BTC over 1y), on the other still pinned under its 200-day average (10% under the 200-day).
 
-On supply, 币安人生 is holding circulating supply nearly flat for a year (supply +1%/yr). On the tape, it is leading its sector (+23.4% vs sector).
+Two more points worth noting: 币安人生 is thinly traded, with liquidity a hard constraint (0.4% turnover); it is also holding circulating supply nearly flat for a year (supply +0%/yr).
 
-**Buy score 5.0 / 10 (hold / wait):** No bet on 币安人生 yet; we watch the triggers listed below first.
+**Buy score 4.9 / 10 (avoid):** Negative evidence dominates on 币安人生; until the conditions below improve we would not initiate a position.
 
-## Instantánea (2026-11-06)
+## Instantánea (2026-11-10)
 
 | Metric | Value | Source |
 | --- | --- | --- |
-| Price | $0.482 | CoinGecko |
-| Mcap / FDV | $482.48M / $482.48M | CoinGecko |
-| Rank | #105 | CoinGecko |
-| 24h volume / turnover | $5.30M / 1.1% | CoinGecko |
-| 7d / 30d / 1y | -7.2% / -1.4% / +156.0% | CoinGecko |
-| 30d vs BTC | +8.6% | 计算 / calc |
-| From ATH | -46% ($0.894, 2026-06-07) | CoinGecko |
-| vs 200-day average | -11% | CoinGecko 365d |
-| 30d vol / 90d max drawdown | 88% / -22% | CoinGecko 365d |
+| Price | $0.492 | CoinGecko |
+| Mcap / FDV | $491.89M / $491.89M | CoinGecko |
+| Rank | #106 | CoinGecko |
+| 24h volume / turnover | $1.77M / 0.4% | CoinGecko |
+| 7d / 30d / 1y | -7.5% / -12.9% / +148.6% | CoinGecko |
+| 30d vs BTC | -3.2% | 计算 / calc |
+| From ATH | -45% ($0.894, 2026-06-07) | CoinGecko |
+| vs 200-day average | -10% | CoinGecko 365d |
+| 30d vol / 90d max drawdown | 78% / -22% | CoinGecko 365d |
 | Circ / total / max | 1.00B / 1.00B / 1.00B | CoinGecko |
-| 1y circulating change | +0.9% | CoinGecko 365d |
+| 1y circulating change | +0.0% | CoinGecko 365d |
 | Headlines naming it, 30d | 0 | RSS / Google News |
-| Fear & Greed | 28 (Fear) | alternative.me |
+| Fear & Greed | 32 (Fear) | alternative.me |
 | Community bullish votes | 0% | CoinGecko |
 
-Snapshot taken 2026-11-06 03:59 UTC. Only data actually fetched is listed; missing metrics are left out.
+Snapshot taken 2026-11-10 05:01 UTC. Only data actually fetched is listed; missing metrics are left out.
 
 ## Market structure: a one-year winner against Bitcoin
 
-Over twelve months 币安人生 is +156.0% against Bitcoin's -26.4%, far ahead by +182%. Outperformance of that size means the market has re-rated 币安人生's story. The sector's 98 names have a 30-day median of -24.7%; 币安人生 is -1.4%, ahead by +23.4%. The in-sector alpha sits with 币安人生.
+币安人生 is +148.6% over a year vs Bitcoin -29.6%. 币安人生 holders sit on fat gains; the thing to watch is profit-taking, not a lack of bids.
 
-币安人生 is held 11% below the 200-day (spot $0.482 and 5% under the 50-day); until the average is reclaimed, rallies are more likely to be used as exits.
+At $0.492, 币安人生 trails its 200-day by 10% and 3% under the 50-day. Trend followers will not buy 币安人生 here; support comes mainly from contrarian money.
 
-Desk view: 币安人生's tape is helping; going with it is easier than fighting it.
+Turnover is only about 0.4% ($1.77M (peer median about 12.7%); 7-day average volume is -38% vs the prior 30 days); liquidity is a hard constraint for 币安人生: easy to get in, hard to get out on schedule.
+
+Desk view: On the tape, 币安人生 carries both "a one-year winner against Bitcoin" and "still pinned under its 200-day average"; what matters is which one breaks first.
 
 ## Token and supply: holding circulating supply nearly flat for a year
 
-币安人生's circulating supply changed about +1% in a year, +0.1% in the last 90 days, close to no new dilution.
+币安人生's circulating supply changed about +0% in a year, +0.0% in the last 90 days, close to no new dilution.
 
-About 100% of 币安人生 already circulates (cap $482.48M, FDV $482.48M); price is plain supply and demand, not an unlock calendar.
+币安人生's circulating cap $491.89M and FDV $491.89M nearly coincide (about 100% float). Little unlock supply hangs over 币安人生; supply is not the main issue.
 
-Desk view: 币安人生's supply structure is clean, with no obvious dilution pressure.
+Desk view: Supply is a plus for 币安人生.
 
-## Valuation vs peers: worth about 18% of sector leader SHIB
+## KOL angle: out of favour, data intact
 
-Next to sector leader SHIB ($2.70B), 币安人生 is about 18% of its size; 币安人生 ranks #6 by cap among 98 filtered sector tokens. The valuation gap between 币安人生 and the leader is the market's vote on market share.
+**Mood readings:** market mood behind 币安人生: Fear & Greed 32 (Fear), 30-day average 46; CoinGecko's top-15 trending list does not include 币安人生; 0% of CoinGecko voters are bullish on 币安人生; 币安人生 sits on about 2K CoinGecko watchlists.
+
+**The crowd:** a coin that is -13% in 30 days rarely makes a KOL timeline; the typical retail reaction to 币安人生 is "wait until it is done falling".
+
+**Contrarian:** the time nobody is looking is the time to look: 币安人生 is a one-year winner against Bitcoin (+178% vs BTC over 1y), and that did not deteriorate with price.
+
+**Levels traders watch:** 200-day average $0.543, 50-day $0.508, 90-day range $0.432–$0.608; until 币安人生 reclaims the 200-day, rallies are likely to be sold.
+
+## Valuation vs peers: worth about 19% of sector leader SHIB
+
+Next to sector leader SHIB ($2.62B), 币安人生 is about 19% of its size; 币安人生 ranks #6 by cap among 98 filtered sector tokens. The valuation gap between 币安人生 and the leader is the market's vote on market share.
 
 | Token | Mcap | 30d | Turnover |
 | --- | --- | --- | --- |
-| SHIB | $2.70B | -17.3% | 2.5% |
-| **币安人生** | $482.48M | -1.4% | 1.1% |
-| PENGU | $414.72M | -26.0% | 25.2% |
-| TRUMP | $342.20M | -35.7% | 92.4% |
-| BONK | $253.16M | -17.8% | 13.0% |
+| SHIB | $2.62B | -17.4% | 1.9% |
+| **币安人生** | $491.89M | -12.9% | 0.4% |
+| PENGU | $399.76M | -22.0% | 17.0% |
+| TRUMP | $315.14M | -40.2% | 32.9% |
+| BONK | $248.55M | -16.0% | 8.5% |
 
 币安人生's peers come from CoinGecko's "Meme" list, core sector projects first and the rest by market-cap distance; peers of very different size are a directional reference only.
 
 Desk view: 币安人生 lacks comparable cash-flow multiples, so valuation falls back on market structure.
 
-## KOL angle: consensus vs contrarian
-
-**Mood:** market mood behind 币安人生: Fear & Greed 28 (Fear), 30-day average 51; 币安人生 is not in CoinGecko's top-15 trending; CoinGecko community votes on 币安人生 are 0% bullish; about 2K users have 币安人生 on a watchlist.
-
-**The crowd:** at -1% over 30 days, 币安人生 is nowhere near the hot topics; there is little consensus either way, and that quiet is part of the price.
-
-**Contrarian:** everyone discusses 币安人生 being a one-year winner against Bitcoin; what should really be priced is that it is still pinned under its 200-day average (11% under the 200-day).
-
-**Thermometer:** Fear & Greed is only 28; the market is fearful, and 币安人生's price already embeds some pessimism.
-
-**Levels traders watch:** 200-day average $0.541, 50-day $0.508, 90-day range $0.432–$0.608; 币安人生 has to get back above the 200-day before trend money reconsiders it.
-
-## News flow: no headlines naming it in 30 days
-
-We searched CoinDesk, Cointelegraph, The Block, Decrypt, CryptoSlate and Google News: no headline named 币安人生 in the last 30 days. No news is information too: 币安人生's price action has no news-flow explanation.
-
-Desk view: The news flow has no directional effect on 币安人生.
-
 ## Narrative and seat: seated in Meme
 
-By category, 币安人生 sits in Meme, Chinese Meme, ecosystems BNB Chain Ecosystem. The sector signal is split: 币安人生's sector has a 30-day median of -24.7% and a cap-weighted (ex-self) change of +325.0%, against Bitcoin's -10.0%; the head and the tail of the peer group are not moving together.
+By category, 币安人生 sits in Meme, Chinese Meme, ecosystems BNB Chain Ecosystem. 币安人生's peers show a 30-day median change of -22.7% but a cap-weighted (ex-self) change of +337.6%, vs Bitcoin -9.8%: large and small peers are diverging, so the sector is neither tailwind nor headwind.
 
 Desk view: The narrative is neutral for 币安人生; its own data drives price.
 
+## News flow: no headlines naming it in 30 days
+
+In the last 30 days neither the main crypto outlets nor Google News carried a headline naming 币安人生; with a blank news flow, price is driven more by flows and mood.
+
+Desk view: The news flow has no directional effect on 币安人生.
+
 ## Catalizadores y riesgos
-
-### Possible catalysts
-
-- Market Fear & Greed is 28, in fear; a mood recovery is itself a catalyst for 币安人生.
-- In-sector money is concentrating on 币安人生 (30-day lead over the sector +23%).
 
 ### Main risks
 
-- 币安人生 is a meme asset; when attention moves on, there is no fundamental floor.
+- Liquidity: 币安人生 trades only about $1.77M a day; size will see real slippage.
+- Meme risk: 币安人生's price is almost purely attention, with no protocol cash flow underneath.
 - Macro and policy: tighter liquidity or a regulatory turn hits all crypto at once, 币安人生 included.
 
-**What would change our view on 币安人生:** 币安人生 reclaiming the 200-day ($0.541), 30-day strength vs Bitcoin (now +9%) flipping.
+**What would change our view on 币安人生:** 币安人生 reclaiming the 200-day ($0.543).
 
-## Puntuación de compra 5.0 / 10
+## Puntuación de compra 4.9 / 10
 
 | Factor | Weight | Score | Basis |
 | --- | ---: | ---: | --- |
-| Market structure & trend | 30% | 4.6 | -11% vs 200d; +8.6% vs BTC 30d; turnover 1.1% |
-| Tokenomics & supply | 15% | 7.5 | float 100%; supply +1%/yr |
-| Relative valuation | 10% | 5.0 | -46% from ATH, no like-for-like peer multiple |
-| Sentiment, news & KOL | 25% | 4.1 | F&G 28; votes 0% bullish; data diverges from mood |
-| Risk (higher = safer) | 20% | 4.7 | vol 88%; no protocol cash flow |
-| **Total** | **100%** | **5.0** | **hold / wait** |
+| Market structure & trend | 30% | 3.6 | -10% vs 200d; -3.2% vs BTC 30d; turnover 0.4% |
+| Tokenomics & supply | 15% | 7.5 | float 100%; supply +0%/yr |
+| Relative valuation | 10% | 5.0 | -45% from ATH, no like-for-like peer multiple |
+| Sentiment, news & KOL | 25% | 5.3 | F&G 32; votes 0% bullish; data diverges from mood |
+| Risk (higher = safer) | 20% | 4.5 | vol 78%; only $1.77M daily volume; no protocol cash flow |
+| **Total** | **100%** | **4.9** | **avoid** |
 
 Scale: each factor 1–10, weighted; 6.5+ cautious watch, 5.0–6.4 hold / wait, below 5.0 avoid. This coin is a meme coin with no protocol cash flow, so market structure and sentiment weigh most.
 
@@ -131,8 +127,8 @@ Scale: each factor 1–10, weighted; 6.5+ cautious watch, 5.0–6.4 hold / wait,
 - CoinGecko trending search
 - Headlines: CoinDesk / Cointelegraph / The Block / Decrypt / CryptoSlate RSS + Google News search
 - DefiLlama hacks database
-- as of 2026-11-06 03:59 UTC
+- as of 2026-11-10 05:01 UTC
 
 ## Aviso
 
-Written by DRLabs from public data for research and discussion. **Not investment, financial or legal advice, and not an offer.** Crypto can cause partial or total loss. The 5.0/10 buy score is a subjective reading of public data. Full terms: [About DRLabs](../../about.html#disclaimer). **For reference only; invest rationally.**
+Written by DRLabs from public data for research and discussion. **Not investment, financial or legal advice, and not an offer.** Crypto can cause partial or total loss. The 4.9/10 buy score is a subjective reading of public data. Full terms: [About DRLabs](../../about.html#disclaimer). **For reference only; invest rationally.**
